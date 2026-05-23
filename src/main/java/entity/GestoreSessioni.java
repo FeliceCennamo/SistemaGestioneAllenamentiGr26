@@ -43,9 +43,6 @@ public class GestoreSessioni {
 
     }
 
-    public void creaSessione(){
-        return new SessioneDiAllenamento();
-    }
 
     public void completaSessione(){
         SessioneDiAllenamento s;
@@ -61,7 +58,7 @@ public class GestoreSessioni {
     }
 
     public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, ArrayList<Esercizio> esercizi){
-        return new SessioneDiAllenamento(titolo, data, descrizione);
+        return new SessioneDiAllenamento(titolo, descrizione, data);
     }
 
 
