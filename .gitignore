@@ -37,3 +37,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+Icon[Lengthy-String]
