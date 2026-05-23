@@ -20,7 +20,6 @@ public abstract class Risultato {
         this.nota = nota;
     }
 
-
     public String getNota(){
         return this.nota;
     }

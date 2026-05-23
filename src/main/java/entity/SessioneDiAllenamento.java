@@ -2,6 +2,8 @@ package entity;
 
 import jakarta.persistence.*;
 
+import javax.xml.crypto.Data;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class SessioneDiAllenamento {
     //Attributi di classe
     private String titolo;
     private String descrizione;
-    private String dataSvolgimento;
+    private LocalDate dataSvolgimento;
 
     @OneToMany(mappedBy = "sessione")
     private List<Esercizio> esercizi = new ArrayList<>();
@@ -31,7 +33,7 @@ public class SessioneDiAllenamento {
         return descrizione;
     }
 
-    public String getDataSvolgimento() {
+    public LocalDate getDataSvolgimento() {
         return dataSvolgimento;
     }
 
@@ -48,7 +50,7 @@ public class SessioneDiAllenamento {
         this.descrizione = descrizione;
     }
 
-    public void setDataSvolgimento(String dataSvolgimento) {
+    public void setDataSvolgimento(LocalDate dataSvolgimento) {
         this.dataSvolgimento = dataSvolgimento;
     }
 
@@ -56,12 +58,19 @@ public class SessioneDiAllenamento {
     public SessioneDiAllenamento(){}
 
     //costruttore con tutti gli attributi
-    public SessioneDiAllenamento(String titolo, String descrizione, String dataSvolgimento){
+    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento){
 
         this.titolo = titolo;
         this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
     }
+
+    /*
+    void addEsercizio(String nome, String descrizione, boolean tipologia, int ris_atteso){
+        // Eventualmente controlli
+        this.esercizi.add(new Esercizio(nome, descrizione, tipologia, ris_atteso));
+    }*/
+
 
 
 }
