@@ -29,10 +29,10 @@ public class Allenatore extends Utente {
         return this.atleti;
     }
 
-    // Questo si chiamava associa atleta in allenatore ma ha più senso farlo così a naso
     public void addAtleta(Atleta a){
         atleti.add(a);
-        a.addAllenatore(this); // Forse sta roba va fatta dal GestoreUtenti
+        //a.addAllenatore(this); // Forse sta roba va fatta dal GestoreUtenti
+        //So Gigi, si lo fa il gestore per garantire persistenza (e dividere responsabilità)
     }
 
     public void removeAtleta(Atleta a){
