@@ -8,8 +8,8 @@ public class GestoreUtenti {
      *Il costruttore è privato, di conseguenza richiamare il metodo gestoreUtente.getInstance()
      */
 
-    // Non ha senso sto HashSet, è meglio lavorare sul db, dobbiamo chiedere al prof se
-    // questa cosa ha senso anche a livello UML del nostro diagramma
+    /* Non ha senso sto HashSet, è meglio lavorare sul db, dobbiamo chiedere al prof se
+     questa cosa ha senso anche a livello UML del nostro diagramma*/
     //private repo_utenti (istanza della repository degli utenti sul db)
     private static GestoreUtenti instance;
 
@@ -35,7 +35,7 @@ public class GestoreUtenti {
     }
 
     public Atleta cercaAtleta(Long id_atleta){
-        HashSet<Utente> listaUtenti = getListaUtenti();
+        HashSet<Utente> listaUtenti = this.getListaUtenti();
         for(Utente utente : listaUtenti){
             if( utente instanceof Atleta && utente.getId().equals(id_atleta) ){
                 return (Atleta) utente;
@@ -45,7 +45,7 @@ public class GestoreUtenti {
     }
 
     public Allenatore cercaAllenatore(Long id_allenatore){
-        HashSet<Utente> listaUtenti = getListaUtenti();
+        HashSet<Utente> listaUtenti = this.getListaUtenti();
         for(Utente utente : listaUtenti){
             if(utente instanceof Allenatore && utente.getId().equals(id_allenatore)){
                 return (Allenatore) utente;
@@ -55,8 +55,8 @@ public class GestoreUtenti {
     }
 
     public void associaAtletaAllenatore(Long id_atleta, Long id_allenatore){
-        Atleta atleta = cercaAtleta(id_atleta);
-        Allenatore allenatore = cercaAllenatore(id_allenatore);
+        Atleta atleta = this.cercaAtleta(id_atleta);
+        Allenatore allenatore = this.cercaAllenatore(id_allenatore);
         if(atleta == null || allenatore == null){
             return;
         }
@@ -66,7 +66,7 @@ public class GestoreUtenti {
 
     public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, String obiettivo, String disciplina, int livello){
 
-        Allenatore allenatore = cercaAllenatore(id_allenatore);
+        Allenatore allenatore = this.cercaAllenatore(id_allenatore);
         if(allenatore == null){
             return;
         }

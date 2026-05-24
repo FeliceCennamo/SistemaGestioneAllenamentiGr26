@@ -19,7 +19,7 @@ public class Atleta extends Utente{
     private HashSet<Allenatore> allenatori = new HashSet<Allenatore>();
 
     @OneToMany(mappedBy = "atleta")
-    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>();
+    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>(); //G: Non sono sicuro lo debba avere
 
     public Atleta(){}
 

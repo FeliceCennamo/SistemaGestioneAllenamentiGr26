@@ -48,6 +48,10 @@ public class SessioneDiAllenamento {
         return id;
     }
 
+    public Atleta getAtleta(){ return Atleta; }
+
+    public Allenatore getAllenatore(){ return Allenatore; }
+
     //Metodi set
     public void setTitolo(String titolo) {
         this.titolo = titolo;
