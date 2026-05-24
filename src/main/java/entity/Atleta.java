@@ -18,6 +18,9 @@ public class Atleta extends Utente{
     @ManyToMany(mappedBy = "atleti")
     private HashSet<Allenatore> allenatori = new HashSet<Allenatore>();
 
+    @OneToMany(mappedBy = "atleta")
+    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>();
+
     public Atleta(){}
 
     public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello){
@@ -63,5 +66,9 @@ public class Atleta extends Utente{
 
     public void addAllenatore(Allenatore a){
         this.allenatori.add(a);
+    }
+
+    public HashSet<SessioneDiAllenamento> getSessioni(){
+        return this.sessioni;
     }
 }

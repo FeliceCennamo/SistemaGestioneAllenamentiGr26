@@ -4,7 +4,7 @@ import com.mysql.cj.Session;
 import jakarta.persistence.*;
 
 import java.time.Duration;
-
+a
 @Entity
 public class Esercizio {
 
@@ -58,6 +58,8 @@ public class Esercizio {
     }
 
 
+
+    // Questa roba è sbagliata, risultato_atteso è una costante non dipende dall'istanza
     public enum Tipologia {
         RIPETIZIONI{
             private int risultato_atteso;

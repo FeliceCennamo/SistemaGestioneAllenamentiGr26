@@ -23,6 +23,13 @@ public class SessioneDiAllenamento {
     @OneToMany(mappedBy = "sessione")
     private List<Esercizio> esercizi = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "atleta_id")   // chiave esterna verso Atleti
+    private Atleta atleta;
+
+    @ManyToOne
+    @JoinColumn(name = "allenatore_id") // chiave esterna verso Allenatori
+    private Allenatore allenatore;
 
     //Metodi get
     public String getTitolo() {
@@ -54,6 +61,16 @@ public class SessioneDiAllenamento {
         this.dataSvolgimento = dataSvolgimento;
     }
 
+    public void setAtleta(Atleta atleta) {
+        this.atleta = atleta;
+        atleta.getSessioni().add(this);
+    }
+
+    public void setAllenatore(Allenatore allenatore) {
+        this.allenatore = allenatore;
+        allenatore.getSessioni().add(this);
+    }
+
     //costruttore vuoto
     public SessioneDiAllenamento(){}
 
@@ -63,6 +80,14 @@ public class SessioneDiAllenamento {
         this.titolo = titolo;
         this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
+    }
+
+    public List<Esercizio> getEsercizi() {
+        return esercizi;
+    }
+
+    public void setEsercizi(List<Esercizio> esercizi) {
+        this.esercizi = esercizi;
     }
 
     /*

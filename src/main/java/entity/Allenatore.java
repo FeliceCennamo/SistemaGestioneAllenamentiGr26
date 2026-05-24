@@ -16,8 +16,10 @@ public class Allenatore extends Utente {
             joinColumns = @JoinColumn(name = "allenatore_id"),
             inverseJoinColumns = @JoinColumn(name = "atleta_id")
     )
-
     private HashSet<Atleta> atleti = new HashSet<Atleta>();
+
+    @OneToMany(mappedBy = "allenatore")
+    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>();
 
     public Allenatore(){}
 
@@ -47,5 +49,9 @@ public class Allenatore extends Utente {
         }
 
         return null;
+    }
+
+    public HashSet<SessioneDiAllenamento> getSessioni(){
+        return this.sessioni;
     }
 }
