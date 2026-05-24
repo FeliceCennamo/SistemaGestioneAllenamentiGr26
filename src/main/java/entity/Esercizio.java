@@ -1,8 +1,6 @@
 package entity;
 
-import com.mysql.cj.Session;
 import jakarta.persistence.*;
-
 import java.time.Duration;
 
 @Entity
@@ -14,68 +12,79 @@ public class Esercizio {
 
     private String nome;
     private String descrizione;
-    private Tipologia tipologia;
 
+    @Enumerated(EnumType.STRING)
+    private TipoEsercizio tipo; // Enum semplice senza dati variabili
 
-    //si deve far quadrare jakarta per le tabelle
+    @Embedded
+    private RisultatoAtteso risultatoAtteso;
+
     @ManyToOne
-    @JoinColumn(name = "risultato", referencedColumnName = "id_risultato")
+    @JoinColumn(name = "sessione_id") // Nome colonna FK verso SessioneDiAllenamento
     private SessioneDiAllenamento sessione;
 
+    public Esercizio() {}
 
-    public Esercizio(){}
-
-    public Esercizio(String nome, String descrizione, int ris_atteso){
-
+    // Costruttore per ripetizioni
+    public Esercizio(String nome, String descrizione, int ripetizioni) {
         this.nome = nome;
         this.descrizione = descrizione;
-        this.tipologia = Tipologia.RIPETIZIONI;
-        this.setRisultatoAtteso(ris_atteso);
+        this.tipo = TipoEsercizio.RIPETIZIONI;
+        this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
     }
 
-    // Gestire formato risultato atteso nel controller
-    public Esercizio(String nome, String descrizione, String ris_atteso){
-
+    // Costruttore per tempo (Duration)
+    public Esercizio(String nome, String descrizione, Duration durata) {
         this.nome = nome;
         this.descrizione = descrizione;
-        this.tipologia = Tipologia.TEMPO;
-        try{
-            Duration d = Duration.parse(ris_atteso);
-            this.setRisultatoAtteso(d);
-        }
-        catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
-
+        this.tipo = TipoEsercizio.TEMPO;
+        this.risultatoAtteso = new RisultatoAtteso(durata);
     }
 
-    private void setRisultatoAtteso(int risultatoAtteso){
-        this.tipologia.setRisultatoAtteso(risultatoAtteso);
+    // getter e setter...
+    public void setSessione(SessioneDiAllenamento sessione) {
+        this.sessione = sessione;
+    }
+}
+
+// Enum semplice
+enum TipoEsercizio {
+    RIPETIZIONI, TEMPO
+}
+
+// Embeddable per memorizzare il risultato atteso in modo polimorfico
+@Embeddable
+class RisultatoAtteso {
+    private Integer ripetizioni;
+    private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
+
+    public RisultatoAtteso() {}
+
+    // Costruttore per ripetizioni
+    public RisultatoAtteso(int ripetizioni) {
+        this.ripetizioni = ripetizioni;
+        this.durata = null;
     }
 
-    private void setRisultatoAtteso(Duration risultatoAtteso){
-        this.tipologia.setRisultatoAtteso(risultatoAtteso);
+    // Costruttore per durata
+    public RisultatoAtteso(Duration durata) {
+        this.durata = durata;
+        this.ripetizioni = null;
     }
 
+    public Integer getRipetizioni() {
+        return ripetizioni;
+    }
 
-    public enum Tipologia {
-        RIPETIZIONI{
-            private int risultato_atteso;
+    public void setRipetizioni(Integer ripetizioni) {
+        this.ripetizioni = ripetizioni;
+    }
 
-            @Override
-            void setRisultatoAtteso(Object risultatoAtteso){
-                this.risultato_atteso =(Integer) risultatoAtteso;
-            }
-        },
-        TEMPO{
-            private Duration risultato_atteso;
+    public Duration getDurata() {
+        return durata;
+    }
 
-            @Override
-            void setRisultatoAtteso(Object risultatoAtteso){
-                risultato_atteso = (Duration) risultatoAtteso;
-            }
-        };
-
-        abstract void  setRisultatoAtteso(Object risultatoAtteso);
+    public void setDurata(Duration durata) {
+        this.durata = durata;
     }
 }

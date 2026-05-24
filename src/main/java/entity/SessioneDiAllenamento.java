@@ -20,7 +20,7 @@ public class SessioneDiAllenamento {
     private String descrizione;
     private LocalDate dataSvolgimento;
 
-    @OneToMany(mappedBy = "sessione")
+    @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Esercizio> esercizi = new ArrayList<>();
 
 
