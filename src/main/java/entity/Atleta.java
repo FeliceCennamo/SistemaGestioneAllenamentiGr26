@@ -1,4 +1,67 @@
 package entity;
 
-public class Atleta {
+
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+
+@Entity
+@Table(name = "Atleti")
+public class Atleta extends Utente{
+
+    private String disciplina;
+    private int livello;
+
+    // Obbiettivo è un attributo opzionale tradotto come un attributo nullo di defoult
+    private String obbiettivo = null;
+
+    @ManyToMany(mappedBy = "atleti")
+    private HashSet<Allenatore> allenatori = new HashSet<Allenatore>();
+
+    public Atleta(){}
+
+    public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello){
+        super(nome, cognome, mail, password);
+        this.disciplina = disciplina;
+        this.livello = livello;
+    }
+
+    public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello, String obbiettivo){
+        super(nome, cognome, mail, password);
+        this.disciplina = disciplina;
+        this.livello = livello;
+        this.obbiettivo = obbiettivo;
+    }
+
+    public String getObbiettivo(){
+        return this.obbiettivo;
+    }
+
+    public String getDisciplina(){
+        return this.disciplina;
+    }
+
+    public int getLivello(){
+        return this.livello;
+    }
+
+    public void setObbiettivo(String obbiettivo){
+        this.obbiettivo = obbiettivo;
+    }
+
+    public void setDisciplina(String disciplina){
+        this.disciplina = disciplina;
+    }
+
+    public void setLivello(int livello){
+        this.livello = livello;
+    }
+
+    public HashSet<Allenatore> getAllenatori(){
+        return this.allenatori;
+    }
+
+    public void addAllenatore(Allenatore a){
+        this.allenatori.add(a);
+    }
 }
