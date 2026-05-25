@@ -2,27 +2,26 @@ package entity;
 
 import java.util.HashSet;
 
+/**
+ *Fornisce i metodi per la gestione degli utenti registrati al sistema
+ *Il costruttore è privato, di conseguenza richiamare il metodo gestoreUtente.getInstance()
+ */
 public class GestoreUtenti {
-    /**
-     *Fornisce i metodi per la gestione degli utenti registrati al sistema
-     *Il costruttore è privato, di conseguenza richiamare il metodo gestoreUtente.getInstance()
-     */
 
     /* Non ha senso sto HashSet, è meglio lavorare sul db, dobbiamo chiedere al prof se
      questa cosa ha senso anche a livello UML del nostro diagramma*/
     //private repo_utenti (istanza della repository degli utenti sul db)
     private static GestoreUtenti instance;
 
-    private GestoreUtenti(){
-        /**
-         * Costruttore di GestoreUtenti
-         */
-    }
+    /**
+     * Costruttore di GestoreUtenti
+     */
+    private GestoreUtenti(){}
 
+    /**
+     * Fornisce l'istanza singola di GestoreUtente, se essa non esiste viene creata
+     */
     public GestoreUtenti getInstance(){
-        /**
-         * Fornisce l'istanza singola di GestoreUtente, se essa non esiste viene creata
-         */
         if(instance == null){
             instance = new GestoreUtenti();
         }
@@ -34,10 +33,10 @@ public class GestoreUtenti {
         //return repo_utenti.findall()
     }
 
+    /**
+     * Dato in ingresso l'id dell'atleta, restituisce l'oggetto
+     */
     public Atleta cercaAtleta(Long id_atleta){
-        /**
-         * Dato in ingresso l'id dell'atleta, restituisce l'oggetto
-         */
         HashSet<Utente> listaUtenti = this.getListaUtenti();
         for(Utente utente : listaUtenti){
             if( utente instanceof Atleta && utente.getId().equals(id_atleta) ){
@@ -47,10 +46,10 @@ public class GestoreUtenti {
         return null;
     }
 
+    /**
+     * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto
+     */
     public Allenatore cercaAllenatore(Long id_allenatore){
-        /**
-         * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto
-         */
         HashSet<Utente> listaUtenti = this.getListaUtenti();
         for(Utente utente : listaUtenti){
             if(utente instanceof Allenatore && utente.getId().equals(id_allenatore)){
@@ -60,10 +59,10 @@ public class GestoreUtenti {
         return null;
     }
 
+    /**
+     * Dati un allenatore e un atleta, permette a essi di associarsi l'un l'altro
+     */
     public void associaAtletaAllenatore(Long id_atleta, Long id_allenatore){
-        /**
-         * Dati un allenatore e un atleta, permette a essi di associarsi l'un l'altro
-         */
         Atleta atleta = this.cercaAtleta(id_atleta);
         Allenatore allenatore = this.cercaAllenatore(id_allenatore);
         if(atleta == null || allenatore == null){
@@ -73,10 +72,10 @@ public class GestoreUtenti {
         atleta.addAllenatore(allenatore);
     }
 
+    /**
+     * Permette all'allenatore di modificare le informazioni relative all'esperienza dell'atleta
+     */
     public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, String obiettivo, String disciplina, int livello){
-        /**
-         * Permette all'allenatore di modificare le informazioni relative all'esperienza dell'atleta
-         */
         Allenatore allenatore = this.cercaAllenatore(id_allenatore);
         if(allenatore == null){
             return;

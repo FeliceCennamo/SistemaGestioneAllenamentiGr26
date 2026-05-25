@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Classe di gestione di tutte le sessioni create, in corso e completate
+ * Permette la visualizzazione e la modifica di esse
+ */
 public class GestoreSessioni {
-    /**
-     * Classe di gestione di tutte le sessioni create, in corso e completate
-     * Permette la visualizzazione e la modifica di esse
-     */
 
     /*public HashSet<SessioneDiAllenamento> listaSessioni;
     Non sono sicuro se abbia senso
@@ -22,16 +22,15 @@ public class GestoreSessioni {
 
     private static GestoreSessioni instance;
 
-    private GestoreSessioni() {
-        /**
-         * Costruttore di GestoreSessioni
-         */
-    }
+    /**
+     * Costruttore di GestoreSessioni
+     */
+    private GestoreSessioni() {}
 
+    /**
+     * Fornisce l'istanza singola di GestoreSessioni, se essa non esiste viene creata
+     */
     public GestoreSessioni getInstance() {
-        /**
-         * Fornisce l'istanza singola di GestoreSessioni, se essa non esiste viene creata
-         */
         if (instance == null) {
             instance = new GestoreSessioni();
         }
@@ -39,15 +38,18 @@ public class GestoreSessioni {
         return instance;
     }
 
+    /**
+     * Permette di vedere gli esercizi che compongono una sessione dato il suo id
+     */
     public List<Esercizio> dettaglioSessione(Long id_sessione) {
         SessioneDiAllenamento sessione = this.getSessione(id_sessione);
         return sessione.getEsercizi();
     }
 
+    /**
+     * Permette di cercare tutte le sessioni presenti e passate
+     */
     public HashSet<SessioneDiAllenamento> cercaSessioni(){
-        /**
-         * Permette di cercare tutte le sessioni presenti e passate
-         */
         HashSet<SessioneDiAllenamento> listaSessioni = //ricerca nel db
         return listaSessioni;
     }
@@ -60,11 +62,10 @@ public class GestoreSessioni {
     }
 
 
+    /**
+     *Permette a un atleta di completare la sessione
+     */
     public void completaSessione(Long id_atleta, Long id_sessione) {
-        /**
-         *Permette a un atleta di completare la sessione
-         */
-
         SessioneDiAllenamento s = this.getSessione(id_sessione);
         if(!s.getAtleta().getId().equals(id_atleta)){
             return;
@@ -74,10 +75,10 @@ public class GestoreSessioni {
         s.registraRisultati();
     }
 
+    /**
+     *Permette di ricercare una sessione dato il suo id
+     */
     public SessioneDiAllenamento getSessione(Long id_sessione) {
-        /**
-         *Permette di ricercare una sessione dato il suo id
-         */
         HashSet<SessioneDiAllenamento> listaSessioni = this.cercaSessioni();
         for(SessioneDiAllenamento sessione : listaSessioni){
             if(sessione.getId().equals(id_sessione)){
@@ -88,11 +89,11 @@ public class GestoreSessioni {
         return null;
     }
 
+    /**
+     *Permette la creazione di una sessione dati in ingresso il suo titolo, la descrizione, la data di svolgimento e la lista di esercizi
+     *Se l'allenatore non è associato all'atleta la sessione non viene creata e il metodo ritorna un valore null
+     */
     public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore) {
-        /**
-         *Permette la creazione di una sessione dati in ingresso il suo titolo, la descrizione, la data di svolgimento e la lista di esercizi
-         *Se l'allenatore non è associato all'atleta la sessione non viene creata e il metodo ritorna un valore null
-         */
         GestoreUtenti utenti = null;
         SessioneDiAllenamento s = null;
         utenti = utenti.getInstance();
