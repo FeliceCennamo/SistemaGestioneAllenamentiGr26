@@ -19,6 +19,7 @@ public class SessioneDiAllenamento {
     private String titolo;
     private String descrizione;
     private LocalDate dataSvolgimento;
+    private Stato stato;
 
     @OneToMany(mappedBy = "sessione")
     private List<Esercizio> esercizi = new ArrayList<>();
@@ -48,9 +49,11 @@ public class SessioneDiAllenamento {
         return id;
     }
 
-    public Atleta getAtleta(){ return Atleta; }
+    public Atleta getAtleta(){ return atleta; }
 
-    public Allenatore getAllenatore(){ return Allenatore; }
+    public Allenatore getAllenatore(){ return allenatore; }
+
+    public Stato getStato(){ return stato; }
 
     //Metodi set
     public void setTitolo(String titolo) {
@@ -64,6 +67,23 @@ public class SessioneDiAllenamento {
     public void setDataSvolgimento(LocalDate dataSvolgimento) {
         this.dataSvolgimento = dataSvolgimento;
     }
+
+    public void setStato(String stato){
+        switch (stato){
+            case "COMPLETATA":
+                this.stato = Stato.COMPLETATA;
+                break;
+            case "IN CORSO":
+                this.stato = Stato.IN_CORSO;
+                break;
+            case "ASSEGNATA":
+                this.stato = Stato.ASSEGNATA;
+                break;
+            default:
+                //no action
+        }
+    }
+
 
     public void setAtleta(Atleta atleta) {
         this.atleta = atleta;
@@ -99,6 +119,7 @@ public class SessioneDiAllenamento {
         // Eventualmente controlli
         this.esercizi.add(new Esercizio(nome, descrizione, tipologia, ris_atteso));
     }*/
+
 
 
 

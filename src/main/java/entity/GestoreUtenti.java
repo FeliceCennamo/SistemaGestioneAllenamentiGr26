@@ -35,6 +35,9 @@ public class GestoreUtenti {
     }
 
     public Atleta cercaAtleta(Long id_atleta){
+        /**
+         * Dato in ingresso l'id dell'atleta, restituisce l'oggetto
+         */
         HashSet<Utente> listaUtenti = this.getListaUtenti();
         for(Utente utente : listaUtenti){
             if( utente instanceof Atleta && utente.getId().equals(id_atleta) ){
@@ -45,6 +48,9 @@ public class GestoreUtenti {
     }
 
     public Allenatore cercaAllenatore(Long id_allenatore){
+        /**
+         * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto
+         */
         HashSet<Utente> listaUtenti = this.getListaUtenti();
         for(Utente utente : listaUtenti){
             if(utente instanceof Allenatore && utente.getId().equals(id_allenatore)){
@@ -55,6 +61,9 @@ public class GestoreUtenti {
     }
 
     public void associaAtletaAllenatore(Long id_atleta, Long id_allenatore){
+        /**
+         * Dati un allenatore e un atleta, permette a essi di associarsi l'un l'altro
+         */
         Atleta atleta = this.cercaAtleta(id_atleta);
         Allenatore allenatore = this.cercaAllenatore(id_allenatore);
         if(atleta == null || allenatore == null){
@@ -65,7 +74,9 @@ public class GestoreUtenti {
     }
 
     public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, String obiettivo, String disciplina, int livello){
-
+        /**
+         * Permette all'allenatore di modificare le informazioni relative all'esperienza dell'atleta
+         */
         Allenatore allenatore = this.cercaAllenatore(id_allenatore);
         if(allenatore == null){
             return;

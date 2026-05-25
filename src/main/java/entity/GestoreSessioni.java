@@ -1,5 +1,7 @@
 package entity;
 
+import com.mysql.cj.Session;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
@@ -43,6 +45,9 @@ public class GestoreSessioni {
     }
 
     public HashSet<SessioneDiAllenamento> cercaSessioni(){
+        /**
+         * Permette di cercare tutte le sessioni presenti e passate
+         */
         HashSet<SessioneDiAllenamento> listaSessioni = //ricerca nel db
         return listaSessioni;
     }
@@ -56,13 +61,23 @@ public class GestoreSessioni {
 
 
     public void completaSessione(Long id_atleta, Long id_sessione) {
+        /**
+         *Permette a un atleta di completare la sessione
+         */
+
         SessioneDiAllenamento s = this.getSessione(id_sessione);
+        if(!s.getAtleta().getId().equals(id_atleta)){
+            return;
+        }
         //cerca sessione
-        s.setStato("COMPLETATO");
+        s.setStato("COMPLETATA");
         s.registraRisultati();
     }
 
     public SessioneDiAllenamento getSessione(Long id_sessione) {
+        /**
+         *Permette di ricercare una sessione dato il suo id
+         */
         HashSet<SessioneDiAllenamento> listaSessioni = this.cercaSessioni();
         for(SessioneDiAllenamento sessione : listaSessioni){
             if(sessione.getId().equals(id_sessione)){
@@ -73,14 +88,24 @@ public class GestoreSessioni {
         return null;
     }
 
-    public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, ArrayList<Esercizio> esercizi, Atleta atleta, Allenatore allenatore) {
-        SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data);
-        s.setAllenatore(allenatore);
-        s.setAtleta(atleta);
-        s.setEsercizi(esercizi);
-
+    public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore) {
+        /**
+         *Permette la creazione di una sessione dati in ingresso il suo titolo, la descrizione, la data di svolgimento e la lista di esercizi
+         *Se l'allenatore non è associato all'atleta la sessione non viene creata e il metodo ritorna un valore null
+         */
+        GestoreUtenti utenti = null;
+        SessioneDiAllenamento s = null;
+        utenti = utenti.getInstance();
+        Allenatore allenatore = utenti.cercaAllenatore(id_allenatore);
+        Atleta atleta = allenatore.getAtleta(id_atleta);
+        if(atleta != null) {
+            s = new SessioneDiAllenamento(titolo, descrizione, data);
+            s.setAllenatore(allenatore);
+            s.setAtleta(atleta);
+            s.setEsercizi(esercizi);
+            s.setStato("ASSEGNATA");
+        }
         return s;
-
     }
 
 }
