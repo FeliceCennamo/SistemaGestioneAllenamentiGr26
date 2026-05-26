@@ -117,8 +117,32 @@ public class SessioneDiAllenamento {
         this.esercizi = esercizi;
     }
 
-    // Qua bisogna ragionare su come fargli arrivare i risultati, va bene anche un listone ma forse meglio una sorta di dizionario dato che gli esercizi di una stessa sessione vogliono pèiù tipi
-    public void registraRisultati(){}
+    /**
+     * PRECONDITION: LA LISTA DEI RISULTATI DEVE MATCHARE I TIPI DEGLI ESERCIZI IN ORDINE NELLA LISTA
+     * @param risultati lista di risultati ottenuti
+     *
+     **/
+
+    public void registraRisultati(Object[] risultati){
+        int i = 0;
+        if(this.esercizi.size() != risultati.length)
+            throw new IllegalArgumentException("Il numero di risultati non combacia con il numero degli esercizi");
+
+        for(Esercizio esercizio : this.esercizi){
+
+            if((esercizio.getTipo() == TipoEsercizio.RIPETIZIONI && (risultati[i] instanceof  RisultatoRipetizioni )) ||
+                    (esercizio.getTipo() == TipoEsercizio.TEMPO && (risultati[i] instanceof  RisultatoTempo ))
+            ){
+                esercizio.setRisultato(risultati[i]);
+                i++;
+            }
+            else
+                throw new IllegalArgumentException("Il tipo dei risultati non combacia con il tipo degli esercizi");
+
+
+        }
+
+    }
 
 
     public enum Stato {

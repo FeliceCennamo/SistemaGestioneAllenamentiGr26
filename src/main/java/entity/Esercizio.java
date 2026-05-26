@@ -65,12 +65,8 @@ public class Esercizio {
     }
 
     // Ragionare se fargli ritornare una stringa o tradurre l'intero dopo e se ha senso il defoult a null
-    public Integer getTipo() {
-        return switch (this.tipo) {
-            case RIPETIZIONI -> 0;
-            case TEMPO -> 1;
-            default -> null;
-        };
+    public TipoEsercizio getTipo() {
+        return this.tipo;
     }
 
     public Object getRisultatoAtteso() {
