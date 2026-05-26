@@ -1,6 +1,10 @@
 package entity;
 
+import database.GestorePersistenza;
+import jakarta.persistence.EntityNotFoundException;
+
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  *Fornisce i metodi per la gestione degli utenti registrati al sistema
@@ -8,9 +12,10 @@ import java.util.HashSet;
  */
 public class GestoreUtenti {
 
-    /* Non ha senso sto HashSet, è meglio lavorare sul db, dobbiamo chiedere al prof se
-     questa cosa ha senso anche a livello UML del nostro diagramma*/
-    //private repo_utenti (istanza della repository degli utenti sul db)
+    /**Accesso al package database*/
+    private static final GestorePersistenza persistence_utenti = new GestorePersistenza();
+
+    /**Istanza statica del gestoreUtenti*/
     private static GestoreUtenti instance;
 
     /**
@@ -20,8 +25,9 @@ public class GestoreUtenti {
 
     /**
      * Fornisce l'istanza singola di GestoreUtente, se essa non esiste viene creata
+     * @return Istanza operativa di gestoreUtente
      */
-    public GestoreUtenti getInstance(){
+    public static GestoreUtenti getInstance(){
         if(instance == null){
             instance = new GestoreUtenti();
         }
@@ -29,43 +35,56 @@ public class GestoreUtenti {
         return instance;
     }
 
-    public HashSet<Utente> getListaUtenti(){
-        //return repo_utenti.findall()
+    /**
+     * Permette di ottenere tutti gli utenti registrati nel sistema
+     * @return Set degli utenti registrati
+     */
+    public Set<Utente> getListaUtenti(){
+        Set<Utente> listaUtenti = new HashSet<>();
+        listaUtenti.addAll(persistence_utenti.ottieniTutti(Atleta.class));
+        listaUtenti.addAll(persistence_utenti.ottieniTutti(Allenatore.class));
+        return listaUtenti;
     }
 
     /**
-     * Dato in ingresso l'id dell'atleta, restituisce l'oggetto
+     * Dato in ingresso l'id dell'atleta, restituisce l'oggetto. Se l'atleta non esiste genera una EntityNotFoundException
+     * @param id_atleta Id dell'atleta che si vuole ricercare
+     * @return Oggetto atleta che è stato trovato
      */
-    public Atleta cercaAtleta(Long id_atleta){
-        HashSet<Utente> listaUtenti = this.getListaUtenti();
-        for(Utente utente : listaUtenti){
-            if( utente instanceof Atleta && utente.getId().equals(id_atleta) ){
-                return (Atleta) utente;
-            }
+    public Atleta cercaAtleta(Long id_atleta) throws EntityNotFoundException{
+        Atleta a = persistence_utenti.trovaPerId(Atleta.class, id_atleta);
+        if(a == null){
+            throw new EntityNotFoundException("Atleta non trovato");
         }
-        return null;
+        return a;
     }
 
     /**
-     * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto
+     * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto. Se l'allenatore non esiste genera una EntityNotFoundException
+     * @param id_allenatore Id dell'allenatore che si vuole ricercare
+     * @return Oggetto allenatore che è stato trovato
      */
-    public Allenatore cercaAllenatore(Long id_allenatore){
-        HashSet<Utente> listaUtenti = this.getListaUtenti();
-        for(Utente utente : listaUtenti){
-            if(utente instanceof Allenatore && utente.getId().equals(id_allenatore)){
-                return (Allenatore) utente;
-            }
+    public Allenatore cercaAllenatore(Long id_allenatore) throws EntityNotFoundException{
+        Allenatore a = persistence_utenti.trovaPerId(Allenatore.class, id_allenatore);
+        if(a == null){
+            throw new EntityNotFoundException("Allenatore non trovato");
         }
-        return null;
+        return a;
     }
 
     /**
      * Dati un allenatore e un atleta, permette a essi di associarsi l'un l'altro
+     * @param id_allenatore allenatore che vuole associare l'atleta
+     * @param id_atleta atleta che deve essere associato a quell'allenatore
      */
     public void associaAtletaAllenatore(Long id_atleta, Long id_allenatore){
-        Atleta atleta = this.cercaAtleta(id_atleta);
-        Allenatore allenatore = this.cercaAllenatore(id_allenatore);
-        if(atleta == null || allenatore == null){
+        Allenatore allenatore;
+        Atleta atleta;
+        try {
+            atleta = cercaAtleta(id_atleta);
+            allenatore = cercaAllenatore(id_allenatore);
+        }catch(EntityNotFoundException e) {
+            e.printStackTrace();
             return;
         }
         allenatore.addAtleta(atleta);
@@ -74,12 +93,22 @@ public class GestoreUtenti {
 
     /**
      * Permette all'allenatore di modificare le informazioni relative all'esperienza dell'atleta
+     * @param id_allenatore id dell'allenatore che compie l'operazione
+     * @param id_atleta id dell'atleta a cui vanno modificati i valori di carriera
+     * @param disciplina La nuova disciplina dell'atleta
+     * @param livello il nuovo livello dell'atleta
+     * @param obiettivo il nuovo obiettivo dell'atleta
      */
     public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, String obiettivo, String disciplina, int livello){
-        Allenatore allenatore = this.cercaAllenatore(id_allenatore);
-        if(allenatore == null){
+        Allenatore allenatore;
+        try{
+                allenatore = cercaAllenatore(id_allenatore);
+        }catch(EntityNotFoundException e){
+            e.printStackTrace();
             return;
         }
+
+        // Aggiungere blocco try catch e ottenere una exception su getAtleta
         Atleta atleta = allenatore.getAtleta(id_atleta);
         if(atleta == null){
             return;
@@ -96,10 +125,6 @@ public class GestoreUtenti {
 
     public void RegistrazioneUtente(){
 
-    }
-
-    public void addUtente(Utente utente){
-        //non so se sto metodo ha senso metterlo se alla fine non abbiamo la lista
     }
 
     public void monitoraPrestazioni(){
