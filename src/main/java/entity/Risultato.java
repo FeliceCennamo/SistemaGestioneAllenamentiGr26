@@ -1,9 +1,6 @@
 package entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public abstract class Risultato {
@@ -28,9 +25,9 @@ public abstract class Risultato {
         this.nota = nota;
     }
 
-    public abstract int getRisultato();
+    public abstract Object getRisultato();
 
-    public abstract  void setRisultato(int risultato);
+    public abstract  void setRisultato(Object risultato);
 
 
 

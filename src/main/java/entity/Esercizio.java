@@ -23,6 +23,10 @@ public class Esercizio {
     @JoinColumn(name = "sessione_id") // Nome colonna FK verso SessioneDiAllenamento
     private SessioneDiAllenamento sessione;
 
+    @OneToOne
+    @JoinColumn(name = "risultato")
+    private Risultato risultato;
+
     public Esercizio() {}
 
     // Costruttore per ripetizioni
@@ -30,6 +34,7 @@ public class Esercizio {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.RIPETIZIONI;
+        this.risultato = new RisultatoRipetizioni();
 
         if(ripetizioni > 0)
             this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
@@ -43,18 +48,88 @@ public class Esercizio {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.TEMPO;
+        this.risultato = new RisultatoTempo();
         this.risultatoAtteso = new RisultatoAtteso(durata);
     }
 
-    // getter e setter...
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    // Ragionare se fargli ritornare una stringa o tradurre l'intero dopo e se ha senso il defoult a null
+    public TipoEsercizio getTipo() {
+        return this.tipo;
+    }
+
+    public Object getRisultatoAtteso() {
+        if(tipo == TipoEsercizio.RIPETIZIONI)
+            return this.risultatoAtteso.getRipetizioni();
+        else
+            return this.risultatoAtteso.getDurata();
+    }
+
+    public SessioneDiAllenamento getSessione() {
+        return sessione;
+    }
+
+    public Risultato getRisultato() {
+        return risultato;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public void setTipo(int tipo) {
+        if (tipo == 0)
+            this.tipo = TipoEsercizio.RIPETIZIONI;
+        else if (tipo==1)
+            this.tipo = TipoEsercizio.TEMPO;
+    }
+
+    public void setRisultatoAtteso(Object risultatoAtteso) {
+
+        boolean esito = false;
+        if (this.tipo==TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
+            esito = this.risultatoAtteso.setRisultato((Integer) risultatoAtteso);
+        else if (this.tipo==TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
+            esito = this.risultatoAtteso.setRisultato((Duration) risultatoAtteso);
+
+        if(!esito)
+            throw new IllegalArgumentException("Risultato non valido");
+    }
+
     public void setSessione(SessioneDiAllenamento sessione) {
         this.sessione = sessione;
     }
+
+    public void setRisultato(Object risultato) {
+        if (this.tipo == TipoEsercizio.TEMPO)
+            this.risultato.setRisultato((Duration) risultato);
+
+        else if (this.tipo == TipoEsercizio.RIPETIZIONI)
+            this.risultato.setRisultato((Integer) risultato);
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
+    }
+
 }
 
-// Enum semplice
 enum TipoEsercizio {
-    RIPETIZIONI, TEMPO
+    RIPETIZIONI,
+    TEMPO
 }
 
 // Embeddable per memorizzare il risultato atteso in modo polimorfico
@@ -63,7 +138,10 @@ class RisultatoAtteso {
     private Integer ripetizioni;
     private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
 
-    public RisultatoAtteso() {}
+    public RisultatoAtteso() {
+        this.ripetizioni = null;
+        this.durata = null;
+    }
 
     // Costruttore per ripetizioni
     public RisultatoAtteso(int ripetizioni) {
@@ -81,15 +159,17 @@ class RisultatoAtteso {
         return ripetizioni;
     }
 
-    public void setRipetizioni(Integer ripetizioni) {
-        this.ripetizioni = ripetizioni;
-    }
-
     public Duration getDurata() {
         return durata;
     }
 
-    public void setDurata(Duration durata) {
-        this.durata = durata;
+    public boolean setRisultato(Object risultato){
+        if(risultato instanceof Integer && this.durata == null)
+            this.ripetizioni = (Integer) risultato;
+        else if(risultato instanceof Duration && this.ripetizioni == null)
+            this.durata = (Duration) risultato;
+        else
+            return false;
+        return true;
     }
 }

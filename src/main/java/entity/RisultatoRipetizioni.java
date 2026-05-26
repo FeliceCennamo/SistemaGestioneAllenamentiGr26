@@ -1,20 +1,31 @@
 package entity;
 
+import jakarta.persistence.Entity;
+
+@Entity
 public class RisultatoRipetizioni extends Risultato {
 
-    private int ripetizioni;
+    private Integer ripetizioni;
 
-    public RisultatoRipetizioni(String nota, int ripetizioni){
+    public RisultatoRipetizioni(){}
+
+    public RisultatoRipetizioni(String nota, Integer ripetizioni){
         super(nota);
         this.ripetizioni = ripetizioni;
     }
 
-    public int getRisultato(){
+    @Override
+    public Integer getRisultato(){
         return this.ripetizioni;
     }
 
-    public void setRisultato(int ripetizioni){
-        this.ripetizioni = ripetizioni;
+    @Override
+    public void setRisultato(Object ripetizioni){
+
+        if (!(ripetizioni instanceof Integer))
+            this.ripetizioni = (Integer) ripetizioni;
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
 

@@ -32,6 +32,21 @@ public class SessioneDiAllenamento {
     @JoinColumn(name = "allenatore_id") // chiave esterna verso Allenatori
     private Allenatore allenatore;
 
+    //costruttore vuoto
+    public SessioneDiAllenamento(){}
+
+    //costruttore con tutti gli attributi
+    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Atleta atleta, Allenatore allenatore){
+
+        this.titolo = titolo;
+        this.dataSvolgimento = dataSvolgimento;
+        this.descrizione = descrizione;
+        this.stato = Stato.ASSEGNATA;
+        this.setAtleta(atleta);
+        this.setAllenatore(allenatore);
+    }
+
+
     //Metodi get
     public String getTitolo() {
         return titolo;
@@ -84,7 +99,6 @@ public class SessioneDiAllenamento {
         }
     }
 
-
     public void setAtleta(Atleta atleta) {
         this.atleta = atleta;
         atleta.getSessioni().add(this);
@@ -95,17 +109,6 @@ public class SessioneDiAllenamento {
         allenatore.getSessioni().add(this);
     }
 
-    //costruttore vuoto
-    public SessioneDiAllenamento(){}
-
-    //costruttore con tutti gli attributi
-    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento){
-
-        this.titolo = titolo;
-        this.dataSvolgimento = dataSvolgimento;
-        this.descrizione = descrizione;
-    }
-
     public List<Esercizio> getEsercizi() {
         return esercizi;
     }
@@ -114,14 +117,38 @@ public class SessioneDiAllenamento {
         this.esercizi = esercizi;
     }
 
-    /*
-    void addEsercizio(String nome, String descrizione, boolean tipologia, int ris_atteso){
-        // Eventualmente controlli
-        this.esercizi.add(new Esercizio(nome, descrizione, tipologia, ris_atteso));
-    }*/
+    /**
+     * PRECONDITION: LA LISTA DEI RISULTATI DEVE MATCHARE I TIPI DEGLI ESERCIZI IN ORDINE NELLA LISTA
+     * @param risultati lista di risultati ottenuti
+     *
+     **/
 
-    public void registraRisultati(){}
+    public void registraRisultati(Object[] risultati){
+        int i = 0;
+        if(this.esercizi.size() != risultati.length)
+            throw new IllegalArgumentException("Il numero di risultati non combacia con il numero degli esercizi");
+
+        for(Esercizio esercizio : this.esercizi){
+
+            if((esercizio.getTipo() == TipoEsercizio.RIPETIZIONI && (risultati[i] instanceof  RisultatoRipetizioni )) ||
+                    (esercizio.getTipo() == TipoEsercizio.TEMPO && (risultati[i] instanceof  RisultatoTempo ))
+            ){
+                esercizio.setRisultato(risultati[i]);
+                i++;
+            }
+            else
+                throw new IllegalArgumentException("Il tipo dei risultati non combacia con il tipo degli esercizi");
 
 
+        }
+
+    }
+
+
+    public enum Stato {
+        ASSEGNATA,
+        IN_CORSO,
+        COMPLETATA
+    }
 
 }

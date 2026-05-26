@@ -1,22 +1,32 @@
 package entity;
 
+import jakarta.persistence.Entity;
+
+import java.time.Duration;
+
+@Entity
 public class RisultatoTempo extends Risultato {
 
-    int tempo;
+    Duration tempo;
 
     public RisultatoTempo(){}
 
-    public RisultatoTempo(String nota, int tempo) {
+    public RisultatoTempo(String nota, Duration tempo) {
         super(nota);
         this.tempo = tempo;
     }
 
-    public int getRisultato(){
+    @Override
+    public Duration getRisultato(){
         return this.tempo;
     }
 
-    public void setRisultato(int tempo){
-        this.tempo = tempo;
+    @Override
+    public void setRisultato(Object tempo){
+        if (tempo instanceof Duration)
+            this.tempo = (Duration) tempo;
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
 }
