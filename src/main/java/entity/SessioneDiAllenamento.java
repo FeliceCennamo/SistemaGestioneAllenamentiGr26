@@ -120,6 +120,7 @@ public class SessioneDiAllenamento {
         this.esercizi.add(new Esercizio(nome, descrizione, tipologia, ris_atteso));
     }*/
 
+    public void registraRisultati(){}
 
 
 

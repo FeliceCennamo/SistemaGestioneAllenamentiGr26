@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public abstract class Risultato {
-//commento try
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

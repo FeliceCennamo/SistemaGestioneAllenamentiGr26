@@ -64,6 +64,9 @@ public class GestoreSessioni {
 
     /**
      *Permette a un atleta di completare la sessione
+     * @param id_atleta id_atleta
+     * @param id_sessione id_sessione
+     *
      */
     public void completaSessione(Long id_atleta, Long id_sessione) {
         SessioneDiAllenamento s = this.getSessione(id_sessione);

@@ -12,8 +12,8 @@ public class Atleta extends Utente{
     private String disciplina;
     private int livello;
 
-    // Obbiettivo è un attributo opzionale tradotto come un attributo nullo di defoult
-    private String obbiettivo = null;
+    // Obiettivo è un attributo opzionale tradotto come un attributo nullo di default
+    private String obiettivo = null;
 
     @ManyToMany(mappedBy = "atleti")
     private HashSet<Allenatore> allenatori = new HashSet<Allenatore>();
@@ -29,15 +29,15 @@ public class Atleta extends Utente{
         this.livello = livello;
     }
 
-    public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello, String obbiettivo){
+    public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello, String obiettivo){
         super(nome, cognome, mail, password);
         this.disciplina = disciplina;
         this.livello = livello;
-        this.obbiettivo = obbiettivo;
+        this.obiettivo = obiettivo;
     }
 
-    public String getObbiettivo(){
-        return this.obbiettivo;
+    public String getObiettivo(){
+        return this.obiettivo;
     }
 
     public String getDisciplina(){
@@ -48,8 +48,8 @@ public class Atleta extends Utente{
         return this.livello;
     }
 
-    public void setObbiettivo(String obbiettivo){
-        this.obbiettivo = obbiettivo;
+    public void setObiettivo(String obiettivo){
+        this.obiettivo = obiettivo;
     }
 
     public void setDisciplina(String disciplina){

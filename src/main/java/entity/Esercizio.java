@@ -2,7 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 import java.time.Duration;
-a
+
 @Entity
 public class Esercizio {
 
@@ -26,11 +26,16 @@ public class Esercizio {
     public Esercizio() {}
 
     // Costruttore per ripetizioni
-    public Esercizio(String nome, String descrizione, int ripetizioni) {
+    public Esercizio(String nome, String descrizione, int ripetizioni) throws IllegalArgumentException{
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.RIPETIZIONI;
-        this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
+
+        if(ripetizioni > 0)
+            this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
+        else
+            throw new IllegalArgumentException("Inserito un numero di ripetzioni negativo");
+
     }
 
     // Costruttore per tempo (Duration)

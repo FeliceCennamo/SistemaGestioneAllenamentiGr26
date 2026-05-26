@@ -86,7 +86,7 @@ public class GestoreUtenti {
         }
         atleta.setDisciplina(disciplina);
         atleta.setLivello(livello);
-        atleta.setObbiettivo(obiettivo);
+        atleta.setObiettivo(obiettivo);
 
     }
 
