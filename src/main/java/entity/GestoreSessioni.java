@@ -76,7 +76,7 @@ public class GestoreSessioni {
      * @param id_sessione Id della sessione che si sta cercando di completare
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
-    public void completaSessione(Long id_atleta, Long id_sessione, Object[] risultati) throws IllegalAccessException {
+    public void completaSessione(Long id_atleta, Long id_sessione, Risultato[] risultati) throws IllegalAccessException {
         SessioneDiAllenamento s;
         try{
             s = getSessione(id_sessione);
@@ -120,10 +120,8 @@ public class GestoreSessioni {
         Atleta atleta = allenatore.getAtleta(id_atleta);
 
         SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, atleta, allenatore);
-        s.setAllenatore(allenatore);
-        s.setAtleta(atleta);
+
         s.setEsercizi(esercizi);
-        s.setStato("ASSEGNATA");
 
         persistence_sessioni.salva(s);
         return s;
