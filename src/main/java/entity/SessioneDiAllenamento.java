@@ -130,8 +130,8 @@ public class SessioneDiAllenamento {
 
         for(Esercizio esercizio : this.esercizi){
 
-            if((esercizio.getTipo() == TipoEsercizio.RIPETIZIONI && (risultati[i] instanceof  RisultatoRipetizioni )) ||
-                    (esercizio.getTipo() == TipoEsercizio.TEMPO && (risultati[i] instanceof  RisultatoTempo ))
+            if((esercizio.getTipo() == Esercizio.TipoEsercizio.RIPETIZIONI && (risultati[i] instanceof  RisultatoRipetizioni )) ||
+                    (esercizio.getTipo() == Esercizio.TipoEsercizio.TEMPO && (risultati[i] instanceof  RisultatoTempo ))
             ){
                 esercizio.setRisultato(risultati[i]);
                 i++;

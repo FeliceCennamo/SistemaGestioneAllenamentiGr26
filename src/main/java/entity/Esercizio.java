@@ -125,12 +125,13 @@ public class Esercizio {
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
+    public enum TipoEsercizio {
+        RIPETIZIONI,
+        TEMPO
+    }
 }
 
-enum TipoEsercizio {
-    RIPETIZIONI,
-    TEMPO
-}
+
 
 // Embeddable per memorizzare il risultato atteso in modo polimorfico
 @Embeddable
