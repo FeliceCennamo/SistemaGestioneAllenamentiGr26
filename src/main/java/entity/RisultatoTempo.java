@@ -1,8 +1,11 @@
 package entity;
 
+import jakarta.persistence.Entity;
+
 import java.time.Duration;
 
-public class RisultatoTempo extends Risultato<Duration> {
+@Entity
+public class RisultatoTempo extends Risultato {
 
     Duration tempo;
 
@@ -19,8 +22,11 @@ public class RisultatoTempo extends Risultato<Duration> {
     }
 
     @Override
-    public void setRisultato(Duration tempo){
-        this.tempo = tempo;
+    public void setRisultato(Object tempo){
+        if (tempo instanceof Duration)
+            this.tempo = (Duration) tempo;
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
 }

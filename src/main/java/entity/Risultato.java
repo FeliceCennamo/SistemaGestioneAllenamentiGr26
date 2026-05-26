@@ -1,12 +1,9 @@
 package entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
-public abstract class Risultato<T> {
+public abstract class Risultato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +25,9 @@ public abstract class Risultato<T> {
         this.nota = nota;
     }
 
-    public abstract T getRisultato();
+    public abstract Object getRisultato();
 
-    public abstract  void setRisultato(T risultato);
+    public abstract  void setRisultato(Object risultato);
 
 
 

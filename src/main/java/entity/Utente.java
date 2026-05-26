@@ -15,13 +15,24 @@ public abstract class Utente {
     private String mail;
     private String password;
 
+    private String disciplinaPrevalente;
+
     public Utente(){}
+
+    public Utente(String nome, String cognome, String mail, String password, String disciplinaPrevalente){
+        this.nome = nome;
+        this.cognome = cognome;
+        this.mail = mail;
+        this.password = password;
+        this.disciplinaPrevalente = disciplinaPrevalente;
+    }
 
     public Utente(String nome, String cognome, String mail, String password){
         this.nome = nome;
         this.cognome = cognome;
         this.mail = mail;
         this.password = password;
+        this.disciplinaPrevalente = null;
     }
 
     public String getNome() {

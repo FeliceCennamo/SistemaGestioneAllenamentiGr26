@@ -36,12 +36,14 @@ public class SessioneDiAllenamento {
     public SessioneDiAllenamento(){}
 
     //costruttore con tutti gli attributi
-    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento){
+    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Atleta atleta, Allenatore allenatore){
 
         this.titolo = titolo;
         this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
         this.stato = Stato.ASSEGNATA;
+        this.setAtleta(atleta);
+        this.setAllenatore(allenatore);
     }
 
 
@@ -115,16 +117,9 @@ public class SessioneDiAllenamento {
         this.esercizi = esercizi;
     }
 
-    // Perchè sta roba non ci piace?
-    /*
-    void addEsercizio(String nome, String descrizione, boolean tipologia, int ris_atteso){
-        // Eventualmente controlli
-        this.esercizi.add(new Esercizio(nome, descrizione, tipologia, ris_atteso));
-    }*/
-
-
     // Qua bisogna ragionare su come fargli arrivare i risultati, va bene anche un listone ma forse meglio una sorta di dizionario dato che gli esercizi di una stessa sessione vogliono pèiù tipi
     public void registraRisultati(){}
+
 
     public enum Stato {
         ASSEGNATA,

@@ -23,6 +23,10 @@ public class Esercizio {
     @JoinColumn(name = "sessione_id") // Nome colonna FK verso SessioneDiAllenamento
     private SessioneDiAllenamento sessione;
 
+    @OneToOne
+    @JoinColumn(name = "risultato")
+    private Risultato risultato;
+
     public Esercizio() {}
 
     // Costruttore per ripetizioni
@@ -30,6 +34,7 @@ public class Esercizio {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.RIPETIZIONI;
+        this.risultato = new RisultatoRipetizioni();
 
         if(ripetizioni > 0)
             this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
@@ -43,9 +48,9 @@ public class Esercizio {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.TEMPO;
+        this.risultato = new RisultatoTempo();
         this.risultatoAtteso = new RisultatoAtteso(durata);
     }
-
 
     public Long getId() {
         return id;
@@ -79,6 +84,10 @@ public class Esercizio {
         return sessione;
     }
 
+    public Risultato getRisultato() {
+        return risultato;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -95,20 +104,33 @@ public class Esercizio {
     }
 
     public void setRisultatoAtteso(Object risultatoAtteso) {
+
+        boolean esito = false;
         if (this.tipo==TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
-            this.risultatoAtteso.setRipetizioni((Integer) risultatoAtteso);
+            esito = this.risultatoAtteso.setRisultato((Integer) risultatoAtteso);
         else if (this.tipo==TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
-            this.risultatoAtteso.setDurata((Duration) risultatoAtteso);
-        else
-            throw new IllegalArgumentException("Tipo di risultato non valido");
+            esito = this.risultatoAtteso.setRisultato((Duration) risultatoAtteso);
+
+        if(!esito)
+            throw new IllegalArgumentException("Risultato non valido");
     }
 
     public void setSessione(SessioneDiAllenamento sessione) {
         this.sessione = sessione;
     }
+
+    public void setRisultato(Object risultato) {
+        if (this.tipo == TipoEsercizio.TEMPO)
+            this.risultato.setRisultato((Duration) risultato);
+
+        else if (this.tipo == TipoEsercizio.RIPETIZIONI)
+            this.risultato.setRisultato((Integer) risultato);
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
+    }
+
 }
 
-// Enum semplice
 enum TipoEsercizio {
     RIPETIZIONI,
     TEMPO
@@ -120,7 +142,10 @@ class RisultatoAtteso {
     private Integer ripetizioni;
     private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
 
-    public RisultatoAtteso() {}
+    public RisultatoAtteso() {
+        this.ripetizioni = null;
+        this.durata = null;
+    }
 
     // Costruttore per ripetizioni
     public RisultatoAtteso(int ripetizioni) {
@@ -138,15 +163,17 @@ class RisultatoAtteso {
         return ripetizioni;
     }
 
-    public void setRipetizioni(Integer ripetizioni) {
-        this.ripetizioni = ripetizioni;
-    }
-
     public Duration getDurata() {
         return durata;
     }
 
-    public void setDurata(Duration durata) {
-        this.durata = durata;
+    public boolean setRisultato(Object risultato){
+        if(risultato instanceof Integer && this.durata == null)
+            this.ripetizioni = (Integer) risultato;
+        else if(risultato instanceof Duration && this.ripetizioni == null)
+            this.durata = (Duration) risultato;
+        else
+            return false;
+        return true;
     }
 }
