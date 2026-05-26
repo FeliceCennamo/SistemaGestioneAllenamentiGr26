@@ -20,7 +20,7 @@ public class RisultatoRipetizioni extends Risultato {
     }
 
     @Override
-    public void setRisultato(Object ripetizioni){
+    public void setRisultato(Object ripetizioni) throws IllegalArgumentException{
 
         if (!(ripetizioni instanceof Integer))
             this.ripetizioni = (Integer) ripetizioni;

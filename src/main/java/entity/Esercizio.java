@@ -99,7 +99,7 @@ public class Esercizio {
             this.tipo = TipoEsercizio.TEMPO;
     }
 
-    public void setRisultatoAtteso(Object risultatoAtteso) {
+    public void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException{
 
         boolean esito = false;
         if (this.tipo==TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
@@ -111,7 +111,7 @@ public class Esercizio {
             throw new IllegalArgumentException("Risultato non valido");
     }
 
-    public void setSessione(SessioneDiAllenamento sessione) {
+    public void setSessione(SessioneDiAllenamento sessione) throws IllegalArgumentException{
         this.sessione = sessione;
     }
 
