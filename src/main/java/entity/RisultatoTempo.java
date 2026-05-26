@@ -1,21 +1,25 @@
 package entity;
 
-public class RisultatoTempo extends Risultato {
+import java.time.Duration;
 
-    int tempo;
+public class RisultatoTempo extends Risultato<Duration> {
+
+    Duration tempo;
 
     public RisultatoTempo(){}
 
-    public RisultatoTempo(String nota, int tempo) {
+    public RisultatoTempo(String nota, Duration tempo) {
         super(nota);
         this.tempo = tempo;
     }
 
-    public int getRisultato(){
+    @Override
+    public Duration getRisultato(){
         return this.tempo;
     }
 
-    public void setRisultato(int tempo){
+    @Override
+    public void setRisultato(Duration tempo){
         this.tempo = tempo;
     }
 

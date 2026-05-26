@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public abstract class Risultato {
+public abstract class Risultato<T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +28,9 @@ public abstract class Risultato {
         this.nota = nota;
     }
 
-    public abstract int getRisultato();
+    public abstract T getRisultato();
 
-    public abstract  void setRisultato(int risultato);
+    public abstract  void setRisultato(T risultato);
 
 
 

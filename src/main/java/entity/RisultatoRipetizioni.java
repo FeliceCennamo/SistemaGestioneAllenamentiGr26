@@ -1,19 +1,21 @@
 package entity;
 
-public class RisultatoRipetizioni extends Risultato {
+public class RisultatoRipetizioni extends Risultato<Integer> {
 
-    private int ripetizioni;
+    private Integer ripetizioni;
 
-    public RisultatoRipetizioni(String nota, int ripetizioni){
+    public RisultatoRipetizioni(String nota, Integer ripetizioni){
         super(nota);
         this.ripetizioni = ripetizioni;
     }
 
-    public int getRisultato(){
+    @Override
+    public Integer getRisultato(){
         return this.ripetizioni;
     }
 
-    public void setRisultato(int ripetizioni){
+    @Override
+    public void setRisultato(Integer ripetizioni){
         this.ripetizioni = ripetizioni;
     }
 

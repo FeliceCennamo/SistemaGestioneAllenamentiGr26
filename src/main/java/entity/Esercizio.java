@@ -46,7 +46,63 @@ public class Esercizio {
         this.risultatoAtteso = new RisultatoAtteso(durata);
     }
 
-    // getter e setter...
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    // Ragionare se fargli ritornare una stringa o tradurre l'intero dopo e se ha senso il defoult a null
+    public Integer getTipo() {
+        return switch (this.tipo) {
+            case RIPETIZIONI -> 0;
+            case TEMPO -> 1;
+            default -> null;
+        };
+    }
+
+    public Object getRisultatoAtteso() {
+        if(tipo == TipoEsercizio.RIPETIZIONI)
+            return this.risultatoAtteso.getRipetizioni();
+        else
+            return this.risultatoAtteso.getDurata();
+    }
+
+    public SessioneDiAllenamento getSessione() {
+        return sessione;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public void setTipo(int tipo) {
+        if (tipo == 0)
+            this.tipo = TipoEsercizio.RIPETIZIONI;
+        else if (tipo==1)
+            this.tipo = TipoEsercizio.TEMPO;
+    }
+
+    public void setRisultatoAtteso(Object risultatoAtteso) {
+        if (this.tipo==TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
+            this.risultatoAtteso.setRipetizioni((Integer) risultatoAtteso);
+        else if (this.tipo==TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
+            this.risultatoAtteso.setDurata((Duration) risultatoAtteso);
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
+    }
+
     public void setSessione(SessioneDiAllenamento sessione) {
         this.sessione = sessione;
     }
@@ -54,7 +110,8 @@ public class Esercizio {
 
 // Enum semplice
 enum TipoEsercizio {
-    RIPETIZIONI, TEMPO
+    RIPETIZIONI,
+    TEMPO
 }
 
 // Embeddable per memorizzare il risultato atteso in modo polimorfico
