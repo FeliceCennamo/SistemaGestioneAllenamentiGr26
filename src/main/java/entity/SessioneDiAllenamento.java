@@ -19,10 +19,18 @@ public class SessioneDiAllenamento {
     private String titolo;
     private String descrizione;
     private LocalDate dataSvolgimento;
+    private Stato stato;
 
     @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Esercizio> esercizi = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "atleta_id")   // chiave esterna verso Atleti
+    private Atleta atleta;
+
+    @ManyToOne
+    @JoinColumn(name = "allenatore_id") // chiave esterna verso Allenatori
+    private Allenatore allenatore;
 
     //Metodi get
     public String getTitolo() {
@@ -41,6 +49,12 @@ public class SessioneDiAllenamento {
         return id;
     }
 
+    public Atleta getAtleta(){ return atleta; }
+
+    public Allenatore getAllenatore(){ return allenatore; }
+
+    public Stato getStato(){ return stato; }
+
     //Metodi set
     public void setTitolo(String titolo) {
         this.titolo = titolo;
@@ -54,6 +68,33 @@ public class SessioneDiAllenamento {
         this.dataSvolgimento = dataSvolgimento;
     }
 
+    public void setStato(String stato){
+        switch (stato){
+            case "COMPLETATA":
+                this.stato = Stato.COMPLETATA;
+                break;
+            case "IN CORSO":
+                this.stato = Stato.IN_CORSO;
+                break;
+            case "ASSEGNATA":
+                this.stato = Stato.ASSEGNATA;
+                break;
+            default:
+                //no action
+        }
+    }
+
+
+    public void setAtleta(Atleta atleta) {
+        this.atleta = atleta;
+        atleta.getSessioni().add(this);
+    }
+
+    public void setAllenatore(Allenatore allenatore) {
+        this.allenatore = allenatore;
+        allenatore.getSessioni().add(this);
+    }
+
     //costruttore vuoto
     public SessioneDiAllenamento(){}
 
@@ -65,11 +106,20 @@ public class SessioneDiAllenamento {
         this.descrizione = descrizione;
     }
 
+    public List<Esercizio> getEsercizi() {
+        return esercizi;
+    }
+
+    public void setEsercizi(List<Esercizio> esercizi) {
+        this.esercizi = esercizi;
+    }
+
     /*
     void addEsercizio(String nome, String descrizione, boolean tipologia, int ris_atteso){
         // Eventualmente controlli
         this.esercizi.add(new Esercizio(nome, descrizione, tipologia, ris_atteso));
     }*/
+
 
 
 

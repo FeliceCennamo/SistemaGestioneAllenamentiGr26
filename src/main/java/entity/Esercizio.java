@@ -2,7 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 import java.time.Duration;
-
+a
 @Entity
 public class Esercizio {
 
