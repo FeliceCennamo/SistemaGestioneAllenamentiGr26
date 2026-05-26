@@ -21,7 +21,7 @@ public class SessioneDiAllenamento {
     private LocalDate dataSvolgimento;
     private Stato stato;
 
-    @OneToMany(mappedBy = "sessione")
+    @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Esercizio> esercizi = new ArrayList<>();
 
     @ManyToOne
