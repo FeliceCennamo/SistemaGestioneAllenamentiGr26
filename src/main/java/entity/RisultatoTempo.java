@@ -22,7 +22,7 @@ public class RisultatoTempo extends Risultato {
     }
 
     @Override
-    public void setRisultato(Object tempo){
+    public void setRisultato(Object tempo) throws IllegalArgumentException{
         if (tempo instanceof Duration)
             this.tempo = (Duration) tempo;
         else

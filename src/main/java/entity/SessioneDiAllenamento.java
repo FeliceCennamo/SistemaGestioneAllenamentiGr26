@@ -83,7 +83,7 @@ public class SessioneDiAllenamento {
         this.dataSvolgimento = dataSvolgimento;
     }
 
-    public void setStato(String stato){
+    public void setStato(String stato) throws IllegalArgumentException{
         switch (stato){
             case "COMPLETATA":
                 this.stato = Stato.COMPLETATA;
@@ -95,7 +95,7 @@ public class SessioneDiAllenamento {
                 this.stato = Stato.ASSEGNATA;
                 break;
             default:
-                //no action
+                throw new IllegalArgumentException("Stato non valido");
         }
     }
 
@@ -123,7 +123,7 @@ public class SessioneDiAllenamento {
      *
      **/
 
-    public void registraRisultati(Object[] risultati){
+    public void registraRisultati(Object[] risultati) throws IllegalArgumentException{
         int i = 0;
         if(this.esercizi.size() != risultati.length)
             throw new IllegalArgumentException("Il numero di risultati non combacia con il numero degli esercizi");
@@ -138,17 +138,13 @@ public class SessioneDiAllenamento {
             }
             else
                 throw new IllegalArgumentException("Il tipo dei risultati non combacia con il tipo degli esercizi");
-
-
         }
 
     }
-
 
     public enum Stato {
         ASSEGNATA,
         IN_CORSO,
         COMPLETATA
     }
-
 }
