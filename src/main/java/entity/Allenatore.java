@@ -17,13 +17,36 @@ public class Allenatore extends Utente {
     )
     private HashSet<Atleta> atleti = new HashSet<Atleta>();
 
+
     @OneToMany(mappedBy = "allenatore")
     private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>(); // G: Non sono sicuro lo debba avere
 
+    /**
+     * Costruttore vuoto dell'oggetto Allenatore
+     * */
     public Allenatore(){}
 
+    /**
+     * Costruttore dell'oggetto Allenatore avente disciplinaPrevalente
+     * @param nome Nome Allenatore
+     * @param cognome Cognome Allenatore
+     * @param mail Indirizzo E-mail Allenatore
+     * @param password Password Allenatore
+     */
     public Allenatore(String nome, String cognome, String mail, String password){
         super(nome, cognome, mail, password);
+    }
+
+    /**
+     * Costruttore dell'oggetto Allenatore avente disciplinaPrevalente
+     * @param nome Nome Allenatore
+     * @param cognome Cognome Allenatore
+     * @param mail Indirizzo E-mail Allenatore
+     * @param password Password Allenatore
+     * @param disciplinaPrevalente Disciplina Prevalente Allenatore
+     * */
+    public Allenatore(String nome, String cognome, String mail, String password, String disciplinaPrevalente){
+        super(nome, cognome, mail, password, disciplinaPrevalente);
     }
 
     public HashSet<Atleta> getAtleti(){
