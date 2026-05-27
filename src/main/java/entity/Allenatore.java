@@ -3,7 +3,6 @@ package entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 @Entity
@@ -18,13 +17,36 @@ public class Allenatore extends Utente {
     )
     private HashSet<Atleta> atleti = new HashSet<Atleta>();
 
+
     @OneToMany(mappedBy = "allenatore")
     private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>(); // G: Non sono sicuro lo debba avere
 
+    /**
+     * Costruttore vuoto dell'oggetto Allenatore
+     * */
     public Allenatore(){}
 
+    /**
+     * Costruttore dell'oggetto Allenatore avente disciplinaPrevalente
+     * @param nome Nome Allenatore
+     * @param cognome Cognome Allenatore
+     * @param mail Indirizzo E-mail Allenatore
+     * @param password Password Allenatore
+     */
     public Allenatore(String nome, String cognome, String mail, String password){
         super(nome, cognome, mail, password);
+    }
+
+    /**
+     * Costruttore dell'oggetto Allenatore avente disciplinaPrevalente
+     * @param nome Nome Allenatore
+     * @param cognome Cognome Allenatore
+     * @param mail Indirizzo E-mail Allenatore
+     * @param password Password Allenatore
+     * @param disciplinaPrevalente Disciplina Prevalente Allenatore
+     * */
+    public Allenatore(String nome, String cognome, String mail, String password, String disciplinaPrevalente){
+        super(nome, cognome, mail, password, disciplinaPrevalente);
     }
 
     public HashSet<Atleta> getAtleti(){
@@ -33,22 +55,20 @@ public class Allenatore extends Utente {
 
     public void addAtleta(Atleta a){
         atleti.add(a);
-        //a.addAllenatore(this); // Forse sta roba va fatta dal GestoreUtenti
-        //So Gigi, si lo fa il gestore per garantire persistenza (e dividere responsabilità)
     }
 
     public void removeAtleta(Atleta a){
         atleti.remove(a);
-        a.getAllenatori().remove(this); // Forse sta roba va fatta dal GestoreUtenti
+        a.getAllenatori().remove(this);
     }
 
-    public Atleta getAtleta(Long id){
+    public Atleta getAtleta(Long id) throws IllegalArgumentException {
         for(Atleta a : atleti){
             if (a.getId().equals(id))
                 return a;
         }
 
-        return null;
+        throw new IllegalArgumentException("Atleta non trovato");
     }
 
     public HashSet<SessioneDiAllenamento> getSessioni(){

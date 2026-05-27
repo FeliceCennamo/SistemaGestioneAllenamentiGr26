@@ -125,51 +125,50 @@ public class Esercizio {
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
-}
-
-enum TipoEsercizio {
-    RIPETIZIONI,
-    TEMPO
-}
-
-// Embeddable per memorizzare il risultato atteso in modo polimorfico
-@Embeddable
-class RisultatoAtteso {
-    private Integer ripetizioni;
-    private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
-
-    public RisultatoAtteso() {
-        this.ripetizioni = null;
-        this.durata = null;
+    public enum TipoEsercizio {
+        RIPETIZIONI,
+        TEMPO
     }
 
-    // Costruttore per ripetizioni
-    public RisultatoAtteso(int ripetizioni) {
-        this.ripetizioni = ripetizioni;
-        this.durata = null;
-    }
+    // Embeddable per memorizzare il risultato atteso in modo polimorfico
+    @Embeddable
+    class RisultatoAtteso {
+        private Integer ripetizioni;
+        private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
 
-    // Costruttore per durata
-    public RisultatoAtteso(Duration durata) {
-        this.durata = durata;
-        this.ripetizioni = null;
-    }
+        public RisultatoAtteso() {
+            this.ripetizioni = null;
+            this.durata = null;
+        }
 
-    public Integer getRipetizioni() {
-        return ripetizioni;
-    }
+        // Costruttore per ripetizioni
+        public RisultatoAtteso(int ripetizioni) {
+            this.ripetizioni = ripetizioni;
+            this.durata = null;
+        }
 
-    public Duration getDurata() {
-        return durata;
-    }
+        // Costruttore per durata
+        public RisultatoAtteso(Duration durata) {
+            this.durata = durata;
+            this.ripetizioni = null;
+        }
 
-    public boolean setRisultato(Object risultato){
-        if(risultato instanceof Integer && this.durata == null)
-            this.ripetizioni = (Integer) risultato;
-        else if(risultato instanceof Duration && this.ripetizioni == null)
-            this.durata = (Duration) risultato;
-        else
-            return false;
-        return true;
+        public Integer getRipetizioni() {
+            return ripetizioni;
+        }
+
+        public Duration getDurata() {
+            return durata;
+        }
+
+        public boolean setRisultato(Object risultato){
+            if(risultato instanceof Integer && this.durata == null)
+                this.ripetizioni = (Integer) risultato;
+            else if(risultato instanceof Duration && this.ripetizioni == null)
+                this.durata = (Duration) risultato;
+            else
+                return false;
+            return true;
+        }
     }
 }

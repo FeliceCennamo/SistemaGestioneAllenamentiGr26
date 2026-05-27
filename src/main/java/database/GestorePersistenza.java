@@ -2,13 +2,17 @@ package database;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaQuery;
 
 import java.util.List;
 import java.util.Map;
 
 public class GestorePersistenza {
 
-
+/**
+ * Inserisce un oggetto nel database
+ * @param oggetto oggetto da voler inserire
+ * */
     public void salva(Object oggetto) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -34,6 +38,10 @@ public class GestorePersistenza {
         }
     }
 
+    /**
+     * Inserisce una lista di oggetti nel database
+     * @param oggetti Lista eterogenea di oggetti da voler inserire
+     * */
     public void salvaTutti(Object... oggetti) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -60,7 +68,12 @@ public class GestorePersistenza {
         }
     }
 
-
+/**
+ * Restituisce l'oggetto cercato nel database
+ * @param classe classe dell'oggetto cercato nel database
+ * @param id id dell'oggetto cercato nel database
+ * @return oggetto cercato nel database
+ * */
     public <T> T trovaPerId(Class<T> classe, Long id) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -74,7 +87,12 @@ public class GestorePersistenza {
         }
     }
 
-
+/**
+ * Restituisce una lista di oggetti corrispondente al risultato di una query jpql
+ * @param jpql String rappresentante la query tipizzata da eseguire
+ * @param classe Classe letterale del tipo di dato aspettato
+ * @param parametri mappa che contiene i valori dinamici da inserire nella query
+ * */
     public <T> List<T> eseguiQuery(String jpql,
                                    Class<T> classe,
                                    Map<String, Object> parametri) {
@@ -101,7 +119,7 @@ public class GestorePersistenza {
 
     }
 
-
+    //ottieniTutti2 dovrebbe essere una forma più compatta di questo
     public <T> List<T> ottieniTutti(Class<T> classe) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
@@ -124,6 +142,15 @@ public class GestorePersistenza {
         }
     }
 
+    //fatto da collega washington, da validare
+    public <T> List<T> ottieniTutti2(Class<T> classe) {
+        try (EntityManager em = JpaUtil.getInstance().getEntityManager()) {
+
+            CriteriaQuery<T> cq = em.getCriteriaBuilder().createQuery(classe);
+            return em.createQuery(cq.select(cq.from(classe))).getResultList();
+
+        }
+    }
 
     }
 
