@@ -2,6 +2,7 @@ package entity;
 
 import database.GestorePersistenza;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.metamodel.EntityType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,8 +42,10 @@ public class GestoreUtenti {
      */
     public Set<Utente> getListaUtenti(){
         Set<Utente> listaUtenti = new HashSet<>();
-        listaUtenti.addAll(persistence_utenti.ottieniTutti(Atleta.class));
-        listaUtenti.addAll(persistence_utenti.ottieniTutti(Allenatore.class));
+        Set<EntityType<?>> listaFiglie = persistence_utenti.getFiglie(Utente.class);
+        for(EntityType<?> figlia: listaFiglie){
+            persistence_utenti.ottieniTutti(figlia.getClass());
+        }
         return listaUtenti;
     }
 

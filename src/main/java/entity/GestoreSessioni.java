@@ -109,10 +109,19 @@ public class GestoreSessioni {
 
     /**
      *Crea la sessione di allenamento dati i suoi parametri
+     * @param id_allenatore
+     * @param id_atleta
+     * @param data
+     * @param descrizione
+     * @param esercizi
+     * @param titolo
+     * @return La sessione appena creata
+     * @throws EntityNotFoundException Se L'allenatore non esiste nel database
+     * @throws IllegalArgumentException Se l'atleta non è associato all'allenatore
      */
     public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione,
                                               ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore)
-                                            throws EntityNotFoundException /*, getAtletaException*/{
+                                            throws EntityNotFoundException, IllegalArgumentException{
 
         GestoreUtenti utenti = GestoreUtenti.getInstance();
 

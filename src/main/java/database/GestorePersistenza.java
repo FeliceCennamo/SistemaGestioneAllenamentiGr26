@@ -3,9 +3,9 @@ package database;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.metamodel.EntityType;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GestorePersistenza {
 
@@ -152,7 +152,19 @@ public class GestorePersistenza {
         }
     }
 
+    public <T> Set<EntityType<?>> getFiglie(Class<T> classe){
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+
+        Set<EntityType<?>> figlie = new HashSet<>(em.getMetamodel().getEntities());
+
+        figlie.removeIf(e ->   !classe.isAssignableFrom(e.getJavaType())
+                                            ||
+                                            e.getJavaType().equals(classe));
+
+        return figlie;
     }
+
+}
 
 
 
