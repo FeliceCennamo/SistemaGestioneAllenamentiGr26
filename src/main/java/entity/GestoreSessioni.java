@@ -109,12 +109,12 @@ public class GestoreSessioni {
 
     /**
      *Crea la sessione di allenamento dati i suoi parametri
-     * @param id_allenatore
-     * @param id_atleta
-     * @param data
-     * @param descrizione
-     * @param esercizi
-     * @param titolo
+     * @param id_allenatore Id dell'allenatore che crea la sessione
+     * @param id_atleta Id dell'atleta che dovrà completare la sessione
+     * @param data La data in cui ci si aspetta lo svolgimento della sessione
+     * @param descrizione Descrizione della sessione
+     * @param esercizi ArrayList degli esercizi che dovranno essere svolti
+     * @param titolo Titolo della sessione
      * @return La sessione appena creata
      * @throws EntityNotFoundException Se L'allenatore non esiste nel database
      * @throws IllegalArgumentException Se l'atleta non è associato all'allenatore
