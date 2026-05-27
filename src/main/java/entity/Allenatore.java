@@ -3,7 +3,6 @@ package entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 @Entity
@@ -33,22 +32,20 @@ public class Allenatore extends Utente {
 
     public void addAtleta(Atleta a){
         atleti.add(a);
-        //a.addAllenatore(this); // Forse sta roba va fatta dal GestoreUtenti
-        //So Gigi, si lo fa il gestore per garantire persistenza (e dividere responsabilità)
     }
 
     public void removeAtleta(Atleta a){
         atleti.remove(a);
-        a.getAllenatori().remove(this); // Forse sta roba va fatta dal GestoreUtenti
+        a.getAllenatori().remove(this);
     }
 
-    public Atleta getAtleta(Long id){
+    public Atleta getAtleta(Long id) throws IllegalArgumentException {
         for(Atleta a : atleti){
             if (a.getId().equals(id))
                 return a;
         }
 
-        return null;
+        throw new IllegalArgumentException("Atleta non trovato");
     }
 
     public HashSet<SessioneDiAllenamento> getSessioni(){
