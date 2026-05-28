@@ -104,6 +104,7 @@ public class GestoreUtenti {
      */
     public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, String obiettivo, String disciplina, int livello){
         Allenatore allenatore;
+        Atleta atleta;
         try{
                 allenatore = cercaAllenatore(id_allenatore);
         }catch(EntityNotFoundException e){
@@ -111,11 +112,13 @@ public class GestoreUtenti {
             return;
         }
 
-        // Aggiungere blocco try catch e ottenere una exception su getAtleta
-        Atleta atleta = allenatore.getAtleta(id_atleta);
-        if(atleta == null){
+        try {
+            atleta = allenatore.getAtleta(id_atleta);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
             return;
         }
+
         atleta.setDisciplina(disciplina);
         atleta.setLivello(livello);
         atleta.setObiettivo(obiettivo);

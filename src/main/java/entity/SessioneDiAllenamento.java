@@ -2,6 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class SessioneDiAllenamento {
     private String descrizione;
     private LocalDate dataSvolgimento;
     private Stato stato;
+    private Duration durata = null;
 
     @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Esercizio> esercizi = new ArrayList<>();
@@ -41,6 +43,17 @@ public class SessioneDiAllenamento {
         this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
         this.stato = Stato.ASSEGNATA;
+        this.setAtleta(atleta);
+        this.setAllenatore(allenatore);
+    }
+
+    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Duration durata, Atleta atleta, Allenatore allenatore){
+
+        this.titolo = titolo;
+        this.dataSvolgimento = dataSvolgimento;
+        this.descrizione = descrizione;
+        this.stato = Stato.ASSEGNATA;
+        this.durata = durata;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
     }
@@ -69,6 +82,8 @@ public class SessioneDiAllenamento {
 
     public Stato getStato(){ return stato; }
 
+    public Duration getDurata(){ return durata; }
+
     //Metodi set
     public void setTitolo(String titolo) {
         this.titolo = titolo;
@@ -80,6 +95,10 @@ public class SessioneDiAllenamento {
 
     public void setDataSvolgimento(LocalDate dataSvolgimento) {
         this.dataSvolgimento = dataSvolgimento;
+    }
+
+    public void setDurata(Duration durata) {
+        this.durata = durata;
     }
 
     public void setStato(String stato) throws IllegalArgumentException{

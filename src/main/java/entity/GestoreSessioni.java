@@ -3,6 +3,7 @@ package entity;
 import database.GestorePersistenza;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
@@ -119,7 +120,7 @@ public class GestoreSessioni {
      * @throws EntityNotFoundException Se L'allenatore non esiste nel database
      * @throws IllegalArgumentException Se l'atleta non è associato all'allenatore
      */
-    public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione,
+    public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, Duration durata,
                                               ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore)
                                             throws EntityNotFoundException, IllegalArgumentException{
 
@@ -128,7 +129,7 @@ public class GestoreSessioni {
         Allenatore allenatore = utenti.cercaAllenatore(id_allenatore);
         Atleta atleta = allenatore.getAtleta(id_atleta);
 
-        SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, atleta, allenatore);
+        SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, durata, atleta, allenatore);
 
         s.setEsercizi(esercizi);
 
