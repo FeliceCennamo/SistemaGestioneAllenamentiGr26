@@ -33,10 +33,19 @@ public class SessioneDiAllenamento {
     @JoinColumn(name = "allenatore_id") // chiave esterna verso Allenatori
     private Allenatore allenatore;
 
-    //costruttore vuoto
+    /**
+     * Costruttore vuoto dell'oggetto SessioneDiAllenamento
+     * */
     public SessioneDiAllenamento(){}
 
-    //costruttore con tutti gli attributi
+    /**
+     * Costruttore vuoto dell'oggetto SessioneDiAllenamento
+     * @param titolo Titolo
+     * @param descrizione Descrizione
+     * @param dataSvolgimento Data di Svolgimento della sessione
+     * @param atleta Atleta a cui la sessione è assegnata
+     * @param allenatore Allenatore che crea la sessione
+     * */
     public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Atleta atleta, Allenatore allenatore){
 
         this.titolo = titolo;
@@ -47,6 +56,15 @@ public class SessioneDiAllenamento {
         this.setAllenatore(allenatore);
     }
 
+    /**
+     * Costruttore vuoto dell'oggetto SessioneDiAllenamento (di cui si vuole specificare la durata)
+     * @param titolo Titolo
+     * @param descrizione Descrizione
+     * @param dataSvolgimento Data di Svolgimento della sessione
+     * @param atleta Atleta a cui la sessione è assegnata
+     * @param allenatore Allenatore che crea la sessione
+     * @param durata Durata della Sessione
+     * */
     public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Duration durata, Atleta atleta, Allenatore allenatore){
 
         this.titolo = titolo;
@@ -59,48 +77,98 @@ public class SessioneDiAllenamento {
     }
 
 
-    //Metodi get
+    /**
+     *Getter Titolo
+     * @return Titolo della Sessione
+     * */
     public String getTitolo() {
         return titolo;
     }
 
+    /**
+     *Getter Descrizione
+     * @return Descrizione della Sessione
+     * */
     public String getDescrizione() {
         return descrizione;
     }
 
+    /**
+     *Getter DataSvolgimento
+     * @return DataSvolgimento della Sessione
+     * */
     public LocalDate getDataSvolgimento() {
         return dataSvolgimento;
     }
 
+    /**
+     *Getter Id
+     * @return Id della Sessione
+     * */
     public Long getId() {
         return id;
     }
 
+    /**
+     *Getter Atleta
+     * @return Atleta a cui è assegnata Sessione
+     * */
     public Atleta getAtleta(){ return atleta; }
 
+    /**
+     *Getter Allenatore
+     * @return Allenatore creatore della Sessione
+     * */
     public Allenatore getAllenatore(){ return allenatore; }
 
+    /**
+     *Getter Stato
+     * @return Stato della Sessione
+     * */
     public Stato getStato(){ return stato; }
 
+    /**
+     *Getter Durata
+     * @return Durata della Sessione
+     * */
     public Duration getDurata(){ return durata; }
 
-    //Metodi set
+    /**
+     * Setter Titolo
+     * @param titolo Titolo
+     * */
     public void setTitolo(String titolo) {
         this.titolo = titolo;
     }
 
+    /**
+     * Setter Descrizione
+     * @param descrizione Descrizione
+     * */
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
+    /**
+     * Setter DataSvolgimento
+     * @param dataSvolgimento Data di Svolgimento
+     * */
     public void setDataSvolgimento(LocalDate dataSvolgimento) {
         this.dataSvolgimento = dataSvolgimento;
     }
 
+    /**
+     * Setter Durata
+     * @param durata Durata
+     * */
     public void setDurata(Duration durata) {
         this.durata = durata;
     }
 
+    /**
+     * Setter Stato
+     * @param stato Stato
+     * */
     public void setStato(String stato) throws IllegalArgumentException{
         switch (stato){
             case "COMPLETATA":
@@ -117,20 +185,36 @@ public class SessioneDiAllenamento {
         }
     }
 
+    /**
+     * Setter Atleta
+     * @param atleta Atleta
+     * */
     public void setAtleta(Atleta atleta) {
         this.atleta = atleta;
         atleta.getSessioni().add(this);
     }
 
+    /**
+     * Setter Allenatore
+     * @param allenatore Allenatore
+     * */
     public void setAllenatore(Allenatore allenatore) {
         this.allenatore = allenatore;
         allenatore.getSessioni().add(this);
     }
 
+    /**
+     * Getter Esercizi
+     * @return Lista degli esercizi che compongono la Sessione
+     * */
     public List<Esercizio> getEsercizi() {
         return esercizi;
     }
 
+    /**
+     * Setter Esercizi
+     * @param esercizi Lista di Esercizi
+     * */
     public void setEsercizi(List<Esercizio> esercizi) {
         this.esercizi = esercizi;
     }

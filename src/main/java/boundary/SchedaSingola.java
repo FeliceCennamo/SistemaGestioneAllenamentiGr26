@@ -34,7 +34,7 @@ public class SchedaSingola {
      */
     private void $$$setupUI$$$() {
         PanelBase = new JPanel();
-        PanelBase.setLayout(new GridLayoutManager(6, 5, new Insets(0, 0, 0, 0), -1, -1));
+        PanelBase.setLayout(new GridLayoutManager(6, 5, new Insets(10, 10, 10, 10), -1, -1));
         PanelBase.setBackground(new Color(-2039584));
         PanelBase.setMaximumSize(new Dimension(1000, 150));
         PanelBase.setMinimumSize(new Dimension(1000, 150));
