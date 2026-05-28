@@ -126,15 +126,15 @@ public class GestoreUtenti {
     }
 
     public void loginUtente(){
-
+        //Caso d'uso non implementato
     }
 
     public void RegistrazioneUtente(){
-
+        //Caso d'uso non implementato
     }
 
     public void monitoraPrestazioni(){
-
+        //Caso d'uso non implementato
     }
 
 }
