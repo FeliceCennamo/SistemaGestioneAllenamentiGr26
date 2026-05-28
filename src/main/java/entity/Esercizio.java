@@ -132,13 +132,12 @@ public class Esercizio {
 
     // Embeddable per memorizzare il risultato atteso in modo polimorfico
     @Embeddable
-    class RisultatoAtteso {
-        private Integer ripetizioni;
-        private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
+    static class RisultatoAtteso {
+        private Integer ripetizioni = null;
+        private Duration durata = null; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
+
 
         public RisultatoAtteso() {
-            this.ripetizioni = null;
-            this.durata = null;
         }
 
         // Costruttore per ripetizioni

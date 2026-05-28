@@ -22,7 +22,7 @@ public class RisultatoRipetizioni extends Risultato {
     @Override
     public void setRisultato(Object ripetizioni) throws IllegalArgumentException{
 
-        if (!(ripetizioni instanceof Integer))
+        if (ripetizioni instanceof Integer)
             this.ripetizioni = (Integer) ripetizioni;
         else
             throw new IllegalArgumentException("Tipo di risultato non valido");

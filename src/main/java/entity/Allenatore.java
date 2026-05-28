@@ -4,6 +4,7 @@ package entity;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Allenatori")
@@ -15,11 +16,11 @@ public class Allenatore extends Utente {
             joinColumns = @JoinColumn(name = "allenatore_id"),
             inverseJoinColumns = @JoinColumn(name = "atleta_id")
     )
-    private HashSet<Atleta> atleti = new HashSet<Atleta>();
+    private Set<Atleta> atleti = new HashSet<Atleta>();
 
 
     @OneToMany(mappedBy = "allenatore")
-    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>(); // G: Non sono sicuro lo debba avere
+    private Set<SessioneDiAllenamento> sessioni = new HashSet<>(); // G: Non sono sicuro lo debba avere
 
     /**
      * Costruttore vuoto dell'oggetto Allenatore
@@ -49,7 +50,7 @@ public class Allenatore extends Utente {
         super(nome, cognome, mail, password, disciplinaPrevalente);
     }
 
-    public HashSet<Atleta> getAtleti(){
+    public Set<Atleta> getAtleti(){
         return this.atleti;
     }
 
@@ -71,7 +72,7 @@ public class Allenatore extends Utente {
         throw new IllegalArgumentException("Atleta non trovato");
     }
 
-    public HashSet<SessioneDiAllenamento> getSessioni(){
+    public Set<SessioneDiAllenamento> getSessioni(){
         return this.sessioni;
     }
 }

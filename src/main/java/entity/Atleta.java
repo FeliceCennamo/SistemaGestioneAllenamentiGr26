@@ -3,6 +3,7 @@ package entity;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Atleti")
@@ -15,10 +16,10 @@ public class Atleta extends Utente{
     private String obiettivo = null;
 
     @ManyToMany(mappedBy = "atleti")
-    private HashSet<Allenatore> allenatori = new HashSet<Allenatore>();
+    private Set<Allenatore> allenatori = new HashSet<Allenatore>();
 
     @OneToMany(mappedBy = "atleta")
-    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>(); //G: Non sono sicuro lo debba avere
+    private Set<SessioneDiAllenamento> sessioni = new HashSet<>(); //G: Non sono sicuro lo debba avere
 
     public Atleta(){}
 
@@ -59,7 +60,7 @@ public class Atleta extends Utente{
         this.livello = livello;
     }
 
-    public HashSet<Allenatore> getAllenatori(){
+    public Set<Allenatore> getAllenatori(){
         return this.allenatori;
     }
 
@@ -67,7 +68,7 @@ public class Atleta extends Utente{
         this.allenatori.add(a);
     }
 
-    public HashSet<SessioneDiAllenamento> getSessioni(){
+    public Set<SessioneDiAllenamento> getSessioni(){
         return this.sessioni;
     }
 }

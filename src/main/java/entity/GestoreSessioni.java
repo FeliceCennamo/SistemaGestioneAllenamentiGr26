@@ -61,7 +61,7 @@ public class GestoreSessioni {
      * @return Set delle sessioni associate all'atleta
      */
     public Set<SessioneDiAllenamento> cercaSessioni(Long id_atleta) {
-        String query = "SELECT s FROM SessioniDiAllenamento s WHERE s.atleta = :id_atleta";
+        String query = "SELECT s FROM SessioneDiAllenamento s WHERE s.atleta.id = :id_atleta";
         List<SessioneDiAllenamento> lista_sessioni = persistence_sessioni.eseguiQuery(query, SessioneDiAllenamento.class, Map.of("id_atleta", id_atleta));
         return new HashSet<>(lista_sessioni);
     }
@@ -98,12 +98,25 @@ public class GestoreSessioni {
      * @throws EntityNotFoundException Se la sessione richiesta non è stata trovata
      * @return sessione richiesta
      */
+    /*
     public SessioneDiAllenamento getSessione(Long id_sessione) throws EntityNotFoundException {
         SessioneDiAllenamento s = persistence_sessioni.trovaPerId(SessioneDiAllenamento.class, id_sessione);
         if(s == null){
             throw new EntityNotFoundException();
         }
         return s;
+    }
+    */
+    public SessioneDiAllenamento getSessione(Long id_sessione) throws EntityNotFoundException {
+        // Query con FETCH per caricare immediatamente gli esercizi
+        String query = "SELECT s FROM SessioneDiAllenamento s LEFT JOIN FETCH s.esercizi WHERE s.id = :id";
+        Map<String, Object> params = Map.of("id", id_sessione);
+        List<SessioneDiAllenamento> result = persistence_sessioni.eseguiQuery(query, SessioneDiAllenamento.class, params);
+
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException("Sessione con id " + id_sessione + " non trovata");
+        }
+        return result.get(0);
     }
 
     /**
