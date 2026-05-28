@@ -2,7 +2,6 @@ package entity;
 
 import jakarta.persistence.*;
 
-import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,23 +122,21 @@ public class SessioneDiAllenamento {
      *
      **/
 
-    public void registraRisultati(Object[] risultati) throws IllegalArgumentException{
+    public void registraRisultati(Risultato[] risultati) throws IllegalArgumentException{
         int i = 0;
         if(this.esercizi.size() != risultati.length)
             throw new IllegalArgumentException("Il numero di risultati non combacia con il numero degli esercizi");
 
         for(Esercizio esercizio : this.esercizi){
 
-            if((esercizio.getTipo() == Esercizio.TipoEsercizio.RIPETIZIONI && (risultati[i] instanceof  RisultatoRipetizioni )) ||
-                    (esercizio.getTipo() == Esercizio.TipoEsercizio.TEMPO && (risultati[i] instanceof  RisultatoTempo ))
-            ){
+            try{
                 esercizio.setRisultato(risultati[i]);
                 i++;
             }
-            else
+            catch (IllegalArgumentException e){
                 throw new IllegalArgumentException("Il tipo dei risultati non combacia con il tipo degli esercizi");
+            }
         }
-
     }
 
     public enum Stato {

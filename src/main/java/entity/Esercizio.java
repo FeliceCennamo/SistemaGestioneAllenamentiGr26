@@ -25,7 +25,7 @@ public class Esercizio {
 
     @OneToOne
     @JoinColumn(name = "risultato")
-    private Risultato risultato;
+    private Risultato risultato = null;
 
     public Esercizio() {}
 
@@ -34,7 +34,6 @@ public class Esercizio {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.RIPETIZIONI;
-        this.risultato = new RisultatoRipetizioni();
 
         if(ripetizioni > 0)
             this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
@@ -103,9 +102,9 @@ public class Esercizio {
 
         boolean esito = false;
         if (this.tipo==TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
-            esito = this.risultatoAtteso.setRisultato((Integer) risultatoAtteso);
+            esito = this.risultatoAtteso.setRisultatoAtteso((Integer) risultatoAtteso);
         else if (this.tipo==TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
-            esito = this.risultatoAtteso.setRisultato((Duration) risultatoAtteso);
+            esito = this.risultatoAtteso.setRisultatoAtteso((Duration) risultatoAtteso);
 
         if(!esito)
             throw new IllegalArgumentException("Risultato non valido");
@@ -116,11 +115,14 @@ public class Esercizio {
     }
 
     public void setRisultato(Object risultato) {
-        if (this.tipo == TipoEsercizio.TEMPO)
+        if (this.tipo == TipoEsercizio.TEMPO  && risultato instanceof Duration){
+            this.risultato = new RisultatoRipetizioni();
             this.risultato.setRisultato((Duration) risultato);
-
-        else if (this.tipo == TipoEsercizio.RIPETIZIONI)
+        }
+        else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer){
+            this.risultato = new RisultatoTempo();
             this.risultato.setRisultato((Integer) risultato);
+        }
         else
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }
@@ -161,7 +163,7 @@ public class Esercizio {
             return durata;
         }
 
-        public boolean setRisultato(Object risultato){
+        public boolean setRisultatoAtteso(Object risultato){
             if(risultato instanceof Integer && this.durata == null)
                 this.ripetizioni = (Integer) risultato;
             else if(risultato instanceof Duration && this.ripetizioni == null)
