@@ -8,6 +8,27 @@ import java.util.Set;
 
 public class Control_session {
 
+    private static Control_session instance;
+
+    /**
+     * Costruttore di GestoreSessioni
+     */
+    private Control_session() {}
+
+    /**
+     * Fornisce l'istanza singola di GestoreSessioni, se essa non esiste viene creata
+     * @return Istanza di gestoreSessioni operativa
+     */
+    public static Control_session getInstance() {
+        if (instance == null) {
+            instance = new Control_session();
+        }
+
+        return instance;
+    }
+
+
+
     public Set<SessioneDiAllenamento> getSessioneforUtente(Long id_utente){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
