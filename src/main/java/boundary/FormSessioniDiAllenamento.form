@@ -27,7 +27,8 @@
           <grid id="38ccd" binding="PanelCentrale" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
             <constraints/>
             <properties>
-              <background color="-1"/>
+              <background color="-657936"/>
+              <font name="Segoe UI Semibold" size="0" style="1"/>
               <maximumSize width="32767" height="1200"/>
               <minimumSize width="10" height="1200"/>
               <opaque value="true"/>
@@ -38,6 +39,7 @@
               <component id="ced68" class="javax.swing.JLabel">
                 <constraints/>
                 <properties>
+                  <font name="Segoe UI Semibold" size="28" style="1"/>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
                   <labelFor value="8e2a"/>

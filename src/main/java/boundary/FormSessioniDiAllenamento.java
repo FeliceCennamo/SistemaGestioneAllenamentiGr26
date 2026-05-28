@@ -7,7 +7,10 @@ import entity.SessioneDiAllenamento;
 import controller.Control_session;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.util.Locale;
 
 public class FormSessioniDiAllenamento {
 
@@ -58,13 +61,17 @@ public class FormSessioniDiAllenamento {
         PanelBase.add(Scorrimento, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         PanelCentrale = new JPanel();
         PanelCentrale.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        PanelCentrale.setBackground(new Color(-1));
+        PanelCentrale.setBackground(new Color(-657936));
+        Font PanelCentraleFont = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 0, PanelCentrale.getFont());
+        if (PanelCentraleFont != null) PanelCentrale.setFont(PanelCentraleFont);
         PanelCentrale.setMaximumSize(new Dimension(32767, 1200));
         PanelCentrale.setMinimumSize(new Dimension(10, 1200));
         PanelCentrale.setOpaque(true);
         PanelCentrale.setPreferredSize(new Dimension(10, 1200));
         Scorrimento.setViewportView(PanelCentrale);
         final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 28, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
         label1.setHorizontalAlignment(0);
         label1.setHorizontalTextPosition(0);
         label1.setOpaque(false);
@@ -83,11 +90,34 @@ public class FormSessioniDiAllenamento {
     /**
      * @noinspection ALL
      */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
+    }
+
+    /**
+     * @noinspection ALL
+     */
     public JComponent $$$getRootComponent$$$() {
         return PanelBase;
     }
 
     public static void main(String[] args) {
+
         JFrame frame = new JFrame();
         frame.setTitle("Visualizza allenamenti");
         FormSessioniDiAllenamento form_base = new FormSessioniDiAllenamento();

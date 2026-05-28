@@ -5,7 +5,10 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.util.Locale;
 
 public class SchedaSingola {
 
@@ -35,7 +38,8 @@ public class SchedaSingola {
     private void $$$setupUI$$$() {
         PanelBase = new JPanel();
         PanelBase.setLayout(new GridLayoutManager(6, 5, new Insets(10, 10, 10, 10), -1, -1));
-        PanelBase.setBackground(new Color(-2039584));
+        PanelBase.setBackground(new Color(-657936));
+        PanelBase.setForeground(new Color(-13884898));
         PanelBase.setMaximumSize(new Dimension(1000, 150));
         PanelBase.setMinimumSize(new Dimension(1000, 150));
         PanelBase.setPreferredSize(new Dimension(720, 130));
@@ -57,6 +61,10 @@ public class SchedaSingola {
         Esercizi_real.setText("NUMERO ESERCIZI EFFETTIVO");
         PanelBase.add(Esercizi_real, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Allenatore_real = new JLabel();
+        Allenatore_real.setBackground(new Color(-460294));
+        Font Allenatore_realFont = this.$$$getFont$$$("Segoe UI Semibold", Font.PLAIN, -1, Allenatore_real.getFont());
+        if (Allenatore_realFont != null) Allenatore_real.setFont(Allenatore_realFont);
+        Allenatore_real.setForeground(new Color(-14605015));
         Allenatore_real.setText("ALLENATORE EFFETTIVO");
         PanelBase.add(Allenatore_real, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         VISUALIZZADETTAGLIOButton = new JButton();
@@ -68,6 +76,28 @@ public class SchedaSingola {
         PanelBase.add(spacer3, new GridConstraints(4, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer4 = new Spacer();
         PanelBase.add(spacer4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**
