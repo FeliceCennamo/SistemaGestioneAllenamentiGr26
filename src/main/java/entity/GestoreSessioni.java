@@ -5,11 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Classe di gestione di tutte le sessioni create, in corso e completate
@@ -77,7 +73,7 @@ public class GestoreSessioni {
      * @param id_sessione Id della sessione che si sta cercando di completare
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
-    public void completaSessione(Long id_atleta, Long id_sessione, Risultato[] risultati) throws IllegalAccessException {
+    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Risultato> risultati, HashMap<Long, String> note) throws IllegalAccessException {
         SessioneDiAllenamento s;
         try{
             s = getSessione(id_sessione);
@@ -88,7 +84,9 @@ public class GestoreSessioni {
 
         if(s.getAtleta().getId().equals(id_atleta)) {
             s.setStato("COMPLETATA");
-            s.registraRisultati(risultati);
+            for(Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
+                s.registraRisultati(risultati.get(es), note.get(es), es);
+            }
         }else{
             throw new IllegalAccessException();
         }

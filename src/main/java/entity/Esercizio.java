@@ -47,7 +47,6 @@ public class Esercizio {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.TEMPO;
-        this.risultato = new RisultatoTempo();
         this.risultatoAtteso = new RisultatoAtteso(durata);
     }
 
@@ -114,14 +113,13 @@ public class Esercizio {
         this.sessione = sessione;
     }
 
-    public void setRisultato(Object risultato) {
+    public void setRisultato(Object risultato, String nota) throws IllegalArgumentException{
         if (this.tipo == TipoEsercizio.TEMPO  && risultato instanceof Duration){
-            this.risultato = new RisultatoRipetizioni();
-            this.risultato.setRisultato((Duration) risultato);
+            this.risultato = new RisultatoTempo(nota, (Duration) risultato);
+
         }
         else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer){
-            this.risultato = new RisultatoTempo();
-            this.risultato.setRisultato((Integer) risultato);
+            this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);
         }
         else
             throw new IllegalArgumentException("Tipo di risultato non valido");

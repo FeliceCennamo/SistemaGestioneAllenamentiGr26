@@ -225,21 +225,15 @@ public class SessioneDiAllenamento {
      *
      **/
 
-    public void registraRisultati(Risultato[] risultati) throws IllegalArgumentException{
-        int i = 0;
-        if(this.esercizi.size() != risultati.length)
-            throw new IllegalArgumentException("Il numero di risultati non combacia con il numero degli esercizi");
-
-        for(Esercizio esercizio : this.esercizi){
-
-            try{
-                esercizio.setRisultato(risultati[i]);
-                i++;
-            }
-            catch (IllegalArgumentException e){
-                throw new IllegalArgumentException("Il tipo dei risultati non combacia con il tipo degli esercizi");
+    public void registraRisultati(Risultato risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
+        for(Esercizio e : esercizi){
+            if(e.getId().equals(id_esercizio)){
+                e.setRisultato(risultato, nota);
+                return;
             }
         }
+
+        throw new IllegalArgumentException("Esercizio non trovato");
     }
 
     public enum Stato {
