@@ -17,10 +17,11 @@ public class GestorePersistenza {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
+
         try {
             em.getTransaction().begin();
 
-            em.persist(oggetto);
+            em.merge(oggetto);
 
             em.getTransaction().commit();
 
@@ -50,7 +51,7 @@ public class GestorePersistenza {
             em.getTransaction().begin();
 
             for (Object oggetto : oggetti) {
-                em.persist(oggetto);
+                em.merge(oggetto);
             }
 
             em.getTransaction().commit();

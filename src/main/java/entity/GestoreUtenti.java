@@ -100,9 +100,9 @@ public class GestoreUtenti {
      * @param id_atleta id dell'atleta a cui vanno modificati i valori di carriera
      * @param disciplina La nuova disciplina dell'atleta
      * @param livello il nuovo livello dell'atleta
-     * @param obiettivo il nuovo obiettivo dell'atleta
+     * @param obiettivi il nuovo obiettivo dell'atleta
      */
-    public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, String obiettivo, String disciplina, int livello){
+    public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, Set<String> obiettivi, String disciplina, int livello){
         Allenatore allenatore;
         Atleta atleta;
         try{
@@ -121,7 +121,7 @@ public class GestoreUtenti {
 
         atleta.setDisciplina(disciplina);
         atleta.setLivello(livello);
-        atleta.setObiettivo(obiettivo);
+        atleta.setObiettivo(obiettivi);
 
     }
 
