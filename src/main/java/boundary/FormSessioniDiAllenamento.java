@@ -25,8 +25,10 @@ public class FormSessioniDiAllenamento {
 
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
-        for (SessioneDiAllenamento s : c_session.stubGetSessioneforUtente(id_utente_autenticato)) {
-            SchedaSingola scheda = new SchedaSingola();
+        id_utente_autenticato = 1L;
+        for (SessioneDiAllenamento s : c_session.getSessioneforUtente(id_utente_autenticato)) {
+            Long id_sessione = s.getId();
+            SchedaSingola scheda = new SchedaSingola(id_sessione);
             PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
         }

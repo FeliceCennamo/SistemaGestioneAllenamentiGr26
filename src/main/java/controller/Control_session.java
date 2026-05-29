@@ -49,12 +49,20 @@ public class Control_session {
         }
 
         return h;
+
     }
 
     public List<Esercizio> getEserciziforSessione(Long id_sessione){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
         return g_session.dettaglioSessione(id_sessione);
     }
+
+    public SessioneDiAllenamento getSessioneforId(Long id_sessione){
+        GestoreSessioni g = GestoreSessioni.getInstance();
+        return g.getSessione(id_sessione);
+
+    }
+
 
     public List<Esercizio> stubGetEsercizioforUtente(){
         GestoreSessioni g_session = GestoreSessioni.getInstance();

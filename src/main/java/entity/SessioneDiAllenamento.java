@@ -22,7 +22,7 @@ public class SessioneDiAllenamento {
     private Stato stato;
     private Duration durata = null;
 
-    @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Esercizio> esercizi = new ArrayList<>();
 
     @ManyToOne
@@ -221,7 +221,7 @@ public class SessioneDiAllenamento {
 
     /**
      * PRECONDITION: LA LISTA DEI RISULTATI DEVE MATCHARE I TIPI DEGLI ESERCIZI IN ORDINE NELLA LISTA
-     * @param risultati lista di risultati ottenuti
+
      *
      */
     public void registraRisultati(Risultato risultato, String nota, Long id_esercizio) throws IllegalArgumentException{

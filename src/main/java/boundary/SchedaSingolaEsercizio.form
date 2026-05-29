@@ -39,7 +39,7 @@
           <text value="RISULTATO ATTESO"/>
         </properties>
       </component>
-      <component id="86ab8" class="javax.swing.JLabel">
+      <component id="86ab8" class="javax.swing.JLabel" binding="lblDescrizione">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -47,12 +47,12 @@
           <text value="DESCRIZIONE EFFETTIVA"/>
         </properties>
       </component>
-      <component id="cb73b" class="javax.swing.JLabel">
+      <component id="cb73b" class="javax.swing.JLabel" binding="lblRisultatoAtteso">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="RISULTATO ATTESO EFFETTIVO"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="a9750" class="javax.swing.JLabel">
