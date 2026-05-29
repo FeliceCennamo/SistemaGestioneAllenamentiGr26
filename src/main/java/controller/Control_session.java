@@ -3,7 +3,9 @@ package controller;
 import entity.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Control_session {
@@ -48,4 +50,23 @@ public class Control_session {
 
         return h;
     }
+
+    public List<Esercizio> getEserciziforSessione(Long id_sessione){
+        GestoreSessioni g_session = GestoreSessioni.getInstance();
+        return g_session.dettaglioSessione(id_sessione);
+    }
+
+    public List<Esercizio> stubGetEsercizioforUtente(){
+        GestoreSessioni g_session = GestoreSessioni.getInstance();
+
+        List<Esercizio> h = new ArrayList<>();
+
+        for(int i = 0; i < 10; i++){
+            Esercizio e = new Esercizio();
+            h.add(e);
+        }
+
+        return h;
+    }
+
 }
