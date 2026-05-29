@@ -13,6 +13,12 @@ public class Atleta extends Utente{
     private int livello;
 
     // Obiettivo è un attributo opzionale tradotto come un attributo nullo di default
+    @ElementCollection
+    @CollectionTable(
+            name = "atleta_obiettivi",
+            joinColumns = @JoinColumn(name = "atleta_id")
+    )
+    @Column(name = "obiettivo")
     private Set<String> obiettivi = null;
 
     @ManyToMany(mappedBy = "atleti")

@@ -73,7 +73,7 @@ public class GestoreSessioni {
      * @return Set delle sessioni associate all'atleta
      */
     public Set<SessioneDiAllenamento> cercaSessioni(Long id_atleta) {
-        String query = "SELECT s FROM SessioniDiAllenamento s WHERE s.atleta = :id_atleta";
+        String query = "SELECT s FROM SessioneDiAllenamento s WHERE s.atleta.id = :id_atleta";
         List<SessioneDiAllenamento> lista_sessioni = persistence_sessioni.eseguiQuery(query, SessioneDiAllenamento.class, Map.of("id_atleta", id_atleta));
         return new HashSet<>(lista_sessioni);
     }
