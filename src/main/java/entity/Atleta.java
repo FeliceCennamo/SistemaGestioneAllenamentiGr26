@@ -2,6 +2,7 @@ package entity;
 
 
 import jakarta.persistence.*;
+import java.util.Set;
 import java.util.HashSet;
 
 @Entity
@@ -15,10 +16,10 @@ public class Atleta extends Utente{
     private String obiettivo = null;
 
     @ManyToMany(mappedBy = "atleti")
-    private HashSet<Allenatore> allenatori = new HashSet<Allenatore>();
+    private Set<Allenatore> allenatori = new HashSet<Allenatore>();
 
     @OneToMany(mappedBy = "atleta")
-    private HashSet<SessioneDiAllenamento> sessioni = new HashSet<>(); //G: Non sono sicuro lo debba avere
+    private Set<SessioneDiAllenamento> sessioni = new HashSet<>(); //G: Non sono sicuro lo debba avere
 
     public Atleta(){}
 
@@ -35,39 +36,75 @@ public class Atleta extends Utente{
         this.obiettivo = obiettivo;
     }
 
+    /**
+     * Getter Obiettivo
+     * @return Obiettivo
+     * */
     public String getObiettivo(){
         return this.obiettivo;
     }
 
+    /**
+     * Getter Disciplina
+     * @return Disciplina
+     * */
     public String getDisciplina(){
         return this.disciplina;
     }
 
+    /**
+     * Getter Livello
+     * @return Livello
+     * */
     public int getLivello(){
         return this.livello;
     }
 
+    /**
+     * Setter Obiettivo
+     * @param obiettivo Obiettivo
+     * */
     public void setObiettivo(String obiettivo){
         this.obiettivo = obiettivo;
     }
 
+    /**
+     * Setter Disciplina
+     * @param disciplina Disciplina
+     * */
     public void setDisciplina(String disciplina){
         this.disciplina = disciplina;
     }
 
+    /**
+     * Setter Livello
+     * @param livello Livello
+     * */
     public void setLivello(int livello){
         this.livello = livello;
     }
 
-    public HashSet<Allenatore> getAllenatori(){
+    /**
+     * Getter Allenatori
+     * @return Lista Allenatori
+     * */
+    public Set<Allenatore> getAllenatori(){
         return this.allenatori;
     }
 
-    public void addAllenatore(Allenatore a){
-        this.allenatori.add(a);
+    /**
+     * Aggiunge un Allenatore alla lista di Allenatori dell'atleta
+     * @param allenatore Allenatore da aggiungere alla lista
+     * */
+    public void addAllenatore(Allenatore allenatore){
+        this.allenatori.add(allenatore);
     }
 
-    public HashSet<SessioneDiAllenamento> getSessioni(){
+    /**
+     * Getter Sessioni
+     * @return Lista di Sessioni assegnate all'Atleta
+     * */
+    public Set<SessioneDiAllenamento> getSessioni(){
         return this.sessioni;
     }
 }

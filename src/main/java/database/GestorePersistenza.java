@@ -142,16 +142,6 @@ public class GestorePersistenza {
         }
     }
 
-    //fatto da collega washington, da validare
-    public <T> List<T> ottieniTutti2(Class<T> classe) {
-        try (EntityManager em = JpaUtil.getInstance().getEntityManager()) {
-
-            CriteriaQuery<T> cq = em.getCriteriaBuilder().createQuery(classe);
-            return em.createQuery(cq.select(cq.from(classe))).getResultList();
-
-        }
-    }
-
     public <T> Set<EntityType<?>> getFiglie(Class<T> classe){
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 

@@ -1,6 +1,7 @@
 package entity;
 
 
+import Exceptions.ResourceNotFoundException;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -62,13 +63,13 @@ public class Allenatore extends Utente {
         a.getAllenatori().remove(this);
     }
 
-    public Atleta getAtleta(Long id) throws IllegalArgumentException {
+    public Atleta getAtleta(Long id) throws ResourceNotFoundException {
         for(Atleta a : atleti){
             if (a.getId().equals(id))
                 return a;
         }
 
-        throw new IllegalArgumentException("Atleta non trovato");
+        throw new ResourceNotFoundException("Atleta non trovato");
     }
 
     public HashSet<SessioneDiAllenamento> getSessioni(){

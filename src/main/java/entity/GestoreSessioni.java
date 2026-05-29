@@ -1,5 +1,6 @@
 package entity;
 
+import Exceptions.ResourceNotFoundException;
 import database.GestorePersistenza;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -13,10 +14,14 @@ import java.util.*;
  */
 public class GestoreSessioni {
 
-    /**Accesso al package database*/
+    /**
+     * Accesso al package database
+     */
     private static final GestorePersistenza persistence_sessioni = new GestorePersistenza();
 
-    /**Istanza statica del gestoreSessioni*/
+    /**
+     * Istanza statica del gestoreSessioni
+     */
     private static GestoreSessioni instance;
 
     /**
@@ -42,8 +47,15 @@ public class GestoreSessioni {
      * @return Lista degli esercizi presenti nella sessione
      */
     public List<Esercizio> dettaglioSessione(Long id_sessione) {
-        SessioneDiAllenamento sessione = getSessione(id_sessione);
-        return sessione.getEsercizi();
+        try {
+            SessioneDiAllenamento sessione = getSessione(id_sessione);
+            return sessione.getEsercizi();
+        }
+        catch(EntityNotFoundException e){
+            System.out.println("sessione non trovata per l'id: " + id_sessione);
+            throw e;
+        }
+
     }
 
     /**
@@ -74,6 +86,7 @@ public class GestoreSessioni {
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
     public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Risultato> risultati, HashMap<Long, String> note) throws IllegalAccessException {
+
         SessioneDiAllenamento s;
         try{
             s = getSessione(id_sessione);
@@ -120,12 +133,18 @@ public class GestoreSessioni {
      */
     public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, Duration durata,
                                               ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore)
-                                            throws EntityNotFoundException, IllegalArgumentException{
+                                            throws EntityNotFoundException, ResourceNotFoundException {
 
         GestoreUtenti utenti = GestoreUtenti.getInstance();
 
-        Allenatore allenatore = utenti.cercaAllenatore(id_allenatore);
-        Atleta atleta = allenatore.getAtleta(id_atleta);
+        Allenatore allenatore;
+        Atleta atleta;
+        try {
+            allenatore = utenti.cercaAllenatore(id_allenatore);
+            atleta = allenatore.getAtleta(id_atleta);
+        } catch (EntityNotFoundException | ResourceNotFoundException e) {
+            throw e;
+        }
 
         SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, durata, atleta, allenatore);
 
