@@ -8,9 +8,11 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Locale;
 
-public class SchedaSingola {
+public class SchedaSingola extends JFrame {
 
     private JButton VISUALIZZADETTAGLIOButton;
     private JButton COMPLETASESSIONEButton;
@@ -26,6 +28,22 @@ public class SchedaSingola {
 // >>> IMPORTANT!! <<<
 // DO NOT EDIT OR ADD ANY CODE HERE!
         $$$setupUI$$$();
+    }
+
+    public SchedaSingola() {
+        VISUALIZZADETTAGLIOButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dettaglioEsercizi();
+            }
+        });
+    }
+
+    private void dettaglioEsercizi(){
+
+        JFrame frame = new JFrame("Dettaglio Esercizi");
+        FormEsercizi formEsercizi = new FormEsercizi();
+        formEsercizi.setup();
     }
 
     /**

@@ -9,14 +9,14 @@ import entity.Esercizio;
 import javax.swing.*;
 import java.awt.*;
 
-public class FormEsercizi {
+public class FormEsercizi extends JFrame {
     private JPanel PanelBase;
     private JScrollPane Scorrimento;
     private JPanel Header;
     private JPanel Footer;
     private JPanel PanelCentrale;
 
-    private void aggiungiEsercizi() {
+    public void aggiungiEsercizi() {
         Control_session control_session = Control_session.getInstance();
         for (Esercizio e : control_session.stubGetEsercizioforUtente()) {
             SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio();
@@ -24,6 +24,10 @@ public class FormEsercizi {
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
 
         }
+    }
+
+    public JPanel getPanelBase() {
+        return this.PanelBase;
     }
 
 
@@ -73,7 +77,7 @@ public class FormEsercizi {
         return PanelBase;
     }
 
-    public static void main(String[] args) {
+    public void setup() {
 
         JFrame frame = new JFrame();
         frame.setTitle("Visualizza allenamenti");
