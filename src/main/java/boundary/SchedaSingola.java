@@ -39,17 +39,17 @@ public class SchedaSingola extends JFrame {
         VISUALIZZADETTAGLIOButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dettaglioEsercizi();
+                dettaglioEsercizi(id_sessione);
             }
 
         });
     }
 
-    private void dettaglioEsercizi() {
+    private void dettaglioEsercizi(Long id_sessione) {
 
         JFrame frame = new JFrame("Dettaglio Esercizi");
         FormEsercizi formEsercizi = new FormEsercizi();
-        formEsercizi.setup();
+        formEsercizi.setup(id_sessione);
     }
 
     {

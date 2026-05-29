@@ -64,7 +64,7 @@ public class Control_session {
     }
 
 
-    public List<Esercizio> stubGetEsercizioforUtente(){
+    public List<Esercizio> stubGetEsercizioForSessione(){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
         List<Esercizio> h = new ArrayList<>();

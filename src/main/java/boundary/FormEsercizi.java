@@ -16,10 +16,10 @@ public class FormEsercizi extends JFrame {
     private JPanel Footer;
     private JPanel PanelCentrale;
 
-    public void aggiungiEsercizi() {
+    public void aggiungiEsercizi(Long id_sessione) {
         Control_session control_session = Control_session.getInstance();
-        for (Esercizio e : control_session.stubGetEsercizioforUtente()) {
-            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio();
+        for (Esercizio e : control_session.getEserciziforSessione(id_sessione)) {
+            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e.getNome(),e.getDescrizione());
             PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
 
@@ -77,14 +77,14 @@ public class FormEsercizi extends JFrame {
         return PanelBase;
     }
 
-    public void setup() {
+    public void setup(Long id_sessione) {
 
         JFrame frame = new JFrame();
         frame.setTitle("Visualizza allenamenti");
         FormEsercizi form_base = new FormEsercizi();
         form_base.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
         frame.setContentPane(form_base.PanelBase);
-        form_base.aggiungiEsercizi();
+        form_base.aggiungiEsercizi(id_sessione);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
