@@ -223,8 +223,7 @@ public class SessioneDiAllenamento {
      * PRECONDITION: LA LISTA DEI RISULTATI DEVE MATCHARE I TIPI DEGLI ESERCIZI IN ORDINE NELLA LISTA
      * @param risultati lista di risultati ottenuti
      *
-     **/
-
+     */
     public void registraRisultati(Risultato risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
         for(Esercizio e : esercizi){
             if(e.getId().equals(id_esercizio)){
