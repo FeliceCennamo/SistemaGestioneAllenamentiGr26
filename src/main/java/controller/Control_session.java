@@ -3,13 +3,11 @@ package controller;
 import entity.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Control_session {
 
+    private Long id_utente_autenticato = 2L;
     private static Control_session instance;
 
     /**
@@ -29,12 +27,18 @@ public class Control_session {
         return instance;
     }
 
-
-
     public Set<SessioneDiAllenamento> getSessioneforUtente(Long id_utente){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
         return g_session.cercaSessioni(id_utente);
+    }
+
+    public Long getAutenticato(){
+        return id_utente_autenticato;
+    }
+
+    public void setAutenticato(Long id_utente){
+        this.id_utente_autenticato = id_utente;
     }
 
     public Set<SessioneDiAllenamento> stubGetSessioneforUtente(Long id_utente){
@@ -75,6 +79,25 @@ public class Control_session {
         }
 
         return h;
+    }
+
+    public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row){
+
+        GestoreSessioni gestore = GestoreSessioni.getInstance();
+
+        HashMap<Long, String> risultati = new HashMap<>();
+        HashMap<Long, String> note = new HashMap<>();
+
+        for(Long id : risultati_row.keySet()){
+            note.put(id, risultati_row.get(id)[0]);
+            risultati.put(id, risultati_row.get(id)[0]);
+        }
+
+        try {
+            gestore.completaSessione(this.id_utente_autenticato, id_sessione, risultati, note);
+        }catch (IllegalAccessException e){
+            System.out.println("Sessione non trovata");
+        }
     }
 
 }

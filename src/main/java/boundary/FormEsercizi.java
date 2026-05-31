@@ -5,9 +5,12 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
 import entity.Esercizio;
+import org.hibernate.engine.jdbc.Size;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class FormEsercizi extends JFrame {
     private JPanel PanelBase;
@@ -15,15 +18,69 @@ public class FormEsercizi extends JFrame {
     private JPanel Header;
     private JPanel Footer;
     private JPanel PanelCentrale;
+    private JButton backBtn;
+    private JButton completaBtn;
+
+    private JFrame previousFrame;  // finestra delle sessioni
+    private JFrame currentFrame;
+
+    private Long idCurrentSession;
+
+    private ArrayList<SchedaSingolaEsercizio> schede = new ArrayList<>();
+
+    public FormEsercizi(Long id_sessione, JFrame parentFrame) {
+        this.previousFrame = parentFrame;
+        this.idCurrentSession = id_sessione;
+
+        // Crea la finestra corrente
+        currentFrame = new JFrame();
+        currentFrame.setTitle("Visualizza allenamenti");
+        currentFrame.setContentPane(this.PanelBase);  // usa il pannello dell'istanza corrente
+        currentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // NON EXIT!
+        currentFrame.setResizable(false);
+        currentFrame.pack();
+        currentFrame.setLocationRelativeTo(null);
+
+        // Aggiungi gli esercizi al pannello centrale
+        aggiungiEsercizi(id_sessione);
+        // Imposta lo scrolling
+        Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
+
+        // Nascondi la finestra padre (quella delle sessioni)
+        parentFrame.setVisible(false);
+        // Mostra la nuova finestra
+        currentFrame.setVisible(true);
+
+        // ----- LISTENER PER IL BOTTONE BACK -----
+        backBtn.addActionListener(e -> {
+            // Rendi di nuovo visibile la finestra delle sessioni
+            previousFrame.setVisible(true);
+            // Chiudi la finestra corrente
+            currentFrame.dispose();
+        });
+
+        completaBtn.addActionListener(e -> {sendCompleta();});
+    }
 
     public void aggiungiEsercizi(Long id_sessione) {
         Control_session control_session = Control_session.getInstance();
-        for (Esercizio e : control_session.getEserciziforSessione(id_sessione)) {
-            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e.getNome(),e.getDescrizione());
-            PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
-            PanelCentrale.add(scheda.$$$getRootComponent$$$());
+        PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
 
+        for (Esercizio e : control_session.getEserciziforSessione(id_sessione)) {
+            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e.getNome(), e.getDescrizione(), e.getId());
+            PanelCentrale.add(scheda.$$$getRootComponent$$$());
+            schede.add(scheda);
         }
+    }
+
+    public void sendCompleta() {
+        Map<Long, String[]> risultati_row = new HashMap<>();
+        for (SchedaSingolaEsercizio s : this.schede) {
+            risultati_row.put(s.getId(), new String[]{s.getValueNota(), s.getValueRisultato()});
+        }
+
+            Control_session control_session = Control_session.getInstance();
+            control_session.completaSessione(this.idCurrentSession, risultati_row);
     }
 
     public JPanel getPanelBase() {
@@ -52,22 +109,32 @@ public class FormEsercizi extends JFrame {
         Scorrimento = new JScrollPane();
         PanelBase.add(Scorrimento, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         PanelCentrale = new JPanel();
-        PanelCentrale.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        PanelCentrale.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         Scorrimento.setViewportView(PanelCentrale);
         final JLabel label1 = new JLabel();
         label1.setHorizontalAlignment(0);
         label1.setHorizontalTextPosition(0);
         label1.setText("I TUOI ESERCIZI");
         label1.setVerticalAlignment(1);
-        PanelCentrale.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        PanelCentrale.add(label1, new GridConstraints(0, 0, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        PanelCentrale.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        PanelCentrale.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        PanelCentrale.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         Header = new JPanel();
-        Header.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        Header.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.add(Header, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        backBtn = new JButton();
+        backBtn.setText("<");
+        Header.add(backBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        Header.add(spacer3, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         Footer = new JPanel();
         Footer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        completaBtn = new JButton();
+        completaBtn.setText("Completa sessione");
+        Footer.add(completaBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -77,20 +144,36 @@ public class FormEsercizi extends JFrame {
         return PanelBase;
     }
 
-    public void setup(Long id_sessione) {
 
-        JFrame frame = new JFrame();
-        frame.setTitle("Visualizza allenamenti");
-        FormEsercizi form_base = new FormEsercizi();
-        form_base.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
-        frame.setContentPane(form_base.PanelBase);
-        form_base.aggiungiEsercizi(id_sessione);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+    // A naso è più corretto farle nel costruttore ste cose (lo lascio per ricordarci di validare)
+    public void setup(Long id_sessione, JFrame parentFrame) {
+        this.previousFrame = parentFrame;
 
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        // Crea la finestra corrente
+        currentFrame = new JFrame();
+        currentFrame.setTitle("Visualizza allenamenti");
+        currentFrame.setContentPane(this.PanelBase);  // usa il pannello dell'istanza corrente
+        currentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // NON EXIT!
+        currentFrame.setResizable(false);
+        currentFrame.pack();
+        currentFrame.setLocationRelativeTo(null);
 
+        // Aggiungi gli esercizi al pannello centrale
+        aggiungiEsercizi(id_sessione);
+        // Imposta lo scrolling
+        Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
+
+        // Nascondi la finestra padre (quella delle sessioni)
+        parentFrame.setVisible(false);
+        // Mostra la nuova finestra
+        currentFrame.setVisible(true);
+
+        // ----- LISTENER PER IL BOTTONE BACK -----
+        backBtn.addActionListener(e -> {
+            // Rendi di nuovo visibile la finestra delle sessioni
+            previousFrame.setVisible(true);
+            // Chiudi la finestra corrente
+            currentFrame.dispose();
+        });
     }
 }

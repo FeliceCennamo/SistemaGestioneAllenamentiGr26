@@ -224,7 +224,7 @@ public class SessioneDiAllenamento {
 
      *
      */
-    public void registraRisultati(Risultato risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
+    public void registraRisultati(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
         for(Esercizio e : esercizi){
             if(e.getId().equals(id_esercizio)){
                 e.setRisultato(risultato, nota);

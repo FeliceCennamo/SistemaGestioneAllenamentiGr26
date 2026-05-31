@@ -121,6 +121,7 @@ public class Esercizio {
         else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer){
             this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);
         }
+
         else
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }

@@ -85,7 +85,7 @@ public class GestoreSessioni {
      * @param id_sessione Id della sessione che si sta cercando di completare
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
-    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Risultato> risultati, HashMap<Long, String> note) throws IllegalAccessException {
+    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, String> risultati, HashMap<Long, String> note) throws IllegalAccessException {
 
         SessioneDiAllenamento s;
         try{
@@ -98,7 +98,22 @@ public class GestoreSessioni {
         if(s.getAtleta().getId().equals(id_atleta)) {
             s.setStato("COMPLETATA");
             for(Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
-                s.registraRisultati(risultati.get(es), note.get(es), es);
+                Esercizio e = persistence_sessioni.trovaPerId(Esercizio.class, es);
+
+                if(e == null){
+                    throw new EntityNotFoundException("Esercizio non trovato");
+                }
+                if (risultati.get(es) == null){
+                    s.registraRisultati(risultati.get(es), note.get(es), es);
+
+                }
+                else if(e.getTipo() == Esercizio.TipoEsercizio.TEMPO){
+                    s.registraRisultati(Duration.ofMinutes(Long.parseLong(risultati.get(es))), note.get(es), es);
+                }
+                else if(e.getTipo() == Esercizio.TipoEsercizio.RIPETIZIONI){
+                    s.registraRisultati(Integer.parseInt(risultati.get(es)), note.get(es), es);
+                }
+
             }
         }else{
             throw new IllegalAccessException();

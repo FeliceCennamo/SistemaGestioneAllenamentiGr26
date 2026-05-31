@@ -17,13 +17,16 @@ import java.util.Locale;
 public class SchedaSingola extends JFrame {
 
     private JButton VISUALIZZADETTAGLIOButton;
-    private JButton COMPLETASESSIONEButton;
     private JPanel PanelBase;
     private JLabel Titolo;
     private JLabel Descrizione_placeholder;
     private JLabel Descrizione_real;
     private JLabel Allenatore_placeholder;
     private JLabel Allenatore_real;
+    private JLabel Stato_placeholder;
+    private JLabel Data_placeholder;
+    private JLabel Stato_real;
+    private JLabel Data_real;
 
 
     public SchedaSingola(Long id_sessione) {
@@ -35,6 +38,8 @@ public class SchedaSingola extends JFrame {
         this.Titolo.setText(s.getTitolo());
         this.Allenatore_real.setText(s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
         this.Descrizione_real.setText(s.getDescrizione());
+        this.Stato_real.setText(s.getStato().toString());
+        this.Data_real.setText(s.getDataSvolgimento().toString());
 
         VISUALIZZADETTAGLIOButton.addActionListener(new ActionListener() {
             @Override
@@ -47,9 +52,9 @@ public class SchedaSingola extends JFrame {
 
     private void dettaglioEsercizi(Long id_sessione) {
 
-        JFrame frame = new JFrame("Dettaglio Esercizi");
-        FormEsercizi formEsercizi = new FormEsercizi();
-        formEsercizi.setup(id_sessione);
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(PanelBase);
+
+        FormEsercizi formEsercizi = new FormEsercizi(id_sessione, parentFrame);
     }
 
     {
@@ -68,45 +73,50 @@ public class SchedaSingola extends JFrame {
      */
     private void $$$setupUI$$$() {
         PanelBase = new JPanel();
-        PanelBase.setLayout(new GridLayoutManager(6, 5, new Insets(10, 10, 10, 10), -1, -1));
+        PanelBase.setLayout(new GridLayoutManager(4, 6, new Insets(10, 10, 10, 10), -1, -1));
         PanelBase.setBackground(new Color(-657936));
         PanelBase.setForeground(new Color(-13884898));
         PanelBase.setMaximumSize(new Dimension(1000, 150));
         PanelBase.setMinimumSize(new Dimension(1000, 150));
         PanelBase.setPreferredSize(new Dimension(720, 130));
-        final Spacer spacer1 = new Spacer();
-        PanelBase.add(spacer1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        COMPLETASESSIONEButton = new JButton();
-        COMPLETASESSIONEButton.setText("COMPLETA SESSIONE");
-        PanelBase.add(COMPLETASESSIONEButton, new GridConstraints(4, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Titolo = new JLabel();
-        Titolo.setText("");
-        PanelBase.add(Titolo, new GridConstraints(0, 0, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Titolo.setText("Titolo");
+        PanelBase.add(Titolo, new GridConstraints(0, 0, 1, 6, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Descrizione_placeholder = new JLabel();
-        Descrizione_placeholder.setText("DESCRIZIONE");
-        PanelBase.add(Descrizione_placeholder, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Descrizione_placeholder.setText("Descrizione:");
+        PanelBase.add(Descrizione_placeholder, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Allenatore_placeholder = new JLabel();
-        Allenatore_placeholder.setText("ALLENATORE:");
-        PanelBase.add(Allenatore_placeholder, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Allenatore_placeholder.setText("Allenatore:");
+        PanelBase.add(Allenatore_placeholder, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Descrizione_real = new JLabel();
         Descrizione_real.setText("NUMERO ESERCIZI EFFETTIVO");
-        PanelBase.add(Descrizione_real, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        PanelBase.add(Descrizione_real, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         Allenatore_real = new JLabel();
         Allenatore_real.setBackground(new Color(-460294));
         Font Allenatore_realFont = this.$$$getFont$$$("Segoe UI Semibold", Font.PLAIN, -1, Allenatore_real.getFont());
         if (Allenatore_realFont != null) Allenatore_real.setFont(Allenatore_realFont);
         Allenatore_real.setForeground(new Color(-14605015));
         Allenatore_real.setText("ALLENATORE EFFETTIVO");
-        PanelBase.add(Allenatore_real, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        PanelBase.add(Allenatore_real, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Stato_placeholder = new JLabel();
+        Stato_placeholder.setText("Stato:");
+        PanelBase.add(Stato_placeholder, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Data_placeholder = new JLabel();
+        Data_placeholder.setText("Data:");
+        PanelBase.add(Data_placeholder, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Stato_real = new JLabel();
+        Stato_real.setText("STATO EFFETTIVO");
+        PanelBase.add(Stato_real, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Data_real = new JLabel();
+        Data_real.setText("DATA EFFETTIVA");
+        PanelBase.add(Data_real, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         VISUALIZZADETTAGLIOButton = new JButton();
-        VISUALIZZADETTAGLIOButton.setText("VISUALIZZA DETTAGLIO");
-        PanelBase.add(VISUALIZZADETTAGLIOButton, new GridConstraints(4, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        VISUALIZZADETTAGLIOButton.setText("VISUALIZZA");
+        PanelBase.add(VISUALIZZADETTAGLIOButton, new GridConstraints(1, 5, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        PanelBase.add(spacer1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        PanelBase.add(spacer2, new GridConstraints(5, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        final Spacer spacer3 = new Spacer();
-        PanelBase.add(spacer3, new GridConstraints(4, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        PanelBase.add(spacer4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        PanelBase.add(spacer2, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
     }
 
     /**

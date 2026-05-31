@@ -2,35 +2,24 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SchedaSingolaEsercizio {
     private JPanel PanelBase;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JButton button1;
+    private JTextField textFieldNota;
+    private JTextField textFieldRisultato;
     private JLabel lblDescrizione;
     private JLabel lblRisultatoAtteso;
     private JLabel lblTitolo;
+    private Long id ;
 
+    public SchedaSingolaEsercizio(String nome, String descrizione, Long id) {
 
-    public SchedaSingolaEsercizio(String nome, String descrizione) {
-
+        this.id = id;
         this.lblDescrizione.setText(descrizione);
         this.lblTitolo.setText(nome);
-
-
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
     }
 
     {
@@ -49,7 +38,7 @@ public class SchedaSingolaEsercizio {
      */
     private void $$$setupUI$$$() {
         PanelBase = new JPanel();
-        PanelBase.setLayout(new GridLayoutManager(6, 2, new Insets(10, 10, 10, 10), -1, -1));
+        PanelBase.setLayout(new GridLayoutManager(5, 2, new Insets(10, 10, 10, 10), -1, -1));
         PanelBase.setPreferredSize(new Dimension(720, 155));
         final JLabel label1 = new JLabel();
         label1.setText("TITOLO");
@@ -72,13 +61,10 @@ public class SchedaSingolaEsercizio {
         final JLabel label5 = new JLabel();
         label5.setText("REGISTRA RISULTATO");
         PanelBase.add(label5, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        textField1 = new JTextField();
-        PanelBase.add(textField1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        textField2 = new JTextField();
-        PanelBase.add(textField2, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        button1 = new JButton();
-        button1.setText("Button");
-        PanelBase.add(button1, new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        textFieldNota = new JTextField();
+        PanelBase.add(textFieldNota, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        textFieldRisultato = new JTextField();
+        PanelBase.add(textFieldRisultato, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         lblTitolo = new JLabel();
         lblTitolo.setText("TITOLO EFFETTIVO");
         PanelBase.add(lblTitolo, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -91,4 +77,15 @@ public class SchedaSingolaEsercizio {
         return PanelBase;
     }
 
+    public String getValueNota() {
+        return textFieldNota.getText();
+    }
+
+    public String getValueRisultato() {
+        return textFieldRisultato.getText();
+    }
+
+    public Long getId() {
+        return id;
+    }
 }

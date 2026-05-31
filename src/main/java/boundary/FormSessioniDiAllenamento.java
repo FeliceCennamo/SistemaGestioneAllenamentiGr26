@@ -22,14 +22,12 @@ public class FormSessioniDiAllenamento {
     private JPanel Header;
     private JPanel Footer;
 
-
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
-        id_utente_autenticato = 1L;
-        for (SessioneDiAllenamento s : c_session.getSessioneforUtente(id_utente_autenticato)) {
+        for (SessioneDiAllenamento s : c_session.getSessioneforUtente(c_session.getAutenticato())) {
             Long id_sessione = s.getId();
             SchedaSingola scheda = new SchedaSingola(id_sessione);
-            PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
+            PanelCentrale.setLayout(new GridLayout(0, 1, 0, 0));
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
         }
     }
@@ -67,9 +65,9 @@ public class FormSessioniDiAllenamento {
         Font PanelCentraleFont = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 0, PanelCentrale.getFont());
         if (PanelCentraleFont != null) PanelCentrale.setFont(PanelCentraleFont);
         PanelCentrale.setMaximumSize(new Dimension(32767, 1200));
-        PanelCentrale.setMinimumSize(new Dimension(10, 1200));
+        PanelCentrale.setMinimumSize(new Dimension(10, 10));
         PanelCentrale.setOpaque(true);
-        PanelCentrale.setPreferredSize(new Dimension(10, 1200));
+        PanelCentrale.setPreferredSize(null);
         Scorrimento.setViewportView(PanelCentrale);
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 28, label1.getFont());
