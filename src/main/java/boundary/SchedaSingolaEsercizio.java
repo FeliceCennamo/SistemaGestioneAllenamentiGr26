@@ -2,6 +2,8 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import entity.Esercizio;
+import entity.SessioneDiAllenamento;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +15,31 @@ public class SchedaSingolaEsercizio {
     private JLabel lblDescrizione;
     private JLabel lblRisultatoAtteso;
     private JLabel lblTitolo;
-    private Long id ;
+    private Long id;
 
-    public SchedaSingolaEsercizio(String nome, String descrizione, Long id) {
+    public SchedaSingolaEsercizio(Esercizio esercizio) {
+        this.id = esercizio.getId();
+        this.lblDescrizione.setText(esercizio.getDescrizione());
+        this.lblTitolo.setText(esercizio.getNome());
 
-        this.id = id;
-        this.lblDescrizione.setText(descrizione);
-        this.lblTitolo.setText(nome);
+        if (esercizio.getSessione().getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
+            // Mostra i valori registrati e disabilita la modifica
+            textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
+            textFieldRisultato.setText(esercizio.getRisultato().getRisultato() != null ? esercizio.getRisultato().getRisultato().toString() : "");
+            textFieldNota.setEditable(false);
+            textFieldRisultato.setEditable(false);
+            // Opzionale: cambia colore di sfondo
+            textFieldNota.setBackground(Color.LIGHT_GRAY);
+            textFieldRisultato.setBackground(Color.LIGHT_GRAY);
+        } else {
+            // Campi vuoti e modificabili
+            textFieldNota.setText("");
+            textFieldRisultato.setText("");
+            textFieldNota.setEditable(true);
+            textFieldRisultato.setEditable(true);
+        }
+
+
     }
 
     {
@@ -62,8 +82,10 @@ public class SchedaSingolaEsercizio {
         label5.setText("REGISTRA RISULTATO");
         PanelBase.add(label5, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         textFieldNota = new JTextField();
+        textFieldNota.setText("nota");
         PanelBase.add(textFieldNota, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         textFieldRisultato = new JTextField();
+        textFieldRisultato.setText("risultato");
         PanelBase.add(textFieldRisultato, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         lblTitolo = new JLabel();
         lblTitolo.setText("TITOLO EFFETTIVO");

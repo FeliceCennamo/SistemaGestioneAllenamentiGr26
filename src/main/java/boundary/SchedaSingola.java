@@ -28,9 +28,12 @@ public class SchedaSingola extends JFrame {
     private JLabel Stato_real;
     private JLabel Data_real;
 
+    private FormSessioniDiAllenamento parentForm;
 
-    public SchedaSingola(Long id_sessione) {
 
+    public SchedaSingola(Long id_sessione, FormSessioniDiAllenamento parentForm) {
+
+        this.parentForm = parentForm;
         Control_session controller = Control_session.getInstance();
 
         SessioneDiAllenamento s = controller.getSessioneforId(id_sessione);
@@ -54,7 +57,7 @@ public class SchedaSingola extends JFrame {
 
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(PanelBase);
 
-        FormEsercizi formEsercizi = new FormEsercizi(id_sessione, parentFrame);
+        FormEsercizi formEsercizi = new FormEsercizi(id_sessione, parentFrame, parentForm);
     }
 
     {

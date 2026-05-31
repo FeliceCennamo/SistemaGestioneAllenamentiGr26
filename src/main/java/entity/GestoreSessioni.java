@@ -98,23 +98,23 @@ public class GestoreSessioni {
         if(s.getAtleta().getId().equals(id_atleta)) {
             s.setStato("COMPLETATA");
             for(Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
-                Esercizio e = persistence_sessioni.trovaPerId(Esercizio.class, es);
+                Esercizio esercizio  = persistence_sessioni.trovaPerId(Esercizio.class, es);
 
-                if(e == null){
-                    throw new EntityNotFoundException("Esercizio non trovato");
+                Object ris = null;
+                String nota = null;
+                if(risultati.containsKey(es) && !risultati.get(es).isEmpty()){
+                    if (esercizio.getTipo() == Esercizio.TipoEsercizio.RIPETIZIONI)
+                        ris = Integer.parseInt(risultati.get(es));
+                    else if (esercizio.getTipo() == Esercizio.TipoEsercizio.TEMPO)
+                        ris = Duration.ofMinutes(Integer.parseInt(risultati.get(es)));
                 }
-                if (risultati.get(es) == null){
-                    s.registraRisultati(risultati.get(es), note.get(es), es);
-
-                }
-                else if(e.getTipo() == Esercizio.TipoEsercizio.TEMPO){
-                    s.registraRisultati(Duration.ofMinutes(Long.parseLong(risultati.get(es))), note.get(es), es);
-                }
-                else if(e.getTipo() == Esercizio.TipoEsercizio.RIPETIZIONI){
-                    s.registraRisultati(Integer.parseInt(risultati.get(es)), note.get(es), es);
+                if(note.containsKey(es)){
+                    nota = note.get(es);
                 }
 
+                s.registraRisultato(ris, nota, es);
             }
+            persistence_sessioni.salva(s);
         }else{
             throw new IllegalAccessException();
         }

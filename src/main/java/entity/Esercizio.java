@@ -23,7 +23,7 @@ public class Esercizio {
     @JoinColumn(name = "sessione_id") // Nome colonna FK verso SessioneDiAllenamento
     private SessioneDiAllenamento sessione;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "risultato")
     private Risultato risultato = null;
 
@@ -120,6 +120,19 @@ public class Esercizio {
         }
         else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer){
             this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);
+        }
+
+        else
+            throw new IllegalArgumentException("Tipo di risultato non valido");
+    }
+
+    public void setRisultato( String nota) throws IllegalArgumentException{
+        if (this.tipo == TipoEsercizio.TEMPO){
+            this.risultato = new RisultatoTempo(nota, null);
+
+        }
+        else if (this.tipo == TipoEsercizio.RIPETIZIONI){
+            this.risultato = new RisultatoRipetizioni(nota, null);
         }
 
         else

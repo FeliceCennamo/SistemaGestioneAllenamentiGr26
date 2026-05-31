@@ -219,15 +219,13 @@ public class SessioneDiAllenamento {
         this.esercizi = esercizi;
     }
 
-    /**
-     * PRECONDITION: LA LISTA DEI RISULTATI DEVE MATCHARE I TIPI DEGLI ESERCIZI IN ORDINE NELLA LISTA
-
-     *
-     */
-    public void registraRisultati(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
+    public void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
         for(Esercizio e : esercizi){
             if(e.getId().equals(id_esercizio)){
-                e.setRisultato(risultato, nota);
+                if (risultato ==null)
+                    e.setRisultato(nota);
+                else
+                    e.setRisultato(risultato, nota);
                 return;
             }
         }

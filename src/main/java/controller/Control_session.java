@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Control_session {
 
-    private Long id_utente_autenticato = 2L;
+    private Long id_utente_autenticato =3L;
     private static Control_session instance;
 
     /**
@@ -88,9 +88,9 @@ public class Control_session {
         HashMap<Long, String> risultati = new HashMap<>();
         HashMap<Long, String> note = new HashMap<>();
 
-        for(Long id : risultati_row.keySet()){
+        for(Long id : risultati_row.keySet()) {
             note.put(id, risultati_row.get(id)[0]);
-            risultati.put(id, risultati_row.get(id)[0]);
+            risultati.put(id, risultati_row.get(id)[1]);
         }
 
         try {

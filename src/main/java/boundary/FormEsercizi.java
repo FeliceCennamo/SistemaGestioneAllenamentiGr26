@@ -25,12 +25,14 @@ public class FormEsercizi extends JFrame {
     private JFrame currentFrame;
 
     private Long idCurrentSession;
+    private FormSessioniDiAllenamento parentForm;
 
     private ArrayList<SchedaSingolaEsercizio> schede = new ArrayList<>();
 
-    public FormEsercizi(Long id_sessione, JFrame parentFrame) {
+    public FormEsercizi(Long id_sessione, JFrame parentFrame, FormSessioniDiAllenamento parentForm) {
         this.previousFrame = parentFrame;
         this.idCurrentSession = id_sessione;
+        this.parentForm = parentForm;
 
         // Crea la finestra corrente
         currentFrame = new JFrame();
@@ -67,7 +69,7 @@ public class FormEsercizi extends JFrame {
         PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
 
         for (Esercizio e : control_session.getEserciziforSessione(id_sessione)) {
-            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e.getNome(), e.getDescrizione(), e.getId());
+            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e);
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
             schede.add(scheda);
         }
@@ -79,8 +81,12 @@ public class FormEsercizi extends JFrame {
             risultati_row.put(s.getId(), new String[]{s.getValueNota(), s.getValueRisultato()});
         }
 
-            Control_session control_session = Control_session.getInstance();
-            control_session.completaSessione(this.idCurrentSession, risultati_row);
+        Control_session control_session = Control_session.getInstance();
+        control_session.completaSessione(this.idCurrentSession, risultati_row);
+
+        parentForm.refresh();
+        previousFrame.setVisible(true);
+        currentFrame.dispose();
     }
 
     public JPanel getPanelBase() {
