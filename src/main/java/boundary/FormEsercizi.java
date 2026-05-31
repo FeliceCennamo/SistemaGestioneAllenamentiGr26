@@ -5,6 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
 import entity.Esercizio;
+import entity.SessioneDiAllenamento;
 import org.hibernate.engine.jdbc.Size;
 
 import javax.swing.*;
@@ -52,6 +53,13 @@ public class FormEsercizi extends JFrame {
         parentFrame.setVisible(false);
         // Mostra la nuova finestra
         currentFrame.setVisible(true);
+
+        Control_session controller = Control_session.getInstance();
+
+
+        if (controller.getSessioneforId(id_sessione).getStato() == SessioneDiAllenamento.Stato.COMPLETATA){
+            completaBtn.setVisible(false);
+        }
 
         // ----- LISTENER PER IL BOTTONE BACK -----
         backBtn.addActionListener(e -> {
