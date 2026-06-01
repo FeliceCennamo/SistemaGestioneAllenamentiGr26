@@ -24,6 +24,7 @@ public class FormEsercizi extends JFrame {
     private JButton backBtn;
     private JButton completaBtn;
     private JPanel panelCentrale;
+    private JLabel emptyLbl;
 
     private JFrame previousFrame;  // finestra delle sessioni
     private JFrame currentFrame;
@@ -79,12 +80,19 @@ public class FormEsercizi extends JFrame {
 
     public void aggiungiEsercizi(Long id_sessione) {
         Control_session control_session = Control_session.getInstance();
-        panelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
+        panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
+        List<Esercizio> esercizi = control_session.getEserciziforSessione(id_sessione);
 
-        for (Esercizio e : control_session.getEserciziforSessione(id_sessione)) {
-            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e);
-            panelCentrale.add(scheda.$$$getRootComponent$$$());
-            schede.add(scheda);
+        if (!esercizi.isEmpty()) {
+            for (Esercizio e : esercizi) {
+                SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e);
+                panelCentrale.add(scheda.$$$getRootComponent$$$());
+                panelCentrale.add(Box.createVerticalStrut(5));
+                schede.add(scheda);
+            }
+            emptyLbl.setVisible(false);
+        } else {
+            emptyLbl.setVisible(true);
         }
     }
 
@@ -148,11 +156,16 @@ public class FormEsercizi extends JFrame {
         label1.setVerticalAlignment(1);
         Header.add(label1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(-1, 30), new Dimension(-1, 30), new Dimension(-1, 30), 0, false));
         Footer = new JPanel();
-        Footer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        Footer.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         completaBtn = new JButton();
         completaBtn.setText("Completa sessione");
-        Footer.add(completaBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(completaBtn, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        emptyLbl = new JLabel();
+        Font emptyLblFont = this.$$$getFont$$$(null, -1, 16, emptyLbl.getFont());
+        if (emptyLblFont != null) emptyLbl.setFont(emptyLblFont);
+        emptyLbl.setText("Nessun esercizio nella sessione");
+        Footer.add(emptyLbl, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
