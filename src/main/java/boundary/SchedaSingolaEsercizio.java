@@ -22,10 +22,11 @@ public class SchedaSingolaEsercizio {
         this.lblDescrizione.setText(esercizio.getDescrizione());
         this.lblTitolo.setText(esercizio.getNome());
 
+        textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
+        textFieldRisultato.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getRisultato().toString() : "");
+
         if (esercizio.getSessione().getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
             // Mostra i valori registrati e disabilita la modifica
-            textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
-            textFieldRisultato.setText(esercizio.getRisultato().getRisultato() != null ? esercizio.getRisultato().getRisultato().toString() : "");
             textFieldNota.setEditable(false);
             textFieldRisultato.setEditable(false);
             // Opzionale: cambia colore di sfondo
