@@ -79,9 +79,9 @@ public class SchedaSingola extends JFrame {
         PanelBase.setLayout(new GridLayoutManager(4, 6, new Insets(10, 10, 10, 10), -1, -1));
         PanelBase.setBackground(new Color(-657936));
         PanelBase.setForeground(new Color(-13884898));
-        PanelBase.setMaximumSize(new Dimension(1000, 150));
-        PanelBase.setMinimumSize(new Dimension(1000, 150));
-        PanelBase.setPreferredSize(new Dimension(720, 130));
+        PanelBase.setMaximumSize(new Dimension(1000, 100));
+        PanelBase.setMinimumSize(new Dimension(1000, 100));
+        PanelBase.setPreferredSize(new Dimension(720, 100));
         Titolo = new JLabel();
         Titolo.setText("Titolo");
         PanelBase.add(Titolo, new GridConstraints(0, 0, 1, 6, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

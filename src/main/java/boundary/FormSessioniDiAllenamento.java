@@ -24,10 +24,10 @@ public class FormSessioniDiAllenamento {
 
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
+        PanelCentrale.setLayout(new GridLayout(0, 1, 0, 0));
         for (SessioneDiAllenamento s : c_session.getSessioneforUtente(c_session.getAutenticato())) {
             Long id_sessione = s.getId();
             SchedaSingola scheda = new SchedaSingola(id_sessione, this);
-            PanelCentrale.setLayout(new GridLayout(0, 1, 0, 0));
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
         }
     }
@@ -68,6 +68,9 @@ public class FormSessioniDiAllenamento {
         PanelCentrale.setOpaque(true);
         PanelCentrale.setPreferredSize(new Dimension(10, 1200));
         Scorrimento.setViewportView(PanelCentrale);
+        Header = new JPanel();
+        Header.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        PanelBase.add(Header, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(-1, 50), new Dimension(-1, 50), new Dimension(-1, 50), 0, false));
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 28, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
@@ -76,10 +79,9 @@ public class FormSessioniDiAllenamento {
         label1.setOpaque(false);
         label1.setPreferredSize(new Dimension(100, 100));
         label1.setText("I TUOI ALLENAMENTI");
-        PanelCentrale.add(label1);
-        Header = new JPanel();
-        Header.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        PanelBase.add(Header, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        Header.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(-1, 50), new Dimension(-1, 50), new Dimension(-1, 50), 0, false));
+        final Spacer spacer1 = new Spacer();
+        Header.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         Footer = new JPanel();
         Footer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -132,7 +134,7 @@ public class FormSessioniDiAllenamento {
         PanelCentrale.repaint();
     }
 
-    public void setup(){
+    public void setup() {
         JFrame frame = new JFrame();
         frame.setTitle("Visualizza allenamenti");
         this.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);

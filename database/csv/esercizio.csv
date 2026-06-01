@@ -1,101 +1,101 @@
 id,nome,tipo,ripetizioni,durata,descrizione,risultato,sessione_id
 1,Affondi,RIPETIZIONI,17,NULL,Descrizione di Affondi,NULL,58
-2,Military press,TEMPO,NULL,34 min,Descrizione di Military press,NULL,49
-3,Panca piana,TEMPO,NULL,53 min,Descrizione di Panca piana,NULL,85
+2,Military press,TEMPO,NULL,PT34M,Descrizione di Military press,NULL,49
+3,Panca piana,TEMPO,NULL,PT53M,Descrizione di Panca piana,NULL,85
 4,Military press,RIPETIZIONI,9,NULL,Descrizione di Military press,NULL,84
 5,Military press,RIPETIZIONI,16,NULL,Descrizione di Military press,NULL,16
 6,Stacco,RIPETIZIONI,17,NULL,Descrizione di Stacco,NULL,68
 7,Stacco,RIPETIZIONI,12,NULL,Descrizione di Stacco,NULL,1
 8,Rematore,RIPETIZIONI,5,NULL,Descrizione di Rematore,NULL,39
-9,Burpees,TEMPO,NULL,53 min,Descrizione di Burpees,NULL,93
+9,Burpees,TEMPO,NULL,PT53M,Descrizione di Burpees,NULL,93
 10,Corsa,RIPETIZIONI,18,NULL,Descrizione di Corsa,NULL,69
 11,Plank,RIPETIZIONI,12,NULL,Descrizione di Plank,NULL,32
-12,Burpees,TEMPO,NULL,32 min,Descrizione di Burpees,NULL,20
+12,Burpees,TEMPO,NULL,PT32M,Descrizione di Burpees,NULL,20
 13,Dips,RIPETIZIONI,11,NULL,Descrizione di Dips,NULL,93
-14,Rematore,TEMPO,NULL,17 min,Descrizione di Rematore,NULL,5
+14,Rematore,TEMPO,NULL,PT17M,Descrizione di Rematore,NULL,5
 15,Rematore,RIPETIZIONI,18,NULL,Descrizione di Rematore,NULL,79
 16,Rematore,RIPETIZIONI,5,NULL,Descrizione di Rematore,NULL,31
 17,Trazioni,RIPETIZIONI,7,NULL,Descrizione di Trazioni,NULL,13
 18,Ciclismo,RIPETIZIONI,6,NULL,Descrizione di Ciclismo,NULL,58
-19,Ciclismo,TEMPO,NULL,53 min,Descrizione di Ciclismo,NULL,91
+19,Ciclismo,TEMPO,NULL,PT53M,Descrizione di Ciclismo,NULL,91
 20,Military press,RIPETIZIONI,6,NULL,Descrizione di Military press,NULL,32
-21,Salto con la corda,TEMPO,NULL,12 min,Descrizione di Salto con la corda,NULL,52
-22,Burpees,TEMPO,NULL,24 min,Descrizione di Burpees,NULL,70
+21,Salto con la corda,TEMPO,NULL,PT12M,Descrizione di Salto con la corda,NULL,52
+22,Burpees,TEMPO,NULL,PT24M,Descrizione di Burpees,NULL,70
 23,Trazioni,RIPETIZIONI,6,NULL,Descrizione di Trazioni,NULL,18
-24,Corsa,TEMPO,NULL,28 min,Descrizione di Corsa,NULL,30
-25,Military press,TEMPO,NULL,56 min,Descrizione di Military press,NULL,74
-26,Affondi,TEMPO,NULL,46 min,Descrizione di Affondi,NULL,77
+24,Corsa,TEMPO,NULL,PT28M,Descrizione di Corsa,NULL,30
+25,Military press,TEMPO,NULL,PT56M,Descrizione di Military press,NULL,74
+26,Affondi,TEMPO,NULL,PT46M,Descrizione di Affondi,NULL,77
 27,Rematore,RIPETIZIONI,15,NULL,Descrizione di Rematore,NULL,31
 28,Dips,RIPETIZIONI,9,NULL,Descrizione di Dips,NULL,85
-29,Corsa,TEMPO,NULL,24 min,Descrizione di Corsa,NULL,53
-30,Dips,TEMPO,NULL,27 min,Descrizione di Dips,NULL,8
+29,Corsa,TEMPO,NULL,PT24M,Descrizione di Corsa,NULL,53
+30,Dips,TEMPO,NULL,PT27M,Descrizione di Dips,NULL,8
 31,Corsa,RIPETIZIONI,10,NULL,Descrizione di Corsa,NULL,81
-32,Nuoto,TEMPO,NULL,37 min,Descrizione di Nuoto,NULL,72
-33,Burpees,TEMPO,NULL,13 min,Descrizione di Burpees,NULL,45
-34,Nuoto,TEMPO,NULL,52 min,Descrizione di Nuoto,NULL,49
-35,Rematore,TEMPO,NULL,43 min,Descrizione di Rematore,NULL,41
-36,Salto con la corda,TEMPO,NULL,36 min,Descrizione di Salto con la corda,NULL,53
-37,Stacco,TEMPO,NULL,29 min,Descrizione di Stacco,NULL,49
+32,Nuoto,TEMPO,NULL,PT37M,Descrizione di Nuoto,NULL,72
+33,Burpees,TEMPO,NULL,PT13M,Descrizione di Burpees,NULL,45
+34,Nuoto,TEMPO,NULL,PT52M,Descrizione di Nuoto,NULL,49
+35,Rematore,TEMPO,NULL,PT43M,Descrizione di Rematore,NULL,41
+36,Salto con la corda,TEMPO,NULL,PT36M,Descrizione di Salto con la corda,NULL,53
+37,Stacco,TEMPO,NULL,PT29M,Descrizione di Stacco,NULL,49
 38,Stacco,RIPETIZIONI,20,NULL,Descrizione di Stacco,NULL,31
 39,Military press,RIPETIZIONI,12,NULL,Descrizione di Military press,NULL,39
 40,Military press,RIPETIZIONI,9,NULL,Descrizione di Military press,NULL,60
-41,Curl bicipiti,TEMPO,NULL,13 min,Descrizione di Curl bicipiti,NULL,72
+41,Curl bicipiti,TEMPO,NULL,PT13M,Descrizione di Curl bicipiti,NULL,72
 42,Plank,RIPETIZIONI,18,NULL,Descrizione di Plank,NULL,72
-43,Corsa,TEMPO,NULL,18 min,Descrizione di Corsa,NULL,50
-44,Trazioni,TEMPO,NULL,26 min,Descrizione di Trazioni,NULL,27
+43,Corsa,TEMPO,NULL,PT18M,Descrizione di Corsa,NULL,50
+44,Trazioni,TEMPO,NULL,PT26M,Descrizione di Trazioni,NULL,27
 45,Affondi,RIPETIZIONI,7,NULL,Descrizione di Affondi,NULL,58
 46,Military press,RIPETIZIONI,16,NULL,Descrizione di Military press,NULL,12
-47,Corsa,TEMPO,NULL,56 min,Descrizione di Corsa,NULL,25
+47,Corsa,TEMPO,NULL,PT56M,Descrizione di Corsa,NULL,25
 48,Squat,RIPETIZIONI,13,NULL,Descrizione di Squat,NULL,49
 49,Nuoto,RIPETIZIONI,6,NULL,Descrizione di Nuoto,NULL,10
-50,Trazioni,TEMPO,NULL,58 min,Descrizione di Trazioni,NULL,76
-51,Salto con la corda,TEMPO,NULL,52 min,Descrizione di Salto con la corda,NULL,72
+50,Trazioni,TEMPO,NULL,PT58M,Descrizione di Trazioni,NULL,76
+51,Salto con la corda,TEMPO,NULL,PT52M,Descrizione di Salto con la corda,NULL,72
 52,Trazioni,RIPETIZIONI,20,NULL,Descrizione di Trazioni,NULL,27
-53,Military press,TEMPO,NULL,31 min,Descrizione di Military press,NULL,39
+53,Military press,TEMPO,NULL,PT31M,Descrizione di Military press,NULL,39
 54,Curl bicipiti,RIPETIZIONI,5,NULL,Descrizione di Curl bicipiti,NULL,28
 55,Curl bicipiti,RIPETIZIONI,11,NULL,Descrizione di Curl bicipiti,NULL,95
-56,Panca piana,TEMPO,NULL,57 min,Descrizione di Panca piana,NULL,97
-57,Burpees,TEMPO,NULL,25 min,Descrizione di Burpees,NULL,90
+56,Panca piana,TEMPO,NULL,PT57M,Descrizione di Panca piana,NULL,97
+57,Burpees,TEMPO,NULL,PT25M,Descrizione di Burpees,NULL,90
 58,Ciclismo,RIPETIZIONI,11,NULL,Descrizione di Ciclismo,NULL,51
-59,Curl bicipiti,TEMPO,NULL,25 min,Descrizione di Curl bicipiti,NULL,71
+59,Curl bicipiti,TEMPO,NULL,PT25M,Descrizione di Curl bicipiti,NULL,71
 60,Affondi,RIPETIZIONI,14,NULL,Descrizione di Affondi,NULL,49
-61,Burpees,TEMPO,NULL,44 min,Descrizione di Burpees,NULL,84
-62,Affondi,TEMPO,NULL,29 min,Descrizione di Affondi,NULL,34
+61,Burpees,TEMPO,NULL,PT44M,Descrizione di Burpees,NULL,84
+62,Affondi,TEMPO,NULL,PT29M,Descrizione di Affondi,NULL,34
 63,Affondi,RIPETIZIONI,20,NULL,Descrizione di Affondi,NULL,60
-64,Panca piana,TEMPO,NULL,56 min,Descrizione di Panca piana,NULL,61
+64,Panca piana,TEMPO,NULL,PT56M,Descrizione di Panca piana,NULL,61
 65,Rematore,RIPETIZIONI,15,NULL,Descrizione di Rematore,NULL,27
-66,Affondi,TEMPO,NULL,30 min,Descrizione di Affondi,NULL,53
+66,Affondi,TEMPO,NULL,PT30M,Descrizione di Affondi,NULL,53
 67,Squat,RIPETIZIONI,12,NULL,Descrizione di Squat,NULL,95
 68,Stacco,RIPETIZIONI,5,NULL,Descrizione di Stacco,NULL,34
-69,Corsa,TEMPO,NULL,47 min,Descrizione di Corsa,NULL,75
+69,Corsa,TEMPO,NULL,PT47M,Descrizione di Corsa,NULL,75
 70,Salto con la corda,RIPETIZIONI,18,NULL,Descrizione di Salto con la corda,NULL,38
-71,Stacco,TEMPO,NULL,22 min,Descrizione di Stacco,NULL,43
+71,Stacco,TEMPO,NULL,PT22M,Descrizione di Stacco,NULL,43
 72,Trazioni,RIPETIZIONI,17,NULL,Descrizione di Trazioni,NULL,73
 73,Military press,RIPETIZIONI,12,NULL,Descrizione di Military press,NULL,64
 74,Corsa,RIPETIZIONI,15,NULL,Descrizione di Corsa,NULL,33
-75,Rematore,TEMPO,NULL,41 min,Descrizione di Rematore,NULL,93
-76,Nuoto,TEMPO,NULL,57 min,Descrizione di Nuoto,NULL,63
+75,Rematore,TEMPO,NULL,PT41M,Descrizione di Rematore,NULL,93
+76,Nuoto,TEMPO,NULL,PT57M,Descrizione di Nuoto,NULL,63
 77,Burpees,RIPETIZIONI,10,NULL,Descrizione di Burpees,NULL,94
-78,Rematore,TEMPO,NULL,32 min,Descrizione di Rematore,NULL,22
-79,Stacco,TEMPO,NULL,56 min,Descrizione di Stacco,NULL,70
+78,Rematore,TEMPO,NULL,PT32M,Descrizione di Rematore,NULL,22
+79,Stacco,TEMPO,NULL,PT56M,Descrizione di Stacco,NULL,70
 80,Burpees,RIPETIZIONI,10,NULL,Descrizione di Burpees,NULL,70
 81,Nuoto,RIPETIZIONI,6,NULL,Descrizione di Nuoto,NULL,68
 82,Squat,RIPETIZIONI,7,NULL,Descrizione di Squat,NULL,86
-83,Squat,TEMPO,NULL,58 min,Descrizione di Squat,NULL,1
+83,Squat,TEMPO,NULL,PT58M,Descrizione di Squat,NULL,1
 84,Plank,RIPETIZIONI,9,NULL,Descrizione di Plank,NULL,81
 85,Trazioni,RIPETIZIONI,7,NULL,Descrizione di Trazioni,NULL,91
-86,Stacco,TEMPO,NULL,10 min,Descrizione di Stacco,NULL,28
+86,Stacco,TEMPO,NULL,PT10M,Descrizione di Stacco,NULL,28
 87,Corsa,RIPETIZIONI,19,NULL,Descrizione di Corsa,NULL,48
-88,Squat,TEMPO,NULL,49 min,Descrizione di Squat,NULL,82
+88,Squat,TEMPO,NULL,PT49M,Descrizione di Squat,NULL,82
 89,Nuoto,RIPETIZIONI,20,NULL,Descrizione di Nuoto,NULL,85
-90,Burpees,TEMPO,NULL,11 min,Descrizione di Burpees,NULL,1
+90,Burpees,TEMPO,NULL,PT11M,Descrizione di Burpees,NULL,1
 91,Corsa,RIPETIZIONI,18,NULL,Descrizione di Corsa,NULL,2
 92,Squat,RIPETIZIONI,13,NULL,Descrizione di Squat,NULL,69
 93,Dips,RIPETIZIONI,5,NULL,Descrizione di Dips,NULL,65
-94,Military press,TEMPO,NULL,54 min,Descrizione di Military press,NULL,87
-95,Plank,TEMPO,NULL,21 min,Descrizione di Plank,NULL,14
+94,Military press,TEMPO,NULL,PT54M,Descrizione di Military press,NULL,87
+95,Plank,TEMPO,NULL,PT21M,Descrizione di Plank,NULL,14
 96,Curl bicipiti,RIPETIZIONI,8,NULL,Descrizione di Curl bicipiti,NULL,68
 97,Stacco,RIPETIZIONI,12,NULL,Descrizione di Stacco,NULL,25
-98,Ciclismo,TEMPO,NULL,43 min,Descrizione di Ciclismo,NULL,33
+98,Ciclismo,TEMPO,NULL,PT43M,Descrizione di Ciclismo,NULL,33
 99,Military press,RIPETIZIONI,16,NULL,Descrizione di Military press,NULL,35
 100,Rematore,RIPETIZIONI,17,NULL,Descrizione di Rematore,NULL,11
