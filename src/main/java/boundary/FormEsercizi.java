@@ -9,6 +9,8 @@ import entity.SessioneDiAllenamento;
 import org.hibernate.engine.jdbc.Size;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -21,6 +23,8 @@ public class FormEsercizi extends JFrame {
     private JPanel PanelCentrale;
     private JButton backBtn;
     private JButton completaBtn;
+    private JPanel panelCentrale;
+    private JLabel emptyLbl;
 
     private JFrame previousFrame;  // finestra delle sessioni
     private JFrame currentFrame;
@@ -57,7 +61,7 @@ public class FormEsercizi extends JFrame {
         Control_session controller = Control_session.getInstance();
 
 
-        if (controller.getSessioneforId(id_sessione).getStato() == SessioneDiAllenamento.Stato.COMPLETATA){
+        if (controller.getSessioneforId(id_sessione).getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
             completaBtn.setVisible(false);
         }
 
@@ -69,17 +73,26 @@ public class FormEsercizi extends JFrame {
             currentFrame.dispose();
         });
 
-        completaBtn.addActionListener(e -> {sendCompleta();});
+        completaBtn.addActionListener(e -> {
+            sendCompleta();
+        });
     }
 
     public void aggiungiEsercizi(Long id_sessione) {
         Control_session control_session = Control_session.getInstance();
-        PanelCentrale.setLayout(new GridLayout(0, 1, 0, 8));
+        panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
+        List<Esercizio> esercizi = control_session.getEserciziforSessione(id_sessione);
 
-        for (Esercizio e : control_session.getEserciziforSessione(id_sessione)) {
-            SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e);
-            PanelCentrale.add(scheda.$$$getRootComponent$$$());
-            schede.add(scheda);
+        if (!esercizi.isEmpty()) {
+            for (Esercizio e : esercizi) {
+                SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e);
+                panelCentrale.add(scheda.$$$getRootComponent$$$());
+                panelCentrale.add(Box.createVerticalStrut(5));
+                schede.add(scheda);
+            }
+            emptyLbl.setVisible(false);
+        } else {
+            emptyLbl.setVisible(true);
         }
     }
 
@@ -122,33 +135,59 @@ public class FormEsercizi extends JFrame {
         PanelBase.setPreferredSize(new Dimension(750, 500));
         Scorrimento = new JScrollPane();
         PanelBase.add(Scorrimento, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        PanelCentrale = new JPanel();
-        PanelCentrale.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        Scorrimento.setViewportView(PanelCentrale);
+        panelCentrale = new JPanel();
+        panelCentrale.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        Scorrimento.setViewportView(panelCentrale);
+        Header = new JPanel();
+        Header.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        PanelBase.add(Header, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        backBtn = new JButton();
+        backBtn.setText("<");
+        Header.add(backBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        Header.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
+        label1.setFocusable(false);
+        Font label1Font = this.$$$getFont$$$(null, -1, 20, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
         label1.setHorizontalAlignment(0);
         label1.setHorizontalTextPosition(0);
         label1.setText("I TUOI ESERCIZI");
         label1.setVerticalAlignment(1);
-        PanelCentrale.add(label1, new GridConstraints(0, 0, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final Spacer spacer1 = new Spacer();
-        PanelCentrale.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        PanelCentrale.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        Header = new JPanel();
-        Header.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        PanelBase.add(Header, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        backBtn = new JButton();
-        backBtn.setText("<");
-        Header.add(backBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer3 = new Spacer();
-        Header.add(spacer3, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        Header.add(label1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(-1, 30), new Dimension(-1, 30), new Dimension(-1, 30), 0, false));
         Footer = new JPanel();
-        Footer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        Footer.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         completaBtn = new JButton();
         completaBtn.setText("Completa sessione");
-        Footer.add(completaBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(completaBtn, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        emptyLbl = new JLabel();
+        Font emptyLblFont = this.$$$getFont$$$(null, -1, 16, emptyLbl.getFont());
+        if (emptyLblFont != null) emptyLbl.setFont(emptyLblFont);
+        emptyLbl.setText("Nessun esercizio nella sessione");
+        Footer.add(emptyLbl, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**

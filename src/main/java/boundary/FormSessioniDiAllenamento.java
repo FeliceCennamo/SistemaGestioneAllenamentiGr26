@@ -11,6 +11,7 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.Locale;
+import java.util.Set;
 
 public class FormSessioniDiAllenamento {
 
@@ -21,14 +22,23 @@ public class FormSessioniDiAllenamento {
     private JScrollPane Scorrimento;
     private JPanel Header;
     private JPanel Footer;
+    private JLabel emptyLbl;
 
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
-        PanelCentrale.setLayout(new GridLayout(0, 1, 0, 0));
-        for (SessioneDiAllenamento s : c_session.getSessioneforUtente(c_session.getAutenticato())) {
-            Long id_sessione = s.getId();
-            SchedaSingola scheda = new SchedaSingola(id_sessione, this);
-            PanelCentrale.add(scheda.$$$getRootComponent$$$());
+        PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
+        Set<SessioneDiAllenamento> sessioni = c_session.getSessioneforUtente(c_session.getAutenticato());
+
+        if (!sessioni.isEmpty()) {
+            for (SessioneDiAllenamento s : sessioni) {
+                Long id_sessione = s.getId();
+                SchedaSingola scheda = new SchedaSingola(id_sessione, this);
+                PanelCentrale.add(scheda.$$$getRootComponent$$$());
+                PanelCentrale.add(Box.createVerticalStrut(5));
+                emptyLbl.setVisible(false);
+            }
+        } else {
+            emptyLbl.setVisible(true);
         }
     }
 
@@ -63,10 +73,10 @@ public class FormSessioniDiAllenamento {
         PanelCentrale.setBackground(new Color(-657936));
         Font PanelCentraleFont = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 0, PanelCentrale.getFont());
         if (PanelCentraleFont != null) PanelCentrale.setFont(PanelCentraleFont);
-        PanelCentrale.setMaximumSize(new Dimension(32767, 1200));
-        PanelCentrale.setMinimumSize(new Dimension(10, 1200));
+        PanelCentrale.setMaximumSize(new Dimension(-1, -1));
+        PanelCentrale.setMinimumSize(new Dimension(-1, -1));
         PanelCentrale.setOpaque(true);
-        PanelCentrale.setPreferredSize(new Dimension(10, 1200));
+        PanelCentrale.setPreferredSize(new Dimension(-1, -1));
         Scorrimento.setViewportView(PanelCentrale);
         Header = new JPanel();
         Header.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -85,6 +95,11 @@ public class FormSessioniDiAllenamento {
         Footer = new JPanel();
         Footer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        emptyLbl = new JLabel();
+        Font emptyLblFont = this.$$$getFont$$$(null, -1, 16, emptyLbl.getFont());
+        if (emptyLblFont != null) emptyLbl.setFont(emptyLblFont);
+        emptyLbl.setText("Nessuna sessione trovata");
+        Footer.add(emptyLbl, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         label1.setLabelFor(Scorrimento);
     }
 

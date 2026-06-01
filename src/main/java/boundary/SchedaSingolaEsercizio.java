@@ -22,10 +22,11 @@ public class SchedaSingolaEsercizio {
         this.lblDescrizione.setText(esercizio.getDescrizione());
         this.lblTitolo.setText(esercizio.getNome());
 
+        textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
+        textFieldRisultato.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getRisultato().toString() : "");
+
         if (esercizio.getSessione().getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
             // Mostra i valori registrati e disabilita la modifica
-            textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
-            textFieldRisultato.setText(esercizio.getRisultato().getRisultato() != null ? esercizio.getRisultato().getRisultato().toString() : "");
             textFieldNota.setEditable(false);
             textFieldRisultato.setEditable(false);
             // Opzionale: cambia colore di sfondo
@@ -59,7 +60,9 @@ public class SchedaSingolaEsercizio {
     private void $$$setupUI$$$() {
         PanelBase = new JPanel();
         PanelBase.setLayout(new GridLayoutManager(5, 2, new Insets(10, 10, 10, 10), -1, -1));
-        PanelBase.setPreferredSize(new Dimension(720, 155));
+        PanelBase.setMaximumSize(new Dimension(2147483647, 130));
+        PanelBase.setMinimumSize(new Dimension(342, 130));
+        PanelBase.setPreferredSize(new Dimension(720, 130));
         final JLabel label1 = new JLabel();
         label1.setText("TITOLO");
         PanelBase.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

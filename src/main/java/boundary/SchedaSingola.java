@@ -42,6 +42,22 @@ public class SchedaSingola extends JFrame {
         this.Allenatore_real.setText(s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
         this.Descrizione_real.setText(s.getDescrizione());
         this.Stato_real.setText(s.getStato().toString());
+
+        switch (s.getStato()) {
+            case SessioneDiAllenamento.Stato.COMPLETATA:
+                this.Stato_real.setForeground(Color.GREEN);
+                break;
+            case SessioneDiAllenamento.Stato.IN_CORSO:
+                this.Stato_real.setForeground(Color.ORANGE);
+                break;
+            case SessioneDiAllenamento.Stato.ASSEGNATA:
+                this.Stato_real.setForeground(Color.BLUE);
+                break;
+            default:
+                this.Stato_real.setForeground(Color.BLACK);
+        }
+
+
         this.Data_real.setText(s.getDataSvolgimento().toString());
 
         VISUALIZZADETTAGLIOButton.addActionListener(new ActionListener() {

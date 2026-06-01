@@ -29,10 +29,10 @@
             <properties>
               <background color="-657936"/>
               <font name="Segoe UI Semibold" size="0" style="1"/>
-              <maximumSize width="32767" height="1200"/>
-              <minimumSize width="10" height="1200"/>
+              <maximumSize width="-1" height="-1"/>
+              <minimumSize width="-1" height="-1"/>
               <opaque value="true"/>
-              <preferredSize width="10" height="1200"/>
+              <preferredSize width="-1" height="-1"/>
             </properties>
             <border type="none"/>
             <children/>
@@ -83,7 +83,17 @@
         </constraints>
         <properties/>
         <border type="none"/>
-        <children/>
+        <children>
+          <component id="1cd56" class="javax.swing.JLabel" binding="emptyLbl">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="16"/>
+              <text value="Nessuna sessione trovata"/>
+            </properties>
+          </component>
+        </children>
       </grid>
     </children>
   </grid>
