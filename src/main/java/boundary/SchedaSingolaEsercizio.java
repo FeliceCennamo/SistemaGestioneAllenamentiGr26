@@ -23,7 +23,10 @@ public class SchedaSingolaEsercizio {
         this.lblTitolo.setText(esercizio.getNome());
 
         textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
-        textFieldRisultato.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getRisultato().toString() : "");
+        if(esercizio.getRisultato() != null && esercizio.getRisultato().getRisultato() != null)
+            textFieldRisultato.setText(esercizio.getRisultato().getRisultato().toString());
+        else
+            textFieldRisultato.setText("");
 
         if (esercizio.getSessione().getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
             // Mostra i valori registrati e disabilita la modifica
