@@ -24,11 +24,12 @@ public class FormSessioniDiAllenamento {
 
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
-        PanelCentrale.setLayout(new GridLayout(0, 1, 0, 0));
+        PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
         for (SessioneDiAllenamento s : c_session.getSessioneforUtente(c_session.getAutenticato())) {
             Long id_sessione = s.getId();
             SchedaSingola scheda = new SchedaSingola(id_sessione, this);
             PanelCentrale.add(scheda.$$$getRootComponent$$$());
+            PanelCentrale.add(Box.createVerticalStrut(5));
         }
     }
 
@@ -63,10 +64,10 @@ public class FormSessioniDiAllenamento {
         PanelCentrale.setBackground(new Color(-657936));
         Font PanelCentraleFont = this.$$$getFont$$$("Segoe UI Semibold", Font.BOLD, 0, PanelCentrale.getFont());
         if (PanelCentraleFont != null) PanelCentrale.setFont(PanelCentraleFont);
-        PanelCentrale.setMaximumSize(new Dimension(32767, 1200));
-        PanelCentrale.setMinimumSize(new Dimension(10, 1200));
+        PanelCentrale.setMaximumSize(new Dimension(-1, -1));
+        PanelCentrale.setMinimumSize(new Dimension(-1, -1));
         PanelCentrale.setOpaque(true);
-        PanelCentrale.setPreferredSize(new Dimension(10, 1200));
+        PanelCentrale.setPreferredSize(new Dimension(-1, -1));
         Scorrimento.setViewportView(PanelCentrale);
         Header = new JPanel();
         Header.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));

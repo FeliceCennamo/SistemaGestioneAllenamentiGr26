@@ -29,10 +29,10 @@
             <properties>
               <background color="-657936"/>
               <font name="Segoe UI Semibold" size="0" style="1"/>
-              <maximumSize width="32767" height="1200"/>
-              <minimumSize width="10" height="1200"/>
+              <maximumSize width="-1" height="-1"/>
+              <minimumSize width="-1" height="-1"/>
               <opaque value="true"/>
-              <preferredSize width="10" height="1200"/>
+              <preferredSize width="-1" height="-1"/>
             </properties>
             <border type="none"/>
             <children/>

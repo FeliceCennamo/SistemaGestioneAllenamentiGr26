@@ -13,7 +13,7 @@ public class Atleta extends Utente{
     private int livello;
 
     @ElementCollection
-    @CollectionTable(name = "atleta_obiettivo",
+    @CollectionTable(name = "atleta_obiettivi",
             joinColumns = @JoinColumn(name = "atleta_id"))
     @Column(name = "obiettivo")
     private Set<String> obiettivi = null;
