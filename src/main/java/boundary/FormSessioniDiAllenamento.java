@@ -118,18 +118,8 @@ public class FormSessioniDiAllenamento {
     public static void main(String[] args) {
 
         FormSessioniDiAllenamento form_base = new FormSessioniDiAllenamento();
+        form_base.setup();
 
-        JFrame frame = new JFrame();
-        frame.setTitle("Visualizza allenamenti");
-        form_base.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
-        frame.setContentPane(form_base.PanelBase);
-        form_base.aggiungiComponenti();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 
     public void refresh() {
@@ -140,5 +130,19 @@ public class FormSessioniDiAllenamento {
         // Forza il ricalcolo del layout
         PanelCentrale.revalidate();
         PanelCentrale.repaint();
+    }
+
+    public void setup(){
+        JFrame frame = new JFrame();
+        frame.setTitle("Visualizza allenamenti");
+        this.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
+        frame.setContentPane(this.PanelBase);
+        this.aggiungiComponenti();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }
