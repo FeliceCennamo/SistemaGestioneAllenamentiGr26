@@ -85,7 +85,7 @@ public class GestoreSessioni {
      * @param id_sessione Id della sessione che si sta cercando di completare
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
-    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, String> risultati, HashMap<Long, String> note) throws IllegalAccessException {
+    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Integer> risultati, HashMap<Long, String> note) throws IllegalAccessException {
 
         SessioneDiAllenamento s;
         try{
@@ -96,17 +96,17 @@ public class GestoreSessioni {
         }
 
         if(s.getAtleta().getId().equals(id_atleta)) {
-            s.setStato("COMPLETATA");
+            s.setStato("IN CORSO");
             for(Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
                 Esercizio esercizio  = persistence_sessioni.trovaPerId(Esercizio.class, es);
 
                 Object ris = null;
                 String nota = null;
-                if(risultati.containsKey(es) && !risultati.get(es).isEmpty()){
+                if(risultati.containsKey(es)){
                     if (esercizio.getTipo() == Esercizio.TipoEsercizio.RIPETIZIONI)
-                        ris = Integer.parseInt(risultati.get(es));
+                        ris = risultati.get(es);
                     else if (esercizio.getTipo() == Esercizio.TipoEsercizio.TEMPO)
-                        ris = Duration.ofMinutes(Integer.parseInt(risultati.get(es)));
+                        ris = Duration.ofMinutes(risultati.get(es));
                 }
                 if(note.containsKey(es)){
                     nota = note.get(es);
@@ -116,8 +116,16 @@ public class GestoreSessioni {
             }
             persistence_sessioni.salva(s);
         }else{
-            throw new IllegalAccessException();
+            throw new IllegalAccessException("La sessione non appartiene all'utente");
         }
+
+        for(Esercizio e: s.getEsercizi()){
+            if(e.getRisultato() == null){
+                return; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti
+                        //Non può quindi essere completata la sessione
+            }
+        }
+        s.setStato("COMPLETATO"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
     }
 
     /**
@@ -154,12 +162,10 @@ public class GestoreSessioni {
 
         Allenatore allenatore;
         Atleta atleta;
-        try {
-            allenatore = utenti.cercaAllenatore(id_allenatore);
-            atleta = allenatore.getAtleta(id_atleta);
-        } catch (EntityNotFoundException | ResourceNotFoundException e) {
-            throw e;
-        }
+
+        allenatore = utenti.cercaAllenatore(id_allenatore);
+        atleta = allenatore.getAtleta(id_atleta);
+
 
         SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, durata, atleta, allenatore);
 

@@ -85,18 +85,18 @@ public class Control_session {
 
         GestoreSessioni gestore = GestoreSessioni.getInstance();
 
-        HashMap<Long, String> risultati = new HashMap<>();
+        HashMap<Long, Integer> risultati = new HashMap<>();
         HashMap<Long, String> note = new HashMap<>();
 
         for(Long id : risultati_row.keySet()) {
             note.put(id, risultati_row.get(id)[0]);
-            risultati.put(id, risultati_row.get(id)[1]);
+            risultati.put(id, Integer.parseInt(risultati_row.get(id)[1]));
         }
 
         try {
             gestore.completaSessione(this.id_utente_autenticato, id_sessione, risultati, note);
         }catch (IllegalAccessException e){
-            System.out.println("Sessione non trovata");
+            System.out.println("Sessione non appartenente all'utente");
         }
     }
 

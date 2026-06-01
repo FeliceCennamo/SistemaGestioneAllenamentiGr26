@@ -97,13 +97,21 @@ public class FormEsercizi extends JFrame {
     }
 
     public void sendCompleta() {
+        Control_session control_session = Control_session.getInstance();
+
         Map<Long, String[]> risultati_row = new HashMap<>();
         for (SchedaSingolaEsercizio s : this.schede) {
+            if (s.getValueRisultato().isEmpty() && s.getValueNota().isEmpty()) {
+                continue;
+            }
             risultati_row.put(s.getId(), new String[]{s.getValueNota(), s.getValueRisultato()});
         }
 
-        Control_session control_session = Control_session.getInstance();
-        control_session.completaSessione(this.idCurrentSession, risultati_row);
+        try {
+            control_session.completaSessione(this.idCurrentSession, risultati_row);
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi", "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
+        }
 
         parentForm.refresh();
         previousFrame.setVisible(true);
