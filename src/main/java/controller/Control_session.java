@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Control_session {
 
-    private Long id_utente_autenticato =4L;
+    private Long id_utente_autenticato =77L;
     private static Control_session instance;
 
     /**

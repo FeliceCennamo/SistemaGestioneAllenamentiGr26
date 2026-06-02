@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "Allenatori")
+@Table(name = "allenatori")
 public class Allenatore extends Utente {
 
     @ManyToMany

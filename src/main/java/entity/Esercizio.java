@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.Duration;
 
 @Entity
+@Table(name = "esercizi")
 public class Esercizio {
 
     @Id

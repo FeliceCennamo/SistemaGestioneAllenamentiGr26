@@ -3,8 +3,6 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.Control_session;
-import entity.Esercizio;
-import entity.SessioneDiAllenamento;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +39,7 @@ public class SchedaSingolaEsercizio {
         }else
             textFieldRisultato.setText("");
 
-        if (((String) dettaglio.get("stato")).equals("completata")) {
+        if (((String) dettaglio.get("stato")).equalsIgnoreCase("completata")) {
             // Mostra i valori registrati e disabilita la modifica
             textFieldNota.setEditable(false);
             textFieldRisultato.setEditable(false);

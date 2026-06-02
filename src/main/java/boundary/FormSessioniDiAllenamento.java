@@ -3,7 +3,6 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import entity.SessioneDiAllenamento;
 import controller.Control_session;
 
 import javax.swing.*;
@@ -14,8 +13,6 @@ import java.util.Locale;
 import java.util.Set;
 
 public class FormSessioniDiAllenamento {
-
-    private Long id_utente_autenticato;
 
     private JPanel PanelBase;
     private JPanel PanelCentrale;

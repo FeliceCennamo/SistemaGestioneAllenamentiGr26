@@ -4,7 +4,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
-import entity.SessioneDiAllenamento;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;

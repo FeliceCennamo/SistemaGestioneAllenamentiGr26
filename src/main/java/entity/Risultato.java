@@ -3,6 +3,7 @@ package entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "risultati")
 public abstract class Risultato {
 
     @Id

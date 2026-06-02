@@ -115,7 +115,7 @@ public class GestoreSessioni {
 
                 s.registraRisultato(ris, nota, es);
             }
-            persistence_sessioni.salva(s);
+
         }else{
             throw new IllegalAccessException("La sessione non appartiene all'utente");
         }
@@ -127,6 +127,7 @@ public class GestoreSessioni {
             }
         }
         s.setStato("COMPLETATA"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
+        persistence_sessioni.salva(s);
     }
 
     /**

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "sessioni")
 public class SessioneDiAllenamento {
 
     //Chiave primaria
@@ -23,6 +24,9 @@ public class SessioneDiAllenamento {
     private Duration durata = null;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinTable(name = "sessioni_esercizi",   // nome della tabella associativa
+            joinColumns = @JoinColumn(name = "sessione_id"),
+            inverseJoinColumns = @JoinColumn(name = "esercizio_id"))
     private List<Esercizio> esercizi = new ArrayList<>();
 
     @ManyToOne

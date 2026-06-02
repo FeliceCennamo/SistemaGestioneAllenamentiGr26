@@ -6,14 +6,14 @@ import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "Atleti")
+@Table(name = "atleti")
 public class Atleta extends Utente{
 
     private String disciplina;
     private int livello;
 
     @ElementCollection
-    @CollectionTable(name = "atleta_obiettivi",
+    @CollectionTable(name = "atleti_obiettivi",
             joinColumns = @JoinColumn(name = "atleta_id"))
     @Column(name = "obiettivo")
     private Set<String> obiettivi = null;
