@@ -22,7 +22,7 @@ public class SessioneDiAllenamento {
     private Stato stato;
     private Duration durata = null;
 
-    @OneToMany(mappedBy = "sessione", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Esercizio> esercizi = new ArrayList<>();
 
     @ManyToOne

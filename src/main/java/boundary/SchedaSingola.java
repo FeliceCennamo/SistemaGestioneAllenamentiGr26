@@ -4,7 +4,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
-import entity.SessioneDiAllenamento;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -13,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
+import java.util.Map;
 
 public class SchedaSingola extends JFrame {
 
@@ -36,21 +36,21 @@ public class SchedaSingola extends JFrame {
         this.parentForm = parentForm;
         Control_session controller = Control_session.getInstance();
 
-        SessioneDiAllenamento s = controller.getSessioneforId(id_sessione);
+        Map<String, Object> dettaglio = controller.getDettaglioSessioneForId(id_sessione);
 
-        this.Titolo.setText(s.getTitolo());
-        this.Allenatore_real.setText(s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
-        this.Descrizione_real.setText(s.getDescrizione());
-        this.Stato_real.setText(s.getStato().toString());
+        this.Titolo.setText((String) dettaglio.get("titolo"));
+        this.Allenatore_real.setText((String) dettaglio.get("allenatore"));
+        this.Descrizione_real.setText((String) dettaglio.get("descrizione"));
+        this.Stato_real.setText((String) dettaglio.get("stato"));
 
-        switch (s.getStato()) {
-            case SessioneDiAllenamento.Stato.COMPLETATA:
+        switch ((String) dettaglio.get("stato")) {
+            case "completata":
                 this.Stato_real.setForeground(Color.GREEN);
                 break;
-            case SessioneDiAllenamento.Stato.IN_CORSO:
+            case "in corso":
                 this.Stato_real.setForeground(Color.ORANGE);
                 break;
-            case SessioneDiAllenamento.Stato.ASSEGNATA:
+            case "assegnata":
                 this.Stato_real.setForeground(Color.BLUE);
                 break;
             default:
@@ -58,7 +58,7 @@ public class SchedaSingola extends JFrame {
         }
 
 
-        this.Data_real.setText(s.getDataSvolgimento().toString());
+        this.Data_real.setText(dettaglio.get("data").toString());
 
         VISUALIZZADETTAGLIOButton.addActionListener(new ActionListener() {
             @Override

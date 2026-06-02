@@ -27,13 +27,13 @@
                       value="root"/>
 
             <property name="jakarta.persistence.jdbc.password"
-                      value="Felice2004!"/>
+                      value="V@lerio18"/>
 
             <property name="hibernate.hbm2ddl.auto"
                       value="update"/>
 
             <property name="hibernate.show_sql"
-                      value="true"/>
+                      value="false"/>
 
             <property name="hibernate.format_sql"
                       value="true"/>

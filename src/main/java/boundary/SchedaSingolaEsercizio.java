@@ -41,7 +41,7 @@ public class SchedaSingolaEsercizio {
         }else
             textFieldRisultato.setText("");
 
-        if ((Integer) dettaglio.get("stato") == 2) {
+        if (((String) dettaglio.get("stato")).equals("completata")) {
             // Mostra i valori registrati e disabilita la modifica
             textFieldNota.setEditable(false);
             textFieldRisultato.setEditable(false);

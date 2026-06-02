@@ -115,14 +115,13 @@ public class Control_session {
 
         switch (stato) {
 
-            case IN_CORSO -> dettaglio.put("stato", 1);
-            case ASSEGNATA -> dettaglio.put("stato", 0);
-            case COMPLETATA -> dettaglio.put("stato", 2);
-            default -> dettaglio.put("stato", null);
+            case IN_CORSO -> dettaglio.put("stato", "in corso");
+            case ASSEGNATA -> dettaglio.put("stato", "assegnata");
+            case COMPLETATA -> dettaglio.put("stato", "completata");
+            default -> dettaglio.put("stato", "non definito");
 
 
         }
-
 
         if(e.getRisultato() == null){
             dettaglio.put("nota", null);
@@ -138,6 +137,24 @@ public class Control_session {
 
         return dettaglio;
 
+    }
+
+    public Map<String, Object> getDettaglioSessioneForId(Long id_sessione){
+        Map<String,Object> dettaglio = new HashMap<>();
+        SessioneDiAllenamento s = this.getSessioneforId(id_sessione);
+
+        dettaglio.put("titolo", s.getTitolo());
+        dettaglio.put("allenatore", s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
+        dettaglio.put("descrizione", s.getDescrizione());
+        switch (s.getStato()){
+            case ASSEGNATA -> dettaglio.put("stato", "assegnata");
+            case IN_CORSO -> dettaglio.put("stato", "in corso");
+            case COMPLETATA -> dettaglio.put("stato", "completata");
+            default -> dettaglio.put("stato", "non definito");
+        }
+        dettaglio.put("data", s.getDataSvolgimento());
+
+        return dettaglio;
     }
 
 }
