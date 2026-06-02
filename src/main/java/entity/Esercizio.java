@@ -19,9 +19,6 @@ public class Esercizio {
     @Embedded
     private RisultatoAtteso risultatoAtteso;
 
-    @ManyToOne
-    @JoinColumn(name = "sessione_id") // Nome colonna FK verso SessioneDiAllenamento
-    private SessioneDiAllenamento sessione;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "risultato")
@@ -74,9 +71,7 @@ public class Esercizio {
             return this.risultatoAtteso.getDurata();
     }
 
-    public SessioneDiAllenamento getSessione() {
-        return sessione;
-    }
+
 
     public Risultato getRisultato() {
         return risultato;
@@ -109,9 +104,6 @@ public class Esercizio {
             throw new IllegalArgumentException("Risultato non valido");
     }
 
-    public void setSessione(SessioneDiAllenamento sessione) throws IllegalArgumentException{
-        this.sessione = sessione;
-    }
 
     public void setRisultato(Object risultato, String nota) throws IllegalArgumentException{
         if (this.tipo == TipoEsercizio.TEMPO  && risultato instanceof Duration){

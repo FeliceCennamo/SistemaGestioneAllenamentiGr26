@@ -1,5 +1,6 @@
 package controller;
 
+import com.mysql.cj.Session;
 import entity.*;
 
 import java.time.LocalDate;
@@ -61,9 +62,17 @@ public class Control_session {
 
     }
 
-    public List<Esercizio> getEserciziforSessione(Long id_sessione){
+    public List<Long> getEserciziforSessione(Long id_sessione){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
-        return g_session.dettaglioSessione(id_sessione);
+
+        List<Long> ids = new ArrayList<>();
+
+        for(Esercizio e : g_session.dettaglioSessione(id_sessione)) {
+
+            ids.add(e.getId());
+
+        }
+        return ids;
     }
 
     public SessioneDiAllenamento getSessioneforId(Long id_sessione){
@@ -72,19 +81,6 @@ public class Control_session {
 
     }
 
-
-    public List<Esercizio> stubGetEsercizioForSessione(){
-        GestoreSessioni g_session = GestoreSessioni.getInstance();
-
-        List<Esercizio> h = new ArrayList<>();
-
-        for(int i = 0; i < 10; i++){
-            Esercizio e = new Esercizio();
-            h.add(e);
-        }
-
-        return h;
-    }
 
     public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row){
 
@@ -103,6 +99,45 @@ public class Control_session {
         }catch (IllegalAccessException e){
             System.out.println("Sessione non appartenente all'utente");
         }
+    }
+
+    public Map<String, Object> dettaglioEsercizioPerId(Long id_sessione,Long id_esercizio){
+
+        Map<String,Object> dettaglio = new HashMap<>();
+        SessioneDiAllenamento s = this.getSessioneforId(id_sessione);
+        Esercizio e = s.getEsercizioPerId(id_esercizio);
+
+        SessioneDiAllenamento.Stato stato = s.getStato();
+
+
+        dettaglio.put("descrizione", e.getDescrizione());
+        dettaglio.put("nome", e.getNome());
+
+        switch (stato) {
+
+            case IN_CORSO -> dettaglio.put("stato", 1);
+            case ASSEGNATA -> dettaglio.put("stato", 0);
+            case COMPLETATA -> dettaglio.put("stato", 2);
+            default -> dettaglio.put("stato", null);
+
+
+        }
+
+
+        if(e.getRisultato() == null){
+            dettaglio.put("nota", null);
+            dettaglio.put("risultato", null);
+
+
+        }
+        else{
+            dettaglio.put("nota", e.getRisultato().getNota());
+            dettaglio.put("risultato", e.getRisultato().getRisultato());
+
+        }
+
+        return dettaglio;
+
     }
 
 }

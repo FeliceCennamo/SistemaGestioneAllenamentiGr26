@@ -2,6 +2,7 @@ package entity;
 
 import Exceptions.ResourceNotFoundException;
 import database.GestorePersistenza;
+import database.JpaUtil;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.time.Duration;
@@ -174,5 +175,7 @@ public class GestoreSessioni {
         persistence_sessioni.salva(s);
         return s;
     }
+
+
 
 }

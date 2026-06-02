@@ -233,6 +233,16 @@ public class SessioneDiAllenamento {
         throw new IllegalArgumentException("Esercizio non trovato");
     }
 
+    public Esercizio getEsercizioPerId(Long id_esercizio){
+
+        for(Esercizio e : this.esercizi){
+            if(e.getId().equals(id_esercizio))
+                return e;
+        }
+        return null;
+
+    }
+
     public enum Stato {
         ASSEGNATA,
         IN_CORSO,

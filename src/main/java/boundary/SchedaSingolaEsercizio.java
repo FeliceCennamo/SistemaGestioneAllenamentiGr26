@@ -2,12 +2,14 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import controller.Control_session;
 import entity.Esercizio;
 import entity.SessioneDiAllenamento;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.Duration;
+import java.util.Map;
 
 public class SchedaSingolaEsercizio {
     private JPanel PanelBase;
@@ -18,21 +20,28 @@ public class SchedaSingolaEsercizio {
     private JLabel lblTitolo;
     private Long id;
 
-    public SchedaSingolaEsercizio(Esercizio esercizio) {
-        this.id = esercizio.getId();
-        this.lblDescrizione.setText(esercizio.getDescrizione());
-        this.lblTitolo.setText(esercizio.getNome());
+    public SchedaSingolaEsercizio(Long id_sessione, Long id_esercizio) {
 
-        textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
-        if(esercizio.getRisultato() != null && esercizio.getRisultato().getRisultato() != null)
-            if(esercizio.getRisultato().getRisultato() instanceof Integer)
-                textFieldRisultato.setText(esercizio.getRisultato().getRisultato().toString());
+        this.id = id_esercizio;
+
+        Control_session controller = Control_session.getInstance();
+
+        Map<String,Object> dettaglio = controller.dettaglioEsercizioPerId(id_sessione, id_esercizio);
+
+
+        this.lblDescrizione.setText((String)dettaglio.get("descrizione"));
+        this.lblTitolo.setText((String)dettaglio.get("nome"));
+
+        textFieldNota.setText(dettaglio.get("nota") != null ? (String) dettaglio.get("nota") : "");
+        if(dettaglio.get("risultato") != null) {
+            if (dettaglio.get("risultato") instanceof Integer)
+                textFieldRisultato.setText(dettaglio.get("risultato").toString());
             else
-                textFieldRisultato.setText(Long.valueOf(((Duration)esercizio.getRisultato().getRisultato()).toMinutes()).toString());
-        else
+                textFieldRisultato.setText(Long.valueOf(((Duration) dettaglio.get("risultato")).toMinutes()).toString());
+        }else
             textFieldRisultato.setText("");
 
-        if (esercizio.getSessione().getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
+        if ((Integer) dettaglio.get("stato") == 2) {
             // Mostra i valori registrati e disabilita la modifica
             textFieldNota.setEditable(false);
             textFieldRisultato.setEditable(false);

@@ -81,11 +81,13 @@ public class FormEsercizi extends JFrame {
     public void aggiungiEsercizi(Long id_sessione) {
         Control_session control_session = Control_session.getInstance();
         panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
-        List<Esercizio> esercizi = control_session.getEserciziforSessione(id_sessione);
 
-        if (!esercizi.isEmpty()) {
-            for (Esercizio e : esercizi) {
-                SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(e);
+        List<Long> id_esercizi = control_session.getEserciziforSessione(id_sessione);
+
+
+        if (!id_esercizi.isEmpty()) {
+            for (Long id_esercizio : id_esercizi) {
+                SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(id_sessione, id_esercizio);
                 panelCentrale.add(scheda.$$$getRootComponent$$$());
                 panelCentrale.add(Box.createVerticalStrut(5));
                 schede.add(scheda);
