@@ -1,6 +1,5 @@
 package controller;
 
-import com.mysql.cj.Session;
 import entity.*;
 
 import java.time.LocalDate;
@@ -8,7 +7,7 @@ import java.util.*;
 
 public class Control_session {
 
-    private Long id_utente_autenticato =133L;
+    private Long id_utente_autenticato =4L;
     private static Control_session instance;
 
     /**
@@ -107,22 +106,12 @@ public class Control_session {
         SessioneDiAllenamento s = this.getSessioneforId(id_sessione);
         Esercizio e = s.getEsercizioPerId(id_esercizio);
 
-        SessioneDiAllenamento.Stato stato = s.getStato();
+        StatoSessione stato = s.getStato();
 
 
         dettaglio.put("descrizione", e.getDescrizione());
         dettaglio.put("nome", e.getNome());
-
-        switch (stato) {
-
-            case IN_CORSO -> dettaglio.put("stato", "in corso");
-            case ASSEGNATA -> dettaglio.put("stato", "assegnata");
-            case COMPLETATA -> dettaglio.put("stato", "completata");
-            default -> dettaglio.put("stato", "non definito");
-
-
-        }
-
+        dettaglio.put("stato", s.getStato().toString());
         if(e.getRisultato() == null){
             dettaglio.put("nota", null);
             dettaglio.put("risultato", null);
@@ -146,15 +135,9 @@ public class Control_session {
         dettaglio.put("titolo", s.getTitolo());
         dettaglio.put("allenatore", s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
         dettaglio.put("descrizione", s.getDescrizione());
-        switch (s.getStato()){
-            case ASSEGNATA -> dettaglio.put("stato", "assegnata");
-            case IN_CORSO -> dettaglio.put("stato", "in corso");
-            case COMPLETATA -> dettaglio.put("stato", "completata");
-            default -> dettaglio.put("stato", "non definito");
-        }
+        dettaglio.put("stato", s.getStato().toString());
         dettaglio.put("data", s.getDataSvolgimento());
 
         return dettaglio;
     }
-
 }

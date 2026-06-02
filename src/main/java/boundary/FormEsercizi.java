@@ -4,9 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
-import entity.Esercizio;
 import entity.SessioneDiAllenamento;
-import org.hibernate.engine.jdbc.Size;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -61,7 +59,7 @@ public class FormEsercizi extends JFrame {
         Control_session controller = Control_session.getInstance();
 
 
-        if (controller.getSessioneforId(id_sessione).getStato() == SessioneDiAllenamento.Stato.COMPLETATA) {
+        if (controller.getSessioneforId(id_sessione).getStato().toString().equalsIgnoreCase("COMPLETATA")) {
             completaBtn.setVisible(false);
         }
 

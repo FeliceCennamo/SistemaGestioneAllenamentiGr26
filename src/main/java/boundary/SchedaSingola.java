@@ -44,13 +44,13 @@ public class SchedaSingola extends JFrame {
         this.Stato_real.setText((String) dettaglio.get("stato"));
 
         switch ((String) dettaglio.get("stato")) {
-            case "completata":
+            case "COMPLETATA":
                 this.Stato_real.setForeground(Color.GREEN);
                 break;
-            case "in corso":
+            case "IN_CORSO":
                 this.Stato_real.setForeground(Color.ORANGE);
                 break;
-            case "assegnata":
+            case "ASSEGNATA":
                 this.Stato_real.setForeground(Color.BLUE);
                 break;
             default:

@@ -19,7 +19,7 @@ public class SessioneDiAllenamento {
     private String titolo;
     private String descrizione;
     private LocalDate dataSvolgimento;
-    private Stato stato;
+    private StatoSessione stato;
     private Duration durata = null;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -51,7 +51,7 @@ public class SessioneDiAllenamento {
         this.titolo = titolo;
         this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
-        this.stato = Stato.ASSEGNATA;
+        this.stato = StatoSessione.ASSEGNATA;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
     }
@@ -70,7 +70,7 @@ public class SessioneDiAllenamento {
         this.titolo = titolo;
         this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
-        this.stato = Stato.ASSEGNATA;
+        this.stato = StatoSessione.ASSEGNATA;
         this.durata = durata;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
@@ -125,7 +125,7 @@ public class SessioneDiAllenamento {
      *Getter Stato
      * @return Stato della Sessione
      * */
-    public Stato getStato(){ return stato; }
+    public StatoSessione getStato(){ return stato; }
 
     /**
      *Getter Durata
@@ -172,13 +172,13 @@ public class SessioneDiAllenamento {
     public void setStato(String stato) throws IllegalArgumentException{
         switch (stato){
             case "COMPLETATA":
-                this.stato = Stato.COMPLETATA;
+                this.stato = StatoSessione.COMPLETATA;
                 break;
             case "IN CORSO":
-                this.stato = Stato.IN_CORSO;
+                this.stato = StatoSessione.IN_CORSO;
                 break;
             case "ASSEGNATA":
-                this.stato = Stato.ASSEGNATA;
+                this.stato = StatoSessione.ASSEGNATA;
                 break;
             default:
                 throw new IllegalArgumentException("Stato non valido");
@@ -241,11 +241,5 @@ public class SessioneDiAllenamento {
         }
         return null;
 
-    }
-
-    public enum Stato {
-        ASSEGNATA,
-        IN_CORSO,
-        COMPLETATA
     }
 }
