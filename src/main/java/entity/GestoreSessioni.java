@@ -162,18 +162,14 @@ public class GestoreSessioni {
 
         GestoreUtenti utenti = GestoreUtenti.getInstance();
 
-        Allenatore allenatore;
-        Atleta atleta;
-
-        allenatore = utenti.cercaAllenatore(id_allenatore);
-        atleta = allenatore.getAtleta(id_atleta);
-
+        Allenatore allenatore = utenti.cercaAllenatore(id_allenatore);
+        Atleta atleta = allenatore.getAtleta(id_atleta);
 
         SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, durata, atleta, allenatore);
-
         s.setEsercizi(esercizi);
 
         persistence_sessioni.salva(s);
+
         return s;
     }
 
