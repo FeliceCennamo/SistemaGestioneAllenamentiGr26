@@ -7,6 +7,7 @@ import entity.SessioneDiAllenamento;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.Duration;
 
 public class SchedaSingolaEsercizio {
     private JPanel PanelBase;
@@ -24,7 +25,10 @@ public class SchedaSingolaEsercizio {
 
         textFieldNota.setText(esercizio.getRisultato() != null ? esercizio.getRisultato().getNota() : "");
         if(esercizio.getRisultato() != null && esercizio.getRisultato().getRisultato() != null)
-            textFieldRisultato.setText(esercizio.getRisultato().getRisultato().toString());
+            if(esercizio.getRisultato().getRisultato() instanceof Integer)
+                textFieldRisultato.setText(esercizio.getRisultato().getRisultato().toString());
+            else
+                textFieldRisultato.setText(Long.valueOf(((Duration)esercizio.getRisultato().getRisultato()).toMinutes()).toString());
         else
             textFieldRisultato.setText("");
 
@@ -37,8 +41,6 @@ public class SchedaSingolaEsercizio {
             textFieldRisultato.setBackground(Color.LIGHT_GRAY);
         } else {
             // Campi vuoti e modificabili
-            textFieldNota.setText("");
-            textFieldRisultato.setText("");
             textFieldNota.setEditable(true);
             textFieldRisultato.setEditable(true);
         }

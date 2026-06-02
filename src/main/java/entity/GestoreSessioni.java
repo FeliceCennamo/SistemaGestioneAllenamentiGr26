@@ -120,12 +120,12 @@ public class GestoreSessioni {
         }
 
         for(Esercizio e: s.getEsercizi()){
-            if(e.getRisultato() == null){
+            if(e.getRisultato().getRisultato() == null){
                 return; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti
                         //Non può quindi essere completata la sessione
             }
         }
-        s.setStato("COMPLETATO"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
+        s.setStato("COMPLETATA"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
     }
 
     /**
