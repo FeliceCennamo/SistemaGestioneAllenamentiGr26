@@ -27,12 +27,11 @@ public class FormSessioniDiAllenamento {
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
-        Set<SessioneDiAllenamento> sessioni = c_session.getSessioneforUtente(c_session.getAutenticato());
+        Set<Long> sessioni = c_session.getSessioneforUtente(c_session.getAutenticato());
 
         if (!sessioni.isEmpty()) {
-            for (SessioneDiAllenamento s : sessioni) {
-                Long id_sessione = s.getId();
-                SchedaSingola scheda = new SchedaSingola(id_sessione, this);
+            for (Long s : sessioni) {
+                SchedaSingola scheda = new SchedaSingola(s, this);
                 PanelCentrale.add(scheda.$$$getRootComponent$$$());
                 PanelCentrale.add(Box.createVerticalStrut(5));
                 emptyLbl.setVisible(false);

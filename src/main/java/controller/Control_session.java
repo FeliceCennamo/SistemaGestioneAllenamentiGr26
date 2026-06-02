@@ -27,10 +27,15 @@ public class Control_session {
         return instance;
     }
 
-    public Set<SessioneDiAllenamento> getSessioneforUtente(Long id_utente){
+    public Set<Long> getSessioneforUtente(Long id_utente){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
-        return g_session.cercaSessioni(id_utente);
+        Set<SessioneDiAllenamento> s = g_session.cercaSessioni(id_utente);
+        Set<Long> id_set = new HashSet<>();
+        for(SessioneDiAllenamento sessione: s){
+            id_set.add(sessione.getId());
+        }
+        return id_set;
     }
 
     public Long getAutenticato(){
