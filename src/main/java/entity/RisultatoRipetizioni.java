@@ -7,18 +7,34 @@ public class RisultatoRipetizioni extends Risultato {
 
     private Integer ripetizioni;
 
+    /**
+     * Costruttore vuoto RisultatoRipetizioni
+     */
     public RisultatoRipetizioni(){}
 
+    /**
+     * Costruttore RisultatoRipetizioni
+     * @param nota Nota
+     * @param ripetizioni Ripetizioni
+     */
     public RisultatoRipetizioni(String nota, Integer ripetizioni){
         super(nota);
         this.ripetizioni = ripetizioni;
     }
 
+    /**
+     * Getter Risultato
+     * @return Risultato (Integer)
+     * */
     @Override
     public Integer getRisultato(){
         return this.ripetizioni;
     }
 
+    /**
+     * Setter Risultato
+     * @param ripetizioni Ripetizioni
+     * */
     @Override
     public void setRisultato(Object ripetizioni) throws IllegalArgumentException{
 

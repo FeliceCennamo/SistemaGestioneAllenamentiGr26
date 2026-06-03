@@ -226,6 +226,13 @@ public class SessioneDiAllenamento {
         this.esercizi = esercizi;
     }
 
+
+    /**
+     * Registra il Risultato di un Esercizio
+     * @param id_esercizio Id Esercizio
+     * @param nota Nota
+     * @param risultato Risultato (Integer / Duration)
+     * */
     public void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
         for(Esercizio e : esercizi){
             if(e.getId().equals(id_esercizio)){
