@@ -59,8 +59,7 @@ public class SessioneDiAllenamento implements Comparable{
         this.stato = StatoSessione.ASSEGNATA;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
-        INotifier notifier = Notifier.getInstance();
-        notifier.sendMailCreate(getAllenatore().getMail());
+        getNotifier().sendMailCreate(getAllenatore().getMail());
     }
 
     /**
@@ -81,8 +80,7 @@ public class SessioneDiAllenamento implements Comparable{
         this.durata = durata;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
-        INotifier notifier = Notifier.getInstance();
-        notifier.sendMailCreate(getAllenatore().getMail());
+        getNotifier().sendMailCreate(getAllenatore().getMail());
     }
 
 
@@ -143,6 +141,12 @@ public class SessioneDiAllenamento implements Comparable{
     public Duration getDurata(){ return durata; }
 
     /**
+     * Getter oggetto notifier
+     * @return Durata della Sessione
+     * */
+    private INotifier getNotifier(){ return Notifier.getInstance(); }
+
+    /**
      * Setter Titolo
      * @param titolo Titolo
      * */
@@ -182,8 +186,7 @@ public class SessioneDiAllenamento implements Comparable{
         switch (stato){
             case "COMPLETATA":
                 this.stato = StatoSessione.COMPLETATA;
-                INotifier notifier = Notifier.getInstance();
-                notifier.sendMailCreate(getAllenatore().getMail());
+                getNotifier().sendMailCreate(getAllenatore().getMail());
                 break;
             case "IN CORSO":
                 this.stato = StatoSessione.IN_CORSO;
