@@ -46,11 +46,10 @@ public class FormSessioniDiAllenamento {
             if (((LocalDate) dettaglio.get("data")).isAfter(data_filtro)) {
                 continue;
             }
-            SchedaSingola scheda = null;
             switch ((String) dettaglio.get("stato")) {
                 case "ASSEGNATA":
                     if (ASSEGNATECheckBox.getModel().isSelected()) {
-                        scheda = new SchedaSingola(s, this);
+                        SchedaSingola scheda = new SchedaSingola(s, this);
                         PanelCentrale.add(scheda.$$$getRootComponent$$$());
                         PanelCentrale.add(Box.createVerticalStrut(5));
                         emptyLbl.setVisible(false);
@@ -59,7 +58,7 @@ public class FormSessioniDiAllenamento {
 
                 case "IN_CORSO":
                     if (INCORSOCheckBox.getModel().isSelected()) {
-                        scheda = new SchedaSingola(s, this);
+                        SchedaSingola scheda = new SchedaSingola(s, this);
                         PanelCentrale.add(scheda.$$$getRootComponent$$$());
                         PanelCentrale.add(Box.createVerticalStrut(5));
                         emptyLbl.setVisible(false);
@@ -68,7 +67,7 @@ public class FormSessioniDiAllenamento {
 
                 case "COMPLETATA":
                     if (COMPLETATECheckBox.getModel().isSelected()) {
-                        scheda = new SchedaSingola(s, this);
+                        SchedaSingola scheda = new SchedaSingola(s, this);
                         PanelCentrale.add(scheda.$$$getRootComponent$$$());
                         PanelCentrale.add(Box.createVerticalStrut(5));
                         emptyLbl.setVisible(false);
