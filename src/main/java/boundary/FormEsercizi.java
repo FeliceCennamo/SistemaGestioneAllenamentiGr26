@@ -120,7 +120,8 @@ public class FormEsercizi extends JFrame {
         try {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
         }catch(NumberFormatException | ClassCastException e){
-            JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi", "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi maggiori di zero",
+                                        "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }
 
         parentForm.refreshPanelCentrale();

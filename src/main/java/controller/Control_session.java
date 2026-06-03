@@ -102,8 +102,12 @@ public class Control_session {
         HashMap<Long, String> note = new HashMap<>();
 
         for(Long id : risultati_row.keySet()) {
+            int ris_intero = Integer.parseInt(risultati_row.get(id)[1]);
+            if(ris_intero < 0){
+                throw new NumberFormatException();
+            }
             note.put(id, risultati_row.get(id)[0]);
-            risultati.put(id, Integer.parseInt(risultati_row.get(id)[1]));
+            risultati.put(id, ris_intero);
         }
 
         try {
