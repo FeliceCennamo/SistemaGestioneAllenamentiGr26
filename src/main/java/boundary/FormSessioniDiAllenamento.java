@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -30,6 +32,8 @@ public class FormSessioniDiAllenamento {
     private JTextField GIORNO;
     private JTextField MESE;
     private JTextField ANNO;
+    private JButton APPLICA;
+
 
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
@@ -96,9 +100,9 @@ public class FormSessioniDiAllenamento {
         PanelBase = new JPanel();
         PanelBase.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.setBackground(new Color(-1));
-        PanelBase.setMaximumSize(new Dimension(700, 500));
+        PanelBase.setMaximumSize(new Dimension(650, 600));
         PanelBase.setMinimumSize(new Dimension(28, 500));
-        PanelBase.setPreferredSize(new Dimension(500, 700));
+        PanelBase.setPreferredSize(new Dimension(650, 600));
         Scorrimento = new JScrollPane();
         Scorrimento.setHorizontalScrollBarPolicy(30);
         Scorrimento.setInheritsPopupMenu(true);
@@ -129,45 +133,52 @@ public class FormSessioniDiAllenamento {
         final Spacer spacer1 = new Spacer();
         Header.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         Footer = new JPanel();
-        Footer.setLayout(new GridLayoutManager(4, 15, new Insets(0, 0, 0, 0), -1, -1));
-        PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(-1, 120), 1, false));
+        Footer.setLayout(new GridLayoutManager(4, 18, new Insets(0, 0, 0, 0), -1, -1));
+        PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(-1, 180), 1, false));
         emptyLbl = new JLabel();
         Font emptyLblFont = this.$$$getFont$$$(null, -1, 16, emptyLbl.getFont());
         if (emptyLblFont != null) emptyLbl.setFont(emptyLblFont);
         emptyLbl.setText("Nessuna sessione trovata");
-        Footer.add(emptyLbl, new GridConstraints(3, 0, 1, 15, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(emptyLbl, new GridConstraints(3, 0, 1, 18, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ASSEGNATECheckBox = new JCheckBox();
         ASSEGNATECheckBox.setText("ASSEGNATE");
-        Footer.add(ASSEGNATECheckBox, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(ASSEGNATECheckBox, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         INCORSOCheckBox = new JCheckBox();
         INCORSOCheckBox.setText("IN CORSO");
-        Footer.add(INCORSOCheckBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(INCORSOCheckBox, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         COMPLETATECheckBox = new JCheckBox();
         COMPLETATECheckBox.setText("COMPLETATE");
-        Footer.add(COMPLETATECheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(COMPLETATECheckBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        Footer.add(spacer2, new GridConstraints(1, 1, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        Footer.add(spacer2, new GridConstraints(1, 2, 1, 9, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         PRECEDENTE_A = new JLabel();
         PRECEDENTE_A.setText("PRECEDENTE A:");
-        Footer.add(PRECEDENTE_A, new GridConstraints(0, 9, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        label2.setText("/");
-        Footer.add(label2, new GridConstraints(1, 12, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(PRECEDENTE_A, new GridConstraints(0, 11, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        Footer.add(spacer3, new GridConstraints(0, 2, 1, 9, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        Footer.add(spacer4, new GridConstraints(2, 2, 1, 9, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         ANNO = new JTextField();
         ANNO.setText("");
-        Footer.add(ANNO, new GridConstraints(1, 13, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(40, -1), new Dimension(40, -1), 0, false));
+        Footer.add(ANNO, new GridConstraints(1, 15, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), new Dimension(50, -1), 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("/");
+        Footer.add(label2, new GridConstraints(1, 14, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         MESE = new JTextField();
-        Footer.add(MESE, new GridConstraints(1, 11, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(40, -1), new Dimension(40, -1), 0, false));
+        Footer.add(MESE, new GridConstraints(1, 13, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), new Dimension(50, -1), 0, false));
         final JLabel label3 = new JLabel();
         label3.setText("/");
-        Footer.add(label3, new GridConstraints(1, 10, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(label3, new GridConstraints(1, 12, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         GIORNO = new JTextField();
         GIORNO.setHorizontalAlignment(4);
-        Footer.add(GIORNO, new GridConstraints(1, 9, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(40, -1), new Dimension(40, -1), 0, false));
-        final Spacer spacer3 = new Spacer();
-        Footer.add(spacer3, new GridConstraints(0, 1, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        Footer.add(spacer4, new GridConstraints(2, 1, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        Footer.add(GIORNO, new GridConstraints(1, 11, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), new Dimension(50, -1), 0, false));
+        APPLICA = new JButton();
+        APPLICA.setText("APPLICA FILTRI");
+        Footer.add(APPLICA, new GridConstraints(1, 16, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        Footer.add(spacer5, new GridConstraints(1, 17, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer6 = new Spacer();
+        Footer.add(spacer6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         label1.setLabelFor(Scorrimento);
     }
 
@@ -207,7 +218,7 @@ public class FormSessioniDiAllenamento {
 
     }
 
-    public void refresh() {
+    public void refreshPanelCentrale() {
         // Svuota il pannello centrale
         PanelCentrale.removeAll();
         // Ricostruisci le schede
@@ -224,6 +235,12 @@ public class FormSessioniDiAllenamento {
         ASSEGNATECheckBox.setSelected(true);
         INCORSOCheckBox.setSelected(true);
         COMPLETATECheckBox.setSelected(true);
+        APPLICA.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshPanelCentrale();
+            }
+        });
         frame.setContentPane(this.PanelBase);
         this.aggiungiComponenti();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

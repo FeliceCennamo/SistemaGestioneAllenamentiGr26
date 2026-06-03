@@ -66,7 +66,7 @@ public class FormEsercizi extends JFrame {
 
         // ----- LISTENER PER IL BOTTONE BACK -----
         backBtn.addActionListener(e -> {
-            returnToPreviousFrame(previousFrame, currentFrame);
+            returnToPreviousFrame();
         });
 
         completaBtn.addActionListener(e -> {
@@ -74,7 +74,7 @@ public class FormEsercizi extends JFrame {
         });
     }
 
-    private void returnToPreviousFrame(JFrame previousFrame, JFrame currentFrame){
+    private void returnToPreviousFrame(){
         // Rendi di nuovo visibile la finestra delle sessioni
         previousFrame.setVisible(true);
         // Chiudi la finestra corrente
@@ -123,7 +123,7 @@ public class FormEsercizi extends JFrame {
             JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi", "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }
 
-        parentForm.refresh();
+        parentForm.refreshPanelCentrale();
         previousFrame.setVisible(true);
         currentFrame.dispose();
     }
