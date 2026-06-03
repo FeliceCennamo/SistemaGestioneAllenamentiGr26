@@ -18,6 +18,12 @@ public class SchedaSingolaEsercizio {
     private JLabel lblTitolo;
     private Long id;
 
+
+    /**
+     * Costruttore SchedaSingolaEsercizio
+     * @param id_esercizio Id Esercizio
+     * @param id_sessione  Id SessioneDiAllenamento
+     * */
     public SchedaSingolaEsercizio(Long id_sessione, Long id_esercizio) {
 
         this.id = id_esercizio;
@@ -114,15 +120,27 @@ public class SchedaSingolaEsercizio {
         return PanelBase;
     }
 
-    public String getValueNota() {
+    /**
+     * Getter Nota
+     * @return Testo della Nota come String
+     * */
+    public String getTestoNota() {
         return textFieldNota.getText();
     }
 
-    public String getValueRisultato() {
+    /**
+     * Getter Risultato
+     * @return  Testo del Risultato come String
+     * */
+    public String getTestoRisultato() {
         return textFieldRisultato.getText();
     }
 
-    public Long getId() {
+    /**
+     * Getter Id Esercizio
+     * @return Id Esercizio
+     * */
+    public Long getIdEsercizio() {
         return id;
     }
 }

@@ -31,6 +31,9 @@ public class FormEsercizi extends JFrame {
 
     private ArrayList<SchedaSingolaEsercizio> schede = new ArrayList<>();
 
+    /**
+     * Costruttore del FormEsercizi
+     * */
     public FormEsercizi(Long id_sessione, JFrame parentFrame, FormSessioniDiAllenamento parentForm) {
         this.previousFrame = parentFrame;
         this.idCurrentSession = id_sessione;
@@ -76,7 +79,9 @@ public class FormEsercizi extends JFrame {
     }
 
     public void aggiungiEsercizi(Long id_sessione) {
+
         Control_session control_session = Control_session.getInstance();
+
         panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
 
         List<Long> id_esercizi = control_session.getIdEserciziPerSessione(id_sessione);
@@ -95,15 +100,18 @@ public class FormEsercizi extends JFrame {
         }
     }
 
+    /**
+     * Inizia il completamento di una SessioneDiALlenamento
+     * */
     public void sendCompleta() {
         Control_session control_session = Control_session.getInstance();
 
         Map<Long, String[]> risultati_row = new HashMap<>();
         for (SchedaSingolaEsercizio s : this.schede) {
-            if (s.getValueRisultato().isEmpty() && s.getValueNota().isEmpty()) {
+            if (s.getTestoRisultato().isEmpty() && s.getTestoNota().isEmpty()) {
                 continue;
             }
-            risultati_row.put(s.getId(), new String[]{s.getValueNota(), s.getValueRisultato()});
+            risultati_row.put(s.getIdEsercizio(), new String[]{s.getTestoNota(), s.getTestoRisultato()});
         }
 
         try {
