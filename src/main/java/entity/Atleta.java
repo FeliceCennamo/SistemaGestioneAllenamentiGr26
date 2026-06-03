@@ -4,6 +4,7 @@ package entity;
 import jakarta.persistence.*;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "atleti")
@@ -22,7 +23,7 @@ public class Atleta extends Utente{
     private Set<Allenatore> allenatori = new HashSet<Allenatore>();
 
     @OneToMany(mappedBy = "atleta")
-    private Set<SessioneDiAllenamento> sessioni = new HashSet<>(); //G: Non sono sicuro lo debba avere
+    private Set<SessioneDiAllenamento> sessioni = new TreeSet<>(); //G: Non sono sicuro lo debba avere
 
     public Atleta(){}
 

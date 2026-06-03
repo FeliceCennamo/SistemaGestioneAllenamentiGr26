@@ -94,7 +94,7 @@ public class Control_session {
      * @param id_sessione id SessioneDiAllenamento
      * @param risultati_row Mappa<IdEsercizio, String[Nota, Risultato]>
      * */
-    public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row){
+    public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row) throws ClassCastException, NumberFormatException{
 
         GestoreSessioni gestore = GestoreSessioni.getInstance();
 

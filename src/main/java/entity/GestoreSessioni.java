@@ -86,7 +86,8 @@ public class GestoreSessioni {
      * @param id_sessione Id della sessione che si sta cercando di completare
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
-    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Integer> risultati, HashMap<Long, String> note) throws IllegalAccessException {
+    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Integer> risultati, HashMap<Long, String> note)
+                                throws IllegalAccessException, ClassCastException{
 
         SessioneDiAllenamento s;
         try{

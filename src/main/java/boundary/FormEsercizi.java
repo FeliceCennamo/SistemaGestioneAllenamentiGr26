@@ -60,22 +60,25 @@ public class FormEsercizi extends JFrame {
 
         Control_session controller = Control_session.getInstance();
 
-//VIENE FATTO RIFERIMENTO A UN OGGETTO SESSIONIDIALLENAMENTO!!!!
-        if (controller.getSessionePerId(id_sessione).getStato().toString().equalsIgnoreCase("COMPLETATA")) {
+        if (((String) controller.getDettaglioSessionePerId(id_sessione).get("stato")).equalsIgnoreCase("COMPLETATA")) {
             completaBtn.setVisible(false);
         }
 
         // ----- LISTENER PER IL BOTTONE BACK -----
         backBtn.addActionListener(e -> {
-            // Rendi di nuovo visibile la finestra delle sessioni
-            previousFrame.setVisible(true);
-            // Chiudi la finestra corrente
-            currentFrame.dispose();
+            returnToPreviousFrame(previousFrame, currentFrame);
         });
 
         completaBtn.addActionListener(e -> {
             sendCompleta();
         });
+    }
+
+    private void returnToPreviousFrame(JFrame previousFrame, JFrame currentFrame){
+        // Rendi di nuovo visibile la finestra delle sessioni
+        previousFrame.setVisible(true);
+        // Chiudi la finestra corrente
+        currentFrame.dispose();
     }
 
     public void aggiungiEsercizi(Long id_sessione) {
@@ -103,7 +106,7 @@ public class FormEsercizi extends JFrame {
     /**
      * Inizia il completamento di una SessioneDiALlenamento
      * */
-    public void sendCompleta() {
+    private void sendCompleta() {
         Control_session control_session = Control_session.getInstance();
 
         Map<Long, String[]> risultati_row = new HashMap<>();
@@ -116,7 +119,7 @@ public class FormEsercizi extends JFrame {
 
         try {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
-        }catch(NumberFormatException e){
+        }catch(NumberFormatException | ClassCastException e){
             JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi", "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -213,35 +216,4 @@ public class FormEsercizi extends JFrame {
     }
 
 
-    // A naso è più corretto farle nel costruttore ste cose (lo lascio per ricordarci di validare)
-    public void setup(Long id_sessione, JFrame parentFrame) {
-        this.previousFrame = parentFrame;
-
-        // Crea la finestra corrente
-        currentFrame = new JFrame();
-        currentFrame.setTitle("Visualizza allenamenti");
-        currentFrame.setContentPane(this.PanelBase);  // usa il pannello dell'istanza corrente
-        currentFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // NON EXIT!
-        currentFrame.setResizable(false);
-        currentFrame.pack();
-        currentFrame.setLocationRelativeTo(null);
-
-        // Aggiungi gli esercizi al pannello centrale
-        aggiungiEsercizi(id_sessione);
-        // Imposta lo scrolling
-        Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
-
-        // Nascondi la finestra padre (quella delle sessioni)
-        parentFrame.setVisible(false);
-        // Mostra la nuova finestra
-        currentFrame.setVisible(true);
-
-        // ----- LISTENER PER IL BOTTONE BACK -----
-        backBtn.addActionListener(e -> {
-            // Rendi di nuovo visibile la finestra delle sessioni
-            previousFrame.setVisible(true);
-            // Chiudi la finestra corrente
-            currentFrame.dispose();
-        });
-    }
 }

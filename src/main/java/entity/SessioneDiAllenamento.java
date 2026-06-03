@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "sessioni")
-public class SessioneDiAllenamento {
+public class SessioneDiAllenamento implements Comparable{
 
     //Chiave primaria
     @Id
@@ -237,7 +237,7 @@ public class SessioneDiAllenamento {
      * @param nota Nota
      * @param risultato Risultato (Integer / Duration)
      * */
-    public void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException{
+    public void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException, ClassCastException{
         for(Esercizio e : esercizi){
             if(e.getId().equals(id_esercizio)){
                 if (risultato ==null)
@@ -259,5 +259,15 @@ public class SessioneDiAllenamento {
         }
         return null;
 
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        SessioneDiAllenamento other_session = (SessioneDiAllenamento) o;
+        if(dataSvolgimento.compareTo(other_session.getDataSvolgimento()) == 0){
+            return titolo.compareTo(other_session.getTitolo());
+        }else{
+            return dataSvolgimento.compareTo(other_session.getDataSvolgimento());
+        }
     }
 }

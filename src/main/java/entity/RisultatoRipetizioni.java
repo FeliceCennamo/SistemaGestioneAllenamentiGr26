@@ -36,12 +36,9 @@ public class RisultatoRipetizioni extends Risultato {
      * @param ripetizioni Ripetizioni
      * */
     @Override
-    public void setRisultato(Object ripetizioni) throws IllegalArgumentException{
+    public void setRisultato(Object ripetizioni) throws ClassCastException{
 
-        if (!(ripetizioni instanceof Integer))
-            this.ripetizioni = (Integer) ripetizioni;
-        else
-            throw new IllegalArgumentException("Tipo di risultato non valido");
+        this.ripetizioni = (Integer) ripetizioni;
     }
 
 

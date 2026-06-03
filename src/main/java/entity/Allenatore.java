@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 @Entity
@@ -22,7 +23,7 @@ public class Allenatore extends Utente {
 
 
     @OneToMany(mappedBy = "allenatore")
-    private Set<SessioneDiAllenamento> sessioni = new HashSet<>(); // G: Non sono sicuro lo debba avere
+    private Set<SessioneDiAllenamento> sessioni = new TreeSet<>();
 
     /**
      * Costruttore vuoto dell'oggetto Allenatore

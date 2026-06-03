@@ -9,7 +9,10 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 public class FormSessioniDiAllenamento {
@@ -20,21 +23,59 @@ public class FormSessioniDiAllenamento {
     private JPanel Header;
     private JPanel Footer;
     private JLabel emptyLbl;
+    private JCheckBox ASSEGNATECheckBox;
+    private JCheckBox INCORSOCheckBox;
+    private JCheckBox COMPLETATECheckBox;
+    private JLabel PRECEDENTE_A;
+    private JTextField GIORNO;
+    private JTextField MESE;
+    private JTextField ANNO;
 
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
         Set<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
-
-        if (!sessioni.isEmpty()) {
-            for (Long s : sessioni) {
-                SchedaSingola scheda = new SchedaSingola(s, this);
-                PanelCentrale.add(scheda.$$$getRootComponent$$$());
-                PanelCentrale.add(Box.createVerticalStrut(5));
-                emptyLbl.setVisible(false);
+        LocalDate data_filtro = null;
+        try {
+            data_filtro = LocalDate.of(Integer.parseInt(ANNO.getText()), Integer.parseInt(MESE.getText()), Integer.parseInt(GIORNO.getText()));
+        } catch (DateTimeException e) {
+            JOptionPane.showMessageDialog(null, "La data inserita non è una data realmente esistente!", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+        }
+        for (Long s : sessioni) {
+            Map<String, Object> dettaglio = c_session.getDettaglioSessionePerId(s);
+            if (((LocalDate) dettaglio.get("data")).isAfter(data_filtro)) {
+                continue;
             }
-        } else {
-            emptyLbl.setVisible(true);
+            SchedaSingola scheda = null;
+            switch ((String) dettaglio.get("stato")) {
+                case "ASSEGNATA":
+                    if (ASSEGNATECheckBox.getModel().isSelected()) {
+                        scheda = new SchedaSingola(s, this);
+                        PanelCentrale.add(scheda.$$$getRootComponent$$$());
+                        PanelCentrale.add(Box.createVerticalStrut(5));
+                        emptyLbl.setVisible(false);
+                    }
+                    break;
+
+                case "IN_CORSO":
+                    if (INCORSOCheckBox.getModel().isSelected()) {
+                        scheda = new SchedaSingola(s, this);
+                        PanelCentrale.add(scheda.$$$getRootComponent$$$());
+                        PanelCentrale.add(Box.createVerticalStrut(5));
+                        emptyLbl.setVisible(false);
+                    }
+                    break;
+
+                case "COMPLETATA":
+                    if (COMPLETATECheckBox.getModel().isSelected()) {
+                        scheda = new SchedaSingola(s, this);
+                        PanelCentrale.add(scheda.$$$getRootComponent$$$());
+                        PanelCentrale.add(Box.createVerticalStrut(5));
+                        emptyLbl.setVisible(false);
+                    }
+                    break;
+
+            }
         }
     }
 
@@ -56,9 +97,9 @@ public class FormSessioniDiAllenamento {
         PanelBase = new JPanel();
         PanelBase.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.setBackground(new Color(-1));
-        PanelBase.setMaximumSize(new Dimension(2147483647, 500));
+        PanelBase.setMaximumSize(new Dimension(700, 500));
         PanelBase.setMinimumSize(new Dimension(28, 500));
-        PanelBase.setPreferredSize(new Dimension(750, 500));
+        PanelBase.setPreferredSize(new Dimension(500, 700));
         Scorrimento = new JScrollPane();
         Scorrimento.setHorizontalScrollBarPolicy(30);
         Scorrimento.setInheritsPopupMenu(true);
@@ -89,13 +130,45 @@ public class FormSessioniDiAllenamento {
         final Spacer spacer1 = new Spacer();
         Header.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         Footer = new JPanel();
-        Footer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        Footer.setLayout(new GridLayoutManager(4, 15, new Insets(0, 0, 0, 0), -1, -1));
+        PanelBase.add(Footer, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, new Dimension(-1, 120), 1, false));
         emptyLbl = new JLabel();
         Font emptyLblFont = this.$$$getFont$$$(null, -1, 16, emptyLbl.getFont());
         if (emptyLblFont != null) emptyLbl.setFont(emptyLblFont);
         emptyLbl.setText("Nessuna sessione trovata");
-        Footer.add(emptyLbl, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Footer.add(emptyLbl, new GridConstraints(3, 0, 1, 15, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        ASSEGNATECheckBox = new JCheckBox();
+        ASSEGNATECheckBox.setText("ASSEGNATE");
+        Footer.add(ASSEGNATECheckBox, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        INCORSOCheckBox = new JCheckBox();
+        INCORSOCheckBox.setText("IN CORSO");
+        Footer.add(INCORSOCheckBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        COMPLETATECheckBox = new JCheckBox();
+        COMPLETATECheckBox.setText("COMPLETATE");
+        Footer.add(COMPLETATECheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        Footer.add(spacer2, new GridConstraints(1, 1, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        PRECEDENTE_A = new JLabel();
+        PRECEDENTE_A.setText("PRECEDENTE A:");
+        Footer.add(PRECEDENTE_A, new GridConstraints(0, 9, 1, 5, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("/");
+        Footer.add(label2, new GridConstraints(1, 12, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        ANNO = new JTextField();
+        ANNO.setText("");
+        Footer.add(ANNO, new GridConstraints(1, 13, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(40, -1), new Dimension(40, -1), 0, false));
+        MESE = new JTextField();
+        Footer.add(MESE, new GridConstraints(1, 11, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(40, -1), new Dimension(40, -1), 0, false));
+        final JLabel label3 = new JLabel();
+        label3.setText("/");
+        Footer.add(label3, new GridConstraints(1, 10, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        GIORNO = new JTextField();
+        GIORNO.setHorizontalAlignment(4);
+        Footer.add(GIORNO, new GridConstraints(1, 9, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(40, -1), new Dimension(40, -1), 0, false));
+        final Spacer spacer3 = new Spacer();
+        Footer.add(spacer3, new GridConstraints(0, 1, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        Footer.add(spacer4, new GridConstraints(2, 1, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         label1.setLabelFor(Scorrimento);
     }
 
@@ -149,6 +222,9 @@ public class FormSessioniDiAllenamento {
         JFrame frame = new JFrame();
         frame.setTitle("Visualizza allenamenti");
         this.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
+        ASSEGNATECheckBox.setSelected(true);
+        INCORSOCheckBox.setSelected(true);
+        COMPLETATECheckBox.setSelected(true);
         frame.setContentPane(this.PanelBase);
         this.aggiungiComponenti();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
