@@ -43,7 +43,9 @@ public class FormSessioniDiAllenamento {
         try {
             data_filtro = LocalDate.of(Integer.parseInt(ANNO.getText()), Integer.parseInt(MESE.getText()), Integer.parseInt(GIORNO.getText()));
         } catch (DateTimeException e) {
-            JOptionPane.showMessageDialog(null, "La data inserita non è una data realmente esistente!", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "La data inserita non è una data realmente esistente", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+        }catch(NumberFormatException n){
+            JOptionPane.showMessageDialog(null, "Inserire nel filtro data solo numeri interi", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
         }
         for (Long s : sessioni) {
             Map<String, Object> dettaglio = c_session.getDettaglioSessionePerId(s);
