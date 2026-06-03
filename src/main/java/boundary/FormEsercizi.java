@@ -57,8 +57,8 @@ public class FormEsercizi extends JFrame {
 
         Control_session controller = Control_session.getInstance();
 
-
-        if (controller.getSessioneforId(id_sessione).getStato().toString().equalsIgnoreCase("COMPLETATA")) {
+//VIENE FATTO RIFERIMENTO A UN OGGETTO SESSIONIDIALLENAMENTO!!!!
+        if (controller.getSessionePerId(id_sessione).getStato().toString().equalsIgnoreCase("COMPLETATA")) {
             completaBtn.setVisible(false);
         }
 
@@ -79,7 +79,7 @@ public class FormEsercizi extends JFrame {
         Control_session control_session = Control_session.getInstance();
         panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
 
-        List<Long> id_esercizi = control_session.getEserciziforSessione(id_sessione);
+        List<Long> id_esercizi = control_session.getIdEserciziPerSessione(id_sessione);
 
 
         if (!id_esercizi.isEmpty()) {

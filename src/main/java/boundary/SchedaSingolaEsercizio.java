@@ -24,7 +24,7 @@ public class SchedaSingolaEsercizio {
 
         Control_session controller = Control_session.getInstance();
 
-        Map<String,Object> dettaglio = controller.dettaglioEsercizioPerId(id_sessione, id_esercizio);
+        Map<String,Object> dettaglio = controller.getDettaglioEsercizioPerId(id_sessione, id_esercizio);
 
 
         this.lblDescrizione.setText((String)dettaglio.get("descrizione"));

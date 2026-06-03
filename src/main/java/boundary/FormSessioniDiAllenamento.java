@@ -24,7 +24,7 @@ public class FormSessioniDiAllenamento {
     private void aggiungiComponenti() {
         Control_session c_session = Control_session.getInstance();
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
-        Set<Long> sessioni = c_session.getSessioneforUtente(c_session.getAutenticato());
+        Set<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
 
         if (!sessioni.isEmpty()) {
             for (Long s : sessioni) {

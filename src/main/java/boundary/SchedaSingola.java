@@ -36,7 +36,7 @@ public class SchedaSingola extends JFrame {
         this.parentForm = parentForm;
         Control_session controller = Control_session.getInstance();
 
-        Map<String, Object> dettaglio = controller.getDettaglioSessioneForId(id_sessione);
+        Map<String, Object> dettaglio = controller.getDettaglioSessionePerId(id_sessione);
 
         this.Titolo.setText((String) dettaglio.get("titolo"));
         this.Allenatore_real.setText((String) dettaglio.get("allenatore"));

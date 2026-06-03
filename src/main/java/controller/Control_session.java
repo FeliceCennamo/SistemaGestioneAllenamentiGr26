@@ -27,7 +27,7 @@ public class Control_session {
         return instance;
     }
 
-    public Set<Long> getSessioneforUtente(Long id_utente){
+    public Set<Long> getIdSessioniPerUtente(Long id_utente){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
         Set<SessioneDiAllenamento> s = g_session.cercaSessioni(id_utente);
@@ -38,7 +38,7 @@ public class Control_session {
         return id_set;
     }
 
-    public Long getAutenticato(){
+    public Long getIdUtenteAutenticato(){
         return id_utente_autenticato;
     }
 
@@ -61,7 +61,12 @@ public class Control_session {
 
     }
 
-    public List<Long> getEserciziforSessione(Long id_sessione){
+    /**
+     * Restituisce gli Id degli esercizi appartenenti a una SessioneDiAllenamento
+     * @param id_sessione id SessioneDiAllenamento
+     * @return Lista contenente gli id degli esercizi della SessioneDiAllenamento
+     * */
+    public List<Long> getIdEserciziPerSessione(Long id_sessione){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
         List<Long> ids = new ArrayList<>();
@@ -74,13 +79,22 @@ public class Control_session {
         return ids;
     }
 
-    public SessioneDiAllenamento getSessioneforId(Long id_sessione){
+    /**
+     * Restituisce la SessioneDiAllenamento corrispondente all'Id passato
+     * @param id_sessione id SessioneDiAllenamento
+     * @return Oggetto SessioneDiAllenamento corrispondente
+     */
+    public SessioneDiAllenamento getSessionePerId(Long id_sessione){
         GestoreSessioni g = GestoreSessioni.getInstance();
         return g.getSessione(id_sessione);
 
     }
 
-
+    /**
+     * Completa una sessione di allenamento
+     * @param id_sessione id SessioneDiAllenamento
+     * @param risultati_row Mappa<IdEsercizio, String[Nota, Risultato]>
+     * */
     public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row){
 
         GestoreSessioni gestore = GestoreSessioni.getInstance();
@@ -100,10 +114,16 @@ public class Control_session {
         }
     }
 
-    public Map<String, Object> dettaglioEsercizioPerId(Long id_sessione,Long id_esercizio){
+    /**
+     *Restituisce una mappa contenente il dettaglio di un Esercizio
+     * @param id_sessione id SessioneDiAllenamento
+     * @param id_esercizio id Esercizio
+     * @return La mappa contiene Nome, Descrizione, Stato Sessione, Nota e Risultato
+     */
+    public Map<String, Object> getDettaglioEsercizioPerId(Long id_sessione, Long id_esercizio){
 
         Map<String,Object> dettaglio = new HashMap<>();
-        SessioneDiAllenamento s = this.getSessioneforId(id_sessione);
+        SessioneDiAllenamento s = this.getSessionePerId(id_sessione);
         Esercizio e = s.getEsercizioPerId(id_esercizio);
 
         StatoSessione stato = s.getStato();
@@ -128,9 +148,14 @@ public class Control_session {
 
     }
 
-    public Map<String, Object> getDettaglioSessioneForId(Long id_sessione){
+    /**
+     *Restituisce una mappa contenente il dettaglio di una SessioneDiAllenamento
+     * @param id_sessione id SessioneDiAllenamento
+     * @return La mappa contiene Titolo,Nome e Cognome Allenatore,Descrizione, Stato e Data
+     */
+    public Map<String, Object> getDettaglioSessionePerId(Long id_sessione){
         Map<String,Object> dettaglio = new HashMap<>();
-        SessioneDiAllenamento s = this.getSessioneforId(id_sessione);
+        SessioneDiAllenamento s = this.getSessionePerId(id_sessione);
 
         dettaglio.put("titolo", s.getTitolo());
         dettaglio.put("allenatore", s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
