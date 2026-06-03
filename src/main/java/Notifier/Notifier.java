@@ -89,8 +89,8 @@ public class Notifier implements INotifier{
         }
     }
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         getInstance().sendMailCreate("mormileluigi.lm91@gmail.com");
         getInstance().sendMailComplete("mormileluigi.lm91@gmail.com");
-    }
+    }*/
 }
