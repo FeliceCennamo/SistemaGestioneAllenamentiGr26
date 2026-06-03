@@ -2,7 +2,6 @@ package controller;
 
 import entity.*;
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class Control_session {
@@ -42,7 +41,7 @@ public class Control_session {
         return id_utente_autenticato;
     }
 
-    public void setAutenticato(Long id_utente){
+   /* public void setAutenticato(Long id_utente){
         this.id_utente_autenticato = id_utente;
     }
 
@@ -59,7 +58,7 @@ public class Control_session {
 
         return h;
 
-    }
+    }*/
 
     /**
      * Restituisce gli Id degli esercizi appartenenti a una SessioneDiAllenamento
@@ -125,8 +124,6 @@ public class Control_session {
         Map<String,Object> dettaglio = new HashMap<>();
         SessioneDiAllenamento s = this.getSessionePerId(id_sessione);
         Esercizio e = s.getEsercizioPerId(id_esercizio);
-
-        StatoSessione stato = s.getStato();
 
 
         dettaglio.put("descrizione", e.getDescrizione());
