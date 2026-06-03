@@ -1,4 +1,4 @@
-package entity;
+package Notifier;
 
 public interface INotifier {
     void sendMailComplete(String destinatario);

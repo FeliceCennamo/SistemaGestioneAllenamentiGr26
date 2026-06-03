@@ -1,5 +1,6 @@
 package entity;
 
+import Notifier.*;
 import jakarta.persistence.*;
 
 import java.time.Duration;
@@ -58,7 +59,8 @@ public class SessioneDiAllenamento {
         this.stato = StatoSessione.ASSEGNATA;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
-        Notifier.getInstance().sendMailCreate(getAllenatore().getMail());
+        INotifier notifier = Notifier.getInstance();
+        notifier.sendMailCreate(getAllenatore().getMail());
     }
 
     /**
@@ -79,7 +81,8 @@ public class SessioneDiAllenamento {
         this.durata = durata;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
-        Notifier.getInstance().sendMailCreate(getAllenatore().getMail());
+        INotifier notifier = Notifier.getInstance();
+        notifier.sendMailCreate(getAllenatore().getMail());
     }
 
 
@@ -179,7 +182,8 @@ public class SessioneDiAllenamento {
         switch (stato){
             case "COMPLETATA":
                 this.stato = StatoSessione.COMPLETATA;
-                Notifier.getInstance().sendMailComplete(getAllenatore().getMail());
+                INotifier notifier = Notifier.getInstance();
+                notifier.sendMailCreate(getAllenatore().getMail());
                 break;
             case "IN CORSO":
                 this.stato = StatoSessione.IN_CORSO;
