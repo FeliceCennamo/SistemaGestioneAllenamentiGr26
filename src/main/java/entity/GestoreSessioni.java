@@ -51,7 +51,7 @@ public class GestoreSessioni {
             SessioneDiAllenamento sessione = getSessione(id_sessione);
             return sessione.getEsercizi();
         }
-        catch(EntityNotFoundException e){
+        catch(ResourceNotFoundException e){
             System.out.println("sessione non trovata per l'id: " + id_sessione);
             throw e;
         }
@@ -63,7 +63,7 @@ public class GestoreSessioni {
      * @return Set di tutte le sessioni presenti nel sistema
      */
     public Set<SessioneDiAllenamento> cercaSessioni(){
-        List<SessioneDiAllenamento> listaSessioni =persistence_sessioni.ottieniTutti(SessioneDiAllenamento.class);
+        List<SessioneDiAllenamento> listaSessioni = persistence_sessioni.ottieniTutti(SessioneDiAllenamento.class);
         return new HashSet<>(listaSessioni);
     }
 
@@ -91,7 +91,7 @@ public class GestoreSessioni {
         SessioneDiAllenamento s;
         try{
             s = getSessione(id_sessione);
-        }catch(EntityNotFoundException e) {
+        }catch(ResourceNotFoundException e) {
             e.printStackTrace();
             return;
         }
@@ -135,13 +135,13 @@ public class GestoreSessioni {
     /**
      *Permette di ricercare una sessione dato il suo id
      * @param id_sessione Id della sessione che stiamo cercando
-     * @throws EntityNotFoundException Se la sessione richiesta non è stata trovata
+     * @throws ResourceNotFoundException Se la sessione richiesta non è stata trovata
      * @return sessione richiesta
      */
-    public SessioneDiAllenamento getSessione(Long id_sessione) throws EntityNotFoundException {
+    public SessioneDiAllenamento getSessione(Long id_sessione) throws ResourceNotFoundException {
         SessioneDiAllenamento s = persistence_sessioni.trovaPerId(SessioneDiAllenamento.class, id_sessione);
         if(s == null){
-            throw new EntityNotFoundException();
+            throw new ResourceNotFoundException("Sessione non trovata");
         }
         return s;
     }
@@ -155,12 +155,11 @@ public class GestoreSessioni {
      * @param esercizi ArrayList degli esercizi che dovranno essere svolti
      * @param titolo Titolo della sessione
      * @return La sessione appena creata
-     * @throws EntityNotFoundException Se L'allenatore non esiste nel database
-     * @throws IllegalArgumentException Se l'atleta non è associato all'allenatore
+     * @throws ResourceNotFoundException Se L'allenatore non esiste nel database
      */
     public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, Duration durata,
                                               ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore)
-                                            throws EntityNotFoundException, ResourceNotFoundException {
+                                            throws ResourceNotFoundException {
 
         GestoreUtenti utenti = GestoreUtenti.getInstance();
 

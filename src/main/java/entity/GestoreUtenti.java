@@ -1,7 +1,7 @@
 package entity;
 
 import database.GestorePersistenza;
-import jakarta.persistence.EntityNotFoundException;
+import exceptions.ResourceNotFoundException;
 import jakarta.persistence.metamodel.EntityType;
 
 import java.util.HashSet;
@@ -50,27 +50,29 @@ public class GestoreUtenti {
     }
 
     /**
-     * Dato in ingresso l'id dell'atleta, restituisce l'oggetto. Se l'atleta non esiste genera una EntityNotFoundException
+     * Dato in ingresso l'id dell'atleta, restituisce l'oggetto.
      * @param id_atleta Id dell'atleta che si vuole ricercare
      * @return Oggetto atleta che è stato trovato
+     * @throws ResourceNotFoundException
      */
-    public Atleta cercaAtleta(Long id_atleta) throws EntityNotFoundException{
+    public Atleta cercaAtleta(Long id_atleta) throws ResourceNotFoundException{
         Atleta a = persistence_utenti.trovaPerId(Atleta.class, id_atleta);
         if(a == null){
-            throw new EntityNotFoundException("Atleta non trovato");
+            throw new ResourceNotFoundException("Atleta non trovato");
         }
         return a;
     }
 
     /**
-     * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto. Se l'allenatore non esiste genera una EntityNotFoundException
+     * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto.
      * @param id_allenatore Id dell'allenatore che si vuole ricercare
      * @return Oggetto allenatore che è stato trovato
+     * @throws ResourceNotFoundException
      */
-    public Allenatore cercaAllenatore(Long id_allenatore) throws EntityNotFoundException{
+    public Allenatore cercaAllenatore(Long id_allenatore) throws ResourceNotFoundException {
         Allenatore a = persistence_utenti.trovaPerId(Allenatore.class, id_allenatore);
         if(a == null){
-            throw new EntityNotFoundException("Allenatore non trovato");
+            throw new ResourceNotFoundException("Allenatore non trovato");
         }
         return a;
     }
@@ -86,7 +88,7 @@ public class GestoreUtenti {
         try {
             atleta = cercaAtleta(id_atleta);
             allenatore = cercaAllenatore(id_allenatore);
-        }catch(EntityNotFoundException e) {
+        }catch(ResourceNotFoundException e) {
             e.printStackTrace();
             return;
         }
@@ -107,7 +109,7 @@ public class GestoreUtenti {
         Atleta atleta;
         try{
                 allenatore = cercaAllenatore(id_allenatore);
-        }catch(EntityNotFoundException e){
+        }catch(ResourceNotFoundException e){
             e.printStackTrace();
             return;
         }
