@@ -166,4 +166,14 @@ public class Control_session {
 
         return dettaglio;
     }
+
+    public Map<String, String> getMailfromSession(Long id_sessione){
+        GestoreSessioni g_sess = GestoreSessioni.getInstance();
+
+        Map<String, String> mails = new HashMap<>();
+        mails.put("Atleta", g_sess.getSessione(id_sessione).getAtleta().getMail());
+        mails.put("Allenatore", g_sess.getSessione(id_sessione).getAllenatore().getMail());
+
+        return mails;
+    }
 }

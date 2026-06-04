@@ -4,6 +4,8 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
+import notifier.INotifier;
+import notifier.Notifier;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -119,6 +121,12 @@ public class FormEsercizi extends JFrame {
 
         try {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
+
+            if(control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")){
+                String mail_allenatore = control_session.getMailfromSession(idCurrentSession).get("Allenatore");
+                Notifier.getInstance().sendMailComplete(mail_allenatore);
+            }
+
             parentForm.refreshPanelCentrale();
             previousFrame.setVisible(true);
             currentFrame.dispose();

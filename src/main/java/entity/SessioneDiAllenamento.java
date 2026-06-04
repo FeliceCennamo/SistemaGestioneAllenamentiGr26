@@ -1,6 +1,5 @@
 package entity;
 
-import notifier.*;
 import jakarta.persistence.*;
 
 import java.time.Duration;
@@ -59,7 +58,6 @@ public class SessioneDiAllenamento implements Comparable{
         this.stato = StatoSessione.ASSEGNATA;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
-        getNotifier().sendMailCreate(getAllenatore().getMail());
     }
 
     /**
@@ -80,7 +78,6 @@ public class SessioneDiAllenamento implements Comparable{
         this.durata = durata;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
-        getNotifier().sendMailCreate(getAllenatore().getMail());
     }
 
 
@@ -141,12 +138,6 @@ public class SessioneDiAllenamento implements Comparable{
     public Duration getDurata(){ return durata; }
 
     /**
-     * Getter oggetto notifier
-     * @return Durata della Sessione
-     * */
-    private INotifier getNotifier(){ return Notifier.getInstance(); }
-
-    /**
      * Setter Titolo
      * @param titolo Titolo
      * */
@@ -186,7 +177,6 @@ public class SessioneDiAllenamento implements Comparable{
         switch (stato){
             case "COMPLETATA":
                 this.stato = StatoSessione.COMPLETATA;
-                getNotifier().sendMailCreate(getAllenatore().getMail());
                 break;
             case "IN CORSO":
                 this.stato = StatoSessione.IN_CORSO;
