@@ -1,4 +1,4 @@
-package Notifier;
+package notifier;
 
 public interface INotifier {
     void sendMailComplete(String destinatario);

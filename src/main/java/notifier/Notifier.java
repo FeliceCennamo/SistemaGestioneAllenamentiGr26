@@ -1,4 +1,4 @@
-package Notifier;
+package notifier;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;

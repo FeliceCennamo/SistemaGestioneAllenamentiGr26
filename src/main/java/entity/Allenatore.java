@@ -1,7 +1,7 @@
 package entity;
 
 
-import Exceptions.ResourceNotFoundException;
+import exceptions.ResourceNotFoundException;
 import jakarta.persistence.*;
 
 import java.util.HashSet;

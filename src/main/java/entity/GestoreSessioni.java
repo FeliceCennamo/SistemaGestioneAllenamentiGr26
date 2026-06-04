@@ -1,8 +1,7 @@
 package entity;
 
-import Exceptions.ResourceNotFoundException;
+import exceptions.ResourceNotFoundException;
 import database.GestorePersistenza;
-import database.JpaUtil;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.time.Duration;
@@ -121,13 +120,15 @@ public class GestoreSessioni {
             throw new IllegalAccessException("La sessione non appartiene all'utente");
         }
 
+        boolean completata = true;
         for(Esercizio e: s.getEsercizi()){
             if(e.getRisultato().getRisultato() == null){
-                return; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti
+                completata = false; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti
                         //Non può quindi essere completata la sessione
             }
         }
-        s.setStato("COMPLETATA"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
+        if (completata)
+            s.setStato("COMPLETATA"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
         persistence_sessioni.salva(s);
     }
 

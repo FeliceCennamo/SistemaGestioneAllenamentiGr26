@@ -1,6 +1,6 @@
 package entity;
 
-import Notifier.*;
+import notifier.*;
 import jakarta.persistence.*;
 
 import java.time.Duration;
@@ -25,7 +25,7 @@ public class SessioneDiAllenamento implements Comparable{
     private Duration durata = null;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinTable(name = "sessioni_esercizi",   // nome della tabella associativa
+    @JoinTable(name = "sessione_esercizio",   // nome della tabella associativa
             joinColumns = @JoinColumn(name = "sessione_id"),
             inverseJoinColumns = @JoinColumn(name = "esercizio_id"))
     private List<Esercizio> esercizi = new ArrayList<>();
