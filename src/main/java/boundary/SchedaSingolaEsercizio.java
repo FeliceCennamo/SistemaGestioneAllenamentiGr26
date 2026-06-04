@@ -31,8 +31,10 @@ public class SchedaSingolaEsercizio {
         Control_session controller = Control_session.getInstance();
 
         Map<String,Object> dettaglio = controller.getDettaglioEsercizioPerId(id_sessione, id_esercizio);
-
-
+        if(dettaglio.get("risultato_atteso") instanceof Duration)
+            this.lblRisultatoAtteso.setText(Long.valueOf(((Duration) dettaglio.get("risultato_atteso")).toMinutes()).toString() + " minuti");
+        else
+            this.lblRisultatoAtteso.setText(dettaglio.get("risultato_atteso").toString() + " ripetizioni");
         this.lblDescrizione.setText((String)dettaglio.get("descrizione"));
         this.lblTitolo.setText((String)dettaglio.get("nome"));
 

@@ -136,14 +136,14 @@ public class Control_session {
         if(e.getRisultato() == null){
             dettaglio.put("nota", null);
             dettaglio.put("risultato", null);
-
-
         }
         else{
             dettaglio.put("nota", e.getRisultato().getNota());
             dettaglio.put("risultato", e.getRisultato().getRisultato());
 
         }
+
+        dettaglio.put("risultato_atteso", e.getRisultatoAtteso());
 
         return dettaglio;
 
