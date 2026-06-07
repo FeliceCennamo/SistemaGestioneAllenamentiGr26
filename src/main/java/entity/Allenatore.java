@@ -83,4 +83,6 @@ public class Allenatore extends Utente {
     public Set<SessioneDiAllenamento> getSessioni() {
         return this.sessioni;
     }
+
+
 }

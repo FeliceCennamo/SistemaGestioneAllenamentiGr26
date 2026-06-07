@@ -152,4 +152,12 @@ public abstract class Utente {
     public Long getId() {
         return id;
     }
+
+    public String getDisciplinaPrevalente() {
+        return disciplinaPrevalente;
+    }
+
+    public void setDisciplinaPrevalente(String disciplinaPrevalente) {
+        this.disciplinaPrevalente = disciplinaPrevalente;
+    }
 }
