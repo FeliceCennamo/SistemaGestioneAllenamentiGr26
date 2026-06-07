@@ -12,24 +12,24 @@ public abstract class Risultato {
 
     private String nota;
 
-    public Risultato(){}
+    public Risultato() {
+    }
 
-    public Risultato(String nota){
+    public Risultato(String nota) {
         this.nota = nota;
     }
 
-    public String getNota(){
+    public String getNota() {
         return this.nota;
     }
 
-    public void setNota(String nota){
+    public void setNota(String nota) {
         this.nota = nota;
     }
 
     public abstract Object getRisultato();
 
-    public abstract  void setRisultato(Object risultato);
-
+    public abstract void setRisultato(Object risultato);
 
 
 }

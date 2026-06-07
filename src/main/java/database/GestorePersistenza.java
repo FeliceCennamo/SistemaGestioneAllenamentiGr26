@@ -9,10 +9,12 @@ import java.util.*;
 
 public class GestorePersistenza {
 
-/**
- * Inserisce un oggetto nel database
- * @param oggetto oggetto da voler inserire
- * */
+    /**
+     * Inserisce un oggetto nel database
+     *
+     * @param oggetto oggetto da voler inserire
+     *
+     */
     public void salva(Object oggetto) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -41,8 +43,10 @@ public class GestorePersistenza {
 
     /**
      * Inserisce una lista di oggetti nel database
+     *
      * @param oggetti Lista eterogenea di oggetti da voler inserire
-     * */
+     *
+     */
     public void salvaTutti(Object... oggetti) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -69,12 +73,14 @@ public class GestorePersistenza {
         }
     }
 
-/**
- * Restituisce l'oggetto cercato nel database
- * @param classe classe dell'oggetto cercato nel database
- * @param id id dell'oggetto cercato nel database
- * @return oggetto cercato nel database
- * */
+    /**
+     * Restituisce l'oggetto cercato nel database
+     *
+     * @param classe classe dell'oggetto cercato nel database
+     * @param id     id dell'oggetto cercato nel database
+     * @return oggetto cercato nel database
+     *
+     */
     public <T> T trovaPerId(Class<T> classe, Long id) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -88,12 +94,14 @@ public class GestorePersistenza {
         }
     }
 
-/**
- * Restituisce una lista di oggetti corrispondente al risultato di una query jpql
- * @param jpql String rappresentante la query tipizzata da eseguire
- * @param classe Classe letterale del tipo di dato aspettato
- * @param parametri mappa che contiene i valori dinamici da inserire nella query
- * */
+    /**
+     * Restituisce una lista di oggetti corrispondente al risultato di una query jpql
+     *
+     * @param jpql      String rappresentante la query tipizzata da eseguire
+     * @param classe    Classe letterale del tipo di dato aspettato
+     * @param parametri mappa che contiene i valori dinamici da inserire nella query
+     *
+     */
     public <T> List<T> eseguiQuery(String jpql,
                                    Class<T> classe,
                                    Map<String, Object> parametri) {
@@ -101,15 +109,11 @@ public class GestorePersistenza {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
         try {
-
-
             TypedQuery<T> query = em.createQuery(jpql, classe);
-
 
             for (String nomeParametro : parametri.keySet()) {
                 query.setParameter(nomeParametro, parametri.get(nomeParametro));
             }
-
 
             return query.getResultList();
 
@@ -143,14 +147,14 @@ public class GestorePersistenza {
         }
     }
 
-    public <T> Set<EntityType<?>> getFiglie(Class<T> classe){
+    public <T> Set<EntityType<?>> getFiglie(Class<T> classe) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
         Set<EntityType<?>> figlie = new HashSet<>(em.getMetamodel().getEntities());
 
-        figlie.removeIf(e ->   !classe.isAssignableFrom(e.getJavaType())
-                                            ||
-                                            e.getJavaType().equals(classe));
+        figlie.removeIf(e -> !classe.isAssignableFrom(e.getJavaType())
+                ||
+                e.getJavaType().equals(classe));
 
         return figlie;
     }

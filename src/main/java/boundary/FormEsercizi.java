@@ -35,7 +35,8 @@ public class FormEsercizi extends JFrame {
 
     /**
      * Costruttore del FormEsercizi
-     * */
+     *
+     */
     public FormEsercizi(Long id_sessione, JFrame parentFrame, FormSessioniDiAllenamento parentForm) {
         this.previousFrame = parentFrame;
         this.idCurrentSession = id_sessione;
@@ -76,7 +77,7 @@ public class FormEsercizi extends JFrame {
         });
     }
 
-    private void returnToPreviousFrame(){
+    private void returnToPreviousFrame() {
         // Rendi di nuovo visibile la finestra delle sessioni
         previousFrame.setVisible(true);
         // Chiudi la finestra corrente
@@ -107,7 +108,8 @@ public class FormEsercizi extends JFrame {
 
     /**
      * Inizia il completamento di una SessioneDiALlenamento
-     * */
+     *
+     */
     private void sendCompleta() {
         Control_session control_session = Control_session.getInstance();
 
@@ -122,7 +124,7 @@ public class FormEsercizi extends JFrame {
         try {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
 
-            if(control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")){
+            if (control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
                 String mail_allenatore = control_session.getMailfromSession(idCurrentSession).get("Allenatore");
                 Notifier.getInstance().sendMailComplete(mail_allenatore);
             }
@@ -130,9 +132,9 @@ public class FormEsercizi extends JFrame {
             parentForm.refreshPanelCentrale();
             previousFrame.setVisible(true);
             currentFrame.dispose();
-        }catch(NumberFormatException | ClassCastException e){
+        } catch (NumberFormatException | ClassCastException e) {
             JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi maggiori di zero",
-                                        "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
+                    "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }
 
 

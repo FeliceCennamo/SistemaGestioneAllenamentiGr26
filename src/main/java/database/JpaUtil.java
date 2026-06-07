@@ -8,7 +8,8 @@ public class JpaUtil {
 
     /**
      * Oggetto JpaUtil instanziato seguendo il pattern Singleton
-     * */
+     *
+     */
     private static JpaUtil instance;
 
     /**
@@ -19,13 +20,15 @@ public class JpaUtil {
 
     /**
      * Costruttore privato secondo il pattern Singleton (non Thread-safe)
-     * */
+     *
+     */
     private JpaUtil() {
         emf = Persistence.createEntityManagerFactory("GestioneAllenamentiPU");
     }
 
     /**
      * Completa l'applicazione del pattern Singleton.
+     *
      * @return Unico oggetto JpaUtil instanziabile
      */
     public static JpaUtil getInstance() {
@@ -38,15 +41,18 @@ public class JpaUtil {
 
     /**
      * Restituisce un nuovo oggetto EntityManager, da utilizzare per una operazione di persistenza
+     *
      * @return Oggetto EntityManager
-     * */
+     *
+     */
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
     /**
      * Chiude l'istanza di EntityManagerFactory
-     * */
+     *
+     */
     public void chiudi() {
         emf.close();
     }

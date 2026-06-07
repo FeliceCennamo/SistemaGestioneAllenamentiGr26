@@ -1,6 +1,7 @@
 package entity;
 
 import jakarta.persistence.*;
+
 import java.time.Duration;
 
 @Entity
@@ -25,15 +26,16 @@ public class Esercizio {
     @JoinColumn(name = "risultato")
     private Risultato risultato = null;
 
-    public Esercizio() {}
+    public Esercizio() {
+    }
 
     // Costruttore per ripetizioni
-    public Esercizio(String nome, String descrizione, int ripetizioni) throws IllegalArgumentException{
+    public Esercizio(String nome, String descrizione, int ripetizioni) throws IllegalArgumentException {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.RIPETIZIONI;
 
-        if(ripetizioni > 0)
+        if (ripetizioni > 0)
             this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
         else
             throw new IllegalArgumentException("Inserito un numero di ripetzioni negativo");
@@ -66,12 +68,11 @@ public class Esercizio {
     }
 
     public Object getRisultatoAtteso() {
-        if(tipo == TipoEsercizio.RIPETIZIONI)
+        if (tipo == TipoEsercizio.RIPETIZIONI)
             return this.risultatoAtteso.getRipetizioni();
         else
             return this.risultatoAtteso.getDurata();
     }
-
 
 
     public Risultato getRisultato() {
@@ -89,46 +90,40 @@ public class Esercizio {
     public void setTipo(int tipo) {
         if (tipo == 0)
             this.tipo = TipoEsercizio.RIPETIZIONI;
-        else if (tipo==1)
+        else if (tipo == 1)
             this.tipo = TipoEsercizio.TEMPO;
     }
 
-    public void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException{
+    public void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException {
 
         boolean esito = false;
-        if (this.tipo==TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
-            esito = this.risultatoAtteso.setRisultatoAtteso((Integer) risultatoAtteso);
-        else if (this.tipo==TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
-            esito = this.risultatoAtteso.setRisultatoAtteso((Duration) risultatoAtteso);
+        if (this.tipo == TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
+            esito = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);
+        else if (this.tipo == TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
+            esito = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);
 
-        if(!esito)
+        if (!esito)
             throw new IllegalArgumentException("Risultato non valido");
     }
 
 
-    public void setRisultato(Object risultato, String nota) throws IllegalArgumentException{
-        if (this.tipo == TipoEsercizio.TEMPO  && risultato instanceof Duration){
+    public void setRisultato(Object risultato, String nota) throws IllegalArgumentException {
+        if (this.tipo == TipoEsercizio.TEMPO && risultato instanceof Duration) {
             this.risultato = new RisultatoTempo(nota, (Duration) risultato);
 
-        }
-        else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer){
+        } else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer) {
             this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);
-        }
-
-        else
+        } else
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
-    public void setRisultato( String nota) throws IllegalArgumentException{
-        if (this.tipo == TipoEsercizio.TEMPO){
+    public void setRisultato(String nota) throws IllegalArgumentException {
+        if (this.tipo == TipoEsercizio.TEMPO) {
             this.risultato = new RisultatoTempo(nota, null);
 
-        }
-        else if (this.tipo == TipoEsercizio.RIPETIZIONI){
+        } else if (this.tipo == TipoEsercizio.RIPETIZIONI) {
             this.risultato = new RisultatoRipetizioni(nota, null);
-        }
-
-        else
+        } else
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
@@ -163,10 +158,10 @@ public class Esercizio {
             return durata;
         }
 
-        public boolean setRisultatoAtteso(Object risultato){
-            if(risultato instanceof Integer && this.durata == null)
+        public boolean setRisultatoAtteso(Object risultato) {
+            if (risultato instanceof Integer && this.durata == null)
                 this.ripetizioni = (Integer) risultato;
-            else if(risultato instanceof Duration && this.ripetizioni == null)
+            else if (risultato instanceof Duration && this.ripetizioni == null)
                 this.durata = (Duration) risultato;
             else
                 return false;

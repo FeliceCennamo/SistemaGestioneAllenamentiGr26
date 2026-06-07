@@ -1,8 +1,7 @@
 package entity;
 
-import exceptions.ResourceNotFoundException;
 import database.GestorePersistenza;
-import jakarta.persistence.EntityNotFoundException;
+import exceptions.ResourceNotFoundException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -27,10 +26,12 @@ public class GestoreSessioni {
     /**
      * Costruttore di GestoreSessioni
      */
-    private GestoreSessioni() {}
+    private GestoreSessioni() {
+    }
 
     /**
      * Fornisce l'istanza singola di GestoreSessioni, se essa non esiste viene creata
+     *
      * @return Istanza di gestoreSessioni operativa
      */
     public static GestoreSessioni getInstance() {
@@ -43,6 +44,7 @@ public class GestoreSessioni {
 
     /**
      * Permette di vedere gli esercizi che compongono una sessione dato il suo id
+     *
      * @param id_sessione id della sessione di cui si vogliono visualizzare gli esercizi
      * @return Lista degli esercizi presenti nella sessione
      */
@@ -50,8 +52,7 @@ public class GestoreSessioni {
         try {
             SessioneDiAllenamento sessione = getSessione(id_sessione);
             return sessione.getEsercizi();
-        }
-        catch(ResourceNotFoundException e){
+        } catch (ResourceNotFoundException e) {
             System.out.println("sessione non trovata per l'id: " + id_sessione);
             throw e;
         }
@@ -60,15 +61,17 @@ public class GestoreSessioni {
 
     /**
      * Permette di cercare tutte le sessioni presenti e passate
+     *
      * @return Set di tutte le sessioni presenti nel sistema
      */
-    public Set<SessioneDiAllenamento> cercaSessioni(){
+    public Set<SessioneDiAllenamento> cercaSessioni() {
         List<SessioneDiAllenamento> listaSessioni = persistence_sessioni.ottieniTutti(SessioneDiAllenamento.class);
         return new HashSet<>(listaSessioni);
     }
 
     /**
      * Permette di cercare tutte le sessioni associate a un dato atleta
+     *
      * @param id_atleta Id dell'atleta di cui si stanno cercando le sessioni di allenamento
      * @return Set delle sessioni associate all'atleta
      */
@@ -80,51 +83,52 @@ public class GestoreSessioni {
 
 
     /**
-     *Permette a un atleta di completare la sessione
-     * @param id_atleta Id dell'atleta che ha richiesto di completare la sessione
+     * Permette a un atleta di completare la sessione
+     *
+     * @param id_atleta   Id dell'atleta che ha richiesto di completare la sessione
      * @param id_sessione Id della sessione che si sta cercando di completare
      * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
      */
     public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Integer> risultati, HashMap<Long, String> note)
-                                throws IllegalAccessException, ClassCastException{
+            throws IllegalAccessException, ClassCastException {
 
         SessioneDiAllenamento s;
-        try{
+        try {
             s = getSessione(id_sessione);
-        }catch(ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             e.printStackTrace();
             return;
         }
 
-        if(s.getAtleta().getId().equals(id_atleta)) {
+        if (s.getAtleta().getId().equals(id_atleta)) {
             s.setStato("IN CORSO");
-            for(Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
-                Esercizio esercizio  = persistence_sessioni.trovaPerId(Esercizio.class, es);
+            for (Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
+                Esercizio esercizio = persistence_sessioni.trovaPerId(Esercizio.class, es);
 
                 Object ris = null;
                 String nota = null;
-                if(risultati.containsKey(es)){
+                if (risultati.containsKey(es)) {
                     if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI)
                         ris = risultati.get(es);
                     else if (esercizio.getTipo() == TipoEsercizio.TEMPO)
                         ris = Duration.ofMinutes(risultati.get(es));
                 }
-                if(note.containsKey(es)){
+                if (note.containsKey(es)) {
                     nota = note.get(es);
                 }
 
                 s.registraRisultato(ris, nota, es);
             }
 
-        }else{
+        } else {
             throw new IllegalAccessException("La sessione non appartiene all'utente");
         }
 
         boolean completata = true;
-        for(Esercizio e: s.getEsercizi()){
-            if(e.getRisultato().getRisultato() == null){
+        for (Esercizio e : s.getEsercizi()) {
+            if (e.getRisultato().getRisultato() == null) {
                 completata = false; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti
-                        //Non può quindi essere completata la sessione
+                //Non può quindi essere completata la sessione
             }
         }
         if (completata)
@@ -133,33 +137,35 @@ public class GestoreSessioni {
     }
 
     /**
-     *Permette di ricercare una sessione dato il suo id
+     * Permette di ricercare una sessione dato il suo id
+     *
      * @param id_sessione Id della sessione che stiamo cercando
-     * @throws ResourceNotFoundException Se la sessione richiesta non è stata trovata
      * @return sessione richiesta
+     * @throws ResourceNotFoundException Se la sessione richiesta non è stata trovata
      */
     public SessioneDiAllenamento getSessione(Long id_sessione) throws ResourceNotFoundException {
         SessioneDiAllenamento s = persistence_sessioni.trovaPerId(SessioneDiAllenamento.class, id_sessione);
-        if(s == null){
+        if (s == null) {
             throw new ResourceNotFoundException("Sessione non trovata");
         }
         return s;
     }
 
     /**
-     *Crea la sessione di allenamento dati i suoi parametri
+     * Crea la sessione di allenamento dati i suoi parametri
+     *
      * @param id_allenatore Id dell'allenatore che crea la sessione
-     * @param id_atleta Id dell'atleta che dovrà completare la sessione
-     * @param data La data in cui ci si aspetta lo svolgimento della sessione
-     * @param descrizione Descrizione della sessione
-     * @param esercizi ArrayList degli esercizi che dovranno essere svolti
-     * @param titolo Titolo della sessione
+     * @param id_atleta     Id dell'atleta che dovrà completare la sessione
+     * @param data          La data in cui ci si aspetta lo svolgimento della sessione
+     * @param descrizione   Descrizione della sessione
+     * @param esercizi      ArrayList degli esercizi che dovranno essere svolti
+     * @param titolo        Titolo della sessione
      * @return La sessione appena creata
      * @throws ResourceNotFoundException Se L'allenatore non esiste nel database
      */
     public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, Duration durata,
                                               ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore)
-                                            throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
 
         GestoreUtenti utenti = GestoreUtenti.getInstance();
 
@@ -173,7 +179,6 @@ public class GestoreSessioni {
 
         return s;
     }
-
 
 
 }

@@ -21,30 +21,32 @@ public class SchedaSingolaEsercizio {
 
     /**
      * Costruttore SchedaSingolaEsercizio
+     *
      * @param id_esercizio Id Esercizio
      * @param id_sessione  Id SessioneDiAllenamento
-     * */
+     *
+     */
     public SchedaSingolaEsercizio(Long id_sessione, Long id_esercizio) {
 
         this.id = id_esercizio;
 
         Control_session controller = Control_session.getInstance();
 
-        Map<String,Object> dettaglio = controller.getDettaglioEsercizioPerId(id_sessione, id_esercizio);
-        if(dettaglio.get("risultato_atteso") instanceof Duration)
+        Map<String, Object> dettaglio = controller.getDettaglioEsercizioPerId(id_sessione, id_esercizio);
+        if (dettaglio.get("risultato_atteso") instanceof Duration)
             this.lblRisultatoAtteso.setText(Long.valueOf(((Duration) dettaglio.get("risultato_atteso")).toMinutes()).toString() + " minuti");
         else
             this.lblRisultatoAtteso.setText(dettaglio.get("risultato_atteso").toString() + " ripetizioni");
-        this.lblDescrizione.setText((String)dettaglio.get("descrizione"));
-        this.lblTitolo.setText((String)dettaglio.get("nome"));
+        this.lblDescrizione.setText((String) dettaglio.get("descrizione"));
+        this.lblTitolo.setText((String) dettaglio.get("nome"));
 
         textFieldNota.setText(dettaglio.get("nota") != null ? (String) dettaglio.get("nota") : "");
-        if(dettaglio.get("risultato") != null) {
+        if (dettaglio.get("risultato") != null) {
             if (dettaglio.get("risultato") instanceof Integer)
                 textFieldRisultato.setText(dettaglio.get("risultato").toString());
             else
                 textFieldRisultato.setText(Long.valueOf(((Duration) dettaglio.get("risultato")).toMinutes()).toString());
-        }else
+        } else
             textFieldRisultato.setText("");
 
         if (((String) dettaglio.get("stato")).equalsIgnoreCase("completata")) {
@@ -124,24 +126,30 @@ public class SchedaSingolaEsercizio {
 
     /**
      * Getter Nota
+     *
      * @return Testo della Nota come String
-     * */
+     *
+     */
     public String getTestoNota() {
         return textFieldNota.getText();
     }
 
     /**
      * Getter Risultato
-     * @return  Testo del Risultato come String
-     * */
+     *
+     * @return Testo del Risultato come String
+     *
+     */
     public String getTestoRisultato() {
         return textFieldRisultato.getText();
     }
 
     /**
      * Getter Id Esercizio
+     *
      * @return Id Esercizio
-     * */
+     *
+     */
     public Long getIdEsercizio() {
         return id;
     }

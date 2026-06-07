@@ -7,22 +7,24 @@ import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 
-public class Notifier implements INotifier{
+public class Notifier implements INotifier {
 
     private final String username = "ad4fc6001@smtp-brevo.com"; //Mail del server che manderà le mail
     private final String password_app = System.getenv("BREVO_KEY");
     private static Notifier instance = null;
 
-    private Notifier(){}
+    private Notifier() {
+    }
 
-    public static Notifier getInstance(){
-        if(instance == null){
+    public static Notifier getInstance() {
+        if (instance == null) {
             instance = new Notifier();
         }
 
         return instance;
     }
-    private Session setSMTPserver(){
+
+    private Session setSMTPserver() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -38,8 +40,8 @@ public class Notifier implements INotifier{
     }
 
     @Override
-    public void sendMailCreate(String destinatario) throws IllegalArgumentException{
-        if(!destinatario.contains("@")){
+    public void sendMailCreate(String destinatario) throws IllegalArgumentException {
+        if (!destinatario.contains("@")) {
             throw new IllegalArgumentException();
         }
 
@@ -51,8 +53,8 @@ public class Notifier implements INotifier{
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject("Ci sono nuovi messaggi dai tuoi allenatori!");
             message.setText("Il tuo allenatore ti ha assegnato un nuovo allenamento!\n" +
-                            "Accedi all'app e inizia ad allenarti!!\n\n" +
-                            "Messaggio inviato automaticamente, si prega di non rispondere");
+                    "Accedi all'app e inizia ad allenarti!!\n\n" +
+                    "Messaggio inviato automaticamente, si prega di non rispondere");
 
             Transport.send(message);
             System.out.println("Email inviata con successo!");
@@ -64,8 +66,8 @@ public class Notifier implements INotifier{
     }
 
     @Override
-    public void sendMailComplete(String destinatario) throws IllegalArgumentException{
-        if(!destinatario.contains("@")){
+    public void sendMailComplete(String destinatario) throws IllegalArgumentException {
+        if (!destinatario.contains("@")) {
             throw new IllegalArgumentException();
         }
 
@@ -77,8 +79,8 @@ public class Notifier implements INotifier{
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
             message.setSubject("Ci sono nuovi messaggi dai tuoi atleti");
             message.setText("Un tuo atleta ha completato un allenamento a lui assegnato!\n" +
-                            "Scopri i suoi risultati e aiutalo a raggiungere i suoi obiettivi!!\n\n" +
-                            "Messaggio inviato automaticamente, si prega di non rispondere");
+                    "Scopri i suoi risultati e aiutalo a raggiungere i suoi obiettivi!!\n\n" +
+                    "Messaggio inviato automaticamente, si prega di non rispondere");
 
             Transport.send(message);
             System.out.println("Email inviata con successo!");
