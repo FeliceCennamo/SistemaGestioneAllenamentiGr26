@@ -1,0 +1,335 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Esercizio</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Esercizio (entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Esercizio</td>
+<td class="coverageStat">
+  <span class="percent">
+    6,7%
+  </span>
+  <span class="absValue">
+    (1/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4,4%
+  </span>
+  <span class="absValue">
+    (2/45)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Esercizio$HibernateInstantiator</td>
+  </tr>
+  <tr>
+    <td class="name">Esercizio$HibernateProxy</td>
+  </tr>
+  <tr>
+    <td class="name">Esercizio$RisultatoAtteso</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    4,8%
+  </span>
+  <span class="absValue">
+    (1/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3,2%
+  </span>
+  <span class="absValue">
+    (2/62)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package entity;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;
+&nbsp;import java.time.Duration;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;esercizi&quot;)
+&nbsp;public class Esercizio {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Long id;
+&nbsp;
+&nbsp;    private String nome;
+&nbsp;    private String descrizione;
+&nbsp;
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private TipoEsercizio tipo; // Enum semplice senza dati variabili
+&nbsp;
+&nbsp;    @Embedded
+&nbsp;    private RisultatoAtteso risultatoAtteso;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    @OneToOne(cascade = CascadeType.ALL)</b>
+&nbsp;    @JoinColumn(name = &quot;risultato&quot;)
+&nbsp;    private Risultato risultato = null;
+&nbsp;
+<b class="fc">&nbsp;    public Esercizio() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Costruttore per ripetizioni
+<b class="nc">&nbsp;    public Esercizio(String nome, String descrizione, int ripetizioni) throws IllegalArgumentException {</b>
+<b class="nc">&nbsp;        this.nome = nome;</b>
+<b class="nc">&nbsp;        this.descrizione = descrizione;</b>
+<b class="nc">&nbsp;        this.tipo = TipoEsercizio.RIPETIZIONI;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (ripetizioni &gt; 0)</b>
+<b class="nc">&nbsp;            this.risultatoAtteso = new RisultatoAtteso(ripetizioni);</b>
+&nbsp;        else
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Inserito un numero di ripetzioni negativo&quot;);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    // Costruttore per tempo (Duration)
+<b class="nc">&nbsp;    public Esercizio(String nome, String descrizione, Duration durata) {</b>
+<b class="nc">&nbsp;        this.nome = nome;</b>
+<b class="nc">&nbsp;        this.descrizione = descrizione;</b>
+<b class="nc">&nbsp;        this.tipo = TipoEsercizio.TEMPO;</b>
+<b class="nc">&nbsp;        this.risultatoAtteso = new RisultatoAtteso(durata);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Long getId() {
+<b class="nc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getNome() {
+<b class="nc">&nbsp;        return nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDescrizione() {
+<b class="nc">&nbsp;        return descrizione;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Ragionare se fargli ritornare una stringa o tradurre l&#39;intero dopo e se ha senso il defoult a null
+&nbsp;    public TipoEsercizio getTipo() {
+<b class="nc">&nbsp;        return this.tipo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Object getRisultatoAtteso() {
+<b class="nc">&nbsp;        if (tipo == TipoEsercizio.RIPETIZIONI)</b>
+<b class="nc">&nbsp;            return this.risultatoAtteso.getRipetizioni();</b>
+&nbsp;        else
+<b class="nc">&nbsp;            return this.risultatoAtteso.getDurata();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public Risultato getRisultato() {
+<b class="nc">&nbsp;        return risultato;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNome(String nome) {
+<b class="nc">&nbsp;        this.nome = nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDescrizione(String descrizione) {
+<b class="nc">&nbsp;        this.descrizione = descrizione;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setTipo(int tipo) {
+<b class="nc">&nbsp;        if (tipo == 0)</b>
+<b class="nc">&nbsp;            this.tipo = TipoEsercizio.RIPETIZIONI;</b>
+<b class="nc">&nbsp;        else if (tipo == 1)</b>
+<b class="nc">&nbsp;            this.tipo = TipoEsercizio.TEMPO;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException {
+&nbsp;
+<b class="nc">&nbsp;        boolean esito = false;</b>
+<b class="nc">&nbsp;        if (this.tipo == TipoEsercizio.RIPETIZIONI &amp;&amp; risultatoAtteso instanceof Integer)</b>
+<b class="nc">&nbsp;            esito = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);</b>
+<b class="nc">&nbsp;        else if (this.tipo == TipoEsercizio.TEMPO &amp;&amp; risultatoAtteso instanceof Duration)</b>
+<b class="nc">&nbsp;            esito = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!esito)</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Risultato non valido&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void setRisultato(Object risultato, String nota) throws IllegalArgumentException {
+<b class="nc">&nbsp;        if (this.tipo == TipoEsercizio.TEMPO &amp;&amp; risultato instanceof Duration) {</b>
+<b class="nc">&nbsp;            this.risultato = new RisultatoTempo(nota, (Duration) risultato);</b>
+&nbsp;
+<b class="nc">&nbsp;        } else if (this.tipo == TipoEsercizio.RIPETIZIONI &amp;&amp; risultato instanceof Integer) {</b>
+<b class="nc">&nbsp;            this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);</b>
+&nbsp;        } else
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Tipo di risultato non valido&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setRisultato(String nota) throws IllegalArgumentException {
+<b class="nc">&nbsp;        if (this.tipo == TipoEsercizio.TEMPO) {</b>
+<b class="nc">&nbsp;            this.risultato = new RisultatoTempo(nota, null);</b>
+&nbsp;
+<b class="nc">&nbsp;        } else if (this.tipo == TipoEsercizio.RIPETIZIONI) {</b>
+<b class="nc">&nbsp;            this.risultato = new RisultatoRipetizioni(nota, null);</b>
+&nbsp;        } else
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Tipo di risultato non valido&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Embeddable per memorizzare il risultato atteso in modo polimorfico
+&nbsp;    @Embeddable
+&nbsp;    static class RisultatoAtteso {
+&nbsp;        private Integer ripetizioni;
+&nbsp;        private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
+&nbsp;
+<b class="nc">&nbsp;        public RisultatoAtteso() {</b>
+<b class="nc">&nbsp;            this.ripetizioni = null;</b>
+<b class="nc">&nbsp;            this.durata = null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Costruttore per ripetizioni
+<b class="nc">&nbsp;        public RisultatoAtteso(int ripetizioni) {</b>
+<b class="nc">&nbsp;            this.ripetizioni = ripetizioni;</b>
+<b class="nc">&nbsp;            this.durata = null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Costruttore per durata
+<b class="nc">&nbsp;        public RisultatoAtteso(Duration durata) {</b>
+<b class="nc">&nbsp;            this.durata = durata;</b>
+<b class="nc">&nbsp;            this.ripetizioni = null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Integer getRipetizioni() {
+<b class="nc">&nbsp;            return ripetizioni;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Duration getDurata() {
+<b class="nc">&nbsp;            return durata;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public boolean setRisultatoAtteso(Object risultato) {
+<b class="nc">&nbsp;            if (risultato instanceof Integer &amp;&amp; this.durata == null)</b>
+<b class="nc">&nbsp;                this.ripetizioni = (Integer) risultato;</b>
+<b class="nc">&nbsp;            else if (risultato instanceof Duration &amp;&amp; this.ripetizioni == null)</b>
+<b class="nc">&nbsp;                this.durata = (Duration) risultato;</b>
+&nbsp;            else
+<b class="nc">&nbsp;                return false;</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-08 10:28</div>
+</div>
+</body>
+</html>

@@ -70,37 +70,8 @@ class AtletaTest {
         }
     }
 
-    private void creaDatiDiProva() {
-        EntityManager em = JpaUtil.getInstance().getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Atleta a = new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass123", "Corsa", 3,
-                    new HashSet<>(Arrays.asList("Migliorare tempo", "Aumentare resistenza")));
-            Allenatore al = new Allenatore("Anna", "Verdi", TEST_MAIL_ALLENATORE, "pass456", "Atletica");
-            em.persist(a);
-            em.persist(al);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            throw e;
-        } finally {
-            em.close();
-        }
-    }
-
-    private Long getIdAtleta() {
-        List<Atleta> list = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.mail = :mail", Atleta.class,
-                Map.of("mail", TEST_MAIL_ATLETA));
-        return list.isEmpty() ? null : list.get(0).getId();
-    }
-
-    private Long getIdAllenatore() {
-        List<Allenatore> list = gp.eseguiQuery("SELECT a FROM Allenatore a WHERE a.mail = :mail", Allenatore.class,
-                Map.of("mail", TEST_MAIL_ALLENATORE));
-        return list.isEmpty() ? null : list.get(0).getId();
-    }
-
-    // Transaction helpers
+    //Metodi che permettono di eseguire operazioni sul db (come DELETE) in maniera controllata, con blocchi try-catch
+    //-----------------------------
     private void eseguiInTransazione(Consumer<EntityManager> consumer) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         em.getTransaction().begin();
@@ -129,6 +100,28 @@ class AtletaTest {
             em.close();
         }
     }
+    //-----------------------------
+
+    private void creaDatiDiProva() {
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+            Atleta a = new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass123", "Corsa", 3,
+                    new HashSet<>(Arrays.asList("Migliorare tempo", "Aumentare resistenza")));
+            Allenatore al = new Allenatore("Anna", "Verdi", TEST_MAIL_ALLENATORE, "pass456", "Atletica");
+            gp.salva(a);
+            gp.salva(al);
+    }
+
+    private Long getIdAtleta() {
+        List<Atleta> list = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.mail = :mail", Atleta.class,
+                Map.of("mail", TEST_MAIL_ATLETA));
+        return list.isEmpty() ? null : list.get(0).getId();
+    }
+
+    private Long getIdAllenatore() {
+        List<Allenatore> list = gp.eseguiQuery("SELECT a FROM Allenatore a WHERE a.mail = :mail", Allenatore.class,
+                Map.of("mail", TEST_MAIL_ALLENATORE));
+        return list.isEmpty() ? null : list.get(0).getId();
+    }
 
     // ---------- Constructors ----------
     @Test
@@ -138,6 +131,7 @@ class AtletaTest {
         assertNull(a.getDisciplina());
         assertEquals(0, a.getLivello());
         assertNull(a.getObiettivo());
+        assertTrue(a.getAllenatori().isEmpty());
 
         Atleta a2 = new Atleta("Luca", "Bianchi", "luca@test.it", "pwd", "Nuoto", 2);
         assertEquals("Luca", a2.getNome());

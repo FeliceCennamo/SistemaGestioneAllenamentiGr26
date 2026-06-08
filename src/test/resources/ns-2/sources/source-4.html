@@ -1,0 +1,300 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GestoreSessioni</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">entity</a>
+</div>
+
+<h1>Coverage Summary for Class: GestoreSessioni (entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GestoreSessioni</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package entity;
+&nbsp;
+&nbsp;import database.GestorePersistenza;
+&nbsp;import exceptions.ResourceNotFoundException;
+&nbsp;
+&nbsp;import java.time.Duration;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Classe di gestione di tutte le sessioni create, in corso e completate
+&nbsp; * Permette la visualizzazione e la modifica di esse
+&nbsp; */
+&nbsp;public class GestoreSessioni {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Accesso al package database
+&nbsp;     */
+<b class="nc">&nbsp;    private static final GestorePersistenza persistence_sessioni = new GestorePersistenza();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Istanza statica del gestoreSessioni
+&nbsp;     */
+&nbsp;    private static GestoreSessioni instance;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Costruttore di GestoreSessioni
+&nbsp;     */
+<b class="nc">&nbsp;    private GestoreSessioni() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Fornisce l&#39;istanza singola di GestoreSessioni, se essa non esiste viene creata
+&nbsp;     *
+&nbsp;     * @return Istanza di gestoreSessioni operativa
+&nbsp;     */
+&nbsp;    public static GestoreSessioni getInstance() {
+<b class="nc">&nbsp;        if (instance == null) {</b>
+<b class="nc">&nbsp;            instance = new GestoreSessioni();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Permette di vedere gli esercizi che compongono una sessione dato il suo id
+&nbsp;     *
+&nbsp;     * @param id_sessione id della sessione di cui si vogliono visualizzare gli esercizi
+&nbsp;     * @return Lista degli esercizi presenti nella sessione
+&nbsp;     */
+&nbsp;    public List&lt;Esercizio&gt; dettaglioSessione(Long id_sessione) {
+&nbsp;        try {
+<b class="nc">&nbsp;            SessioneDiAllenamento sessione = getSessione(id_sessione);</b>
+<b class="nc">&nbsp;            return sessione.getEsercizi();</b>
+&nbsp;        } catch (ResourceNotFoundException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;sessione non trovata per l&#39;id: &quot; + id_sessione);</b>
+&nbsp;            throw e;
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Permette di cercare tutte le sessioni presenti e passate
+&nbsp;     *
+&nbsp;     * @return Set di tutte le sessioni presenti nel sistema
+&nbsp;     */
+&nbsp;    public Set&lt;SessioneDiAllenamento&gt; cercaSessioni() {
+<b class="nc">&nbsp;        List&lt;SessioneDiAllenamento&gt; listaSessioni = persistence_sessioni.ottieniTutti(SessioneDiAllenamento.class);</b>
+<b class="nc">&nbsp;        return new HashSet&lt;&gt;(listaSessioni);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Permette di cercare tutte le sessioni associate a un dato atleta
+&nbsp;     *
+&nbsp;     * @param id_atleta Id dell&#39;atleta di cui si stanno cercando le sessioni di allenamento
+&nbsp;     * @return Set delle sessioni associate all&#39;atleta
+&nbsp;     */
+&nbsp;    public Set&lt;SessioneDiAllenamento&gt; cercaSessioni(Long id_atleta) {
+<b class="nc">&nbsp;        String query = &quot;SELECT s FROM SessioneDiAllenamento s WHERE s.atleta.id = :id_atleta&quot;;</b>
+<b class="nc">&nbsp;        List&lt;SessioneDiAllenamento&gt; lista_sessioni = persistence_sessioni.eseguiQuery(query, SessioneDiAllenamento.class, Map.of(&quot;id_atleta&quot;, id_atleta));</b>
+<b class="nc">&nbsp;        return new HashSet&lt;&gt;(lista_sessioni);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Permette a un atleta di completare la sessione
+&nbsp;     *
+&nbsp;     * @param id_atleta   Id dell&#39;atleta che ha richiesto di completare la sessione
+&nbsp;     * @param id_sessione Id della sessione che si sta cercando di completare
+&nbsp;     * @throws IllegalAccessException Se l&#39;utente prova a modificare una sessione che non è stata assegnata a lui
+&nbsp;     */
+&nbsp;    public void completaSessione(Long id_atleta, Long id_sessione, HashMap&lt;Long, Integer&gt; risultati, HashMap&lt;Long, String&gt; note)
+&nbsp;            throws IllegalAccessException, ClassCastException {
+&nbsp;
+&nbsp;        SessioneDiAllenamento s;
+&nbsp;        try {
+<b class="nc">&nbsp;            s = getSessione(id_sessione);</b>
+&nbsp;        } catch (ResourceNotFoundException e) {
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (s.getAtleta().getId().equals(id_atleta)) {</b>
+<b class="nc">&nbsp;            s.setStato(&quot;IN CORSO&quot;);</b>
+<b class="nc">&nbsp;            for (Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {</b>
+<b class="nc">&nbsp;                Esercizio esercizio = persistence_sessioni.trovaPerId(Esercizio.class, es);</b>
+&nbsp;
+<b class="nc">&nbsp;                Object ris = null;</b>
+<b class="nc">&nbsp;                String nota = null;</b>
+<b class="nc">&nbsp;                if (risultati.containsKey(es)) {</b>
+<b class="nc">&nbsp;                    if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI)</b>
+<b class="nc">&nbsp;                        ris = risultati.get(es);</b>
+<b class="nc">&nbsp;                    else if (esercizio.getTipo() == TipoEsercizio.TEMPO)</b>
+<b class="nc">&nbsp;                        ris = Duration.ofMinutes(risultati.get(es));</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (note.containsKey(es)) {</b>
+<b class="nc">&nbsp;                    nota = note.get(es);</b>
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                s.registraRisultato(ris, nota, es);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        } else {
+<b class="nc">&nbsp;            throw new IllegalAccessException(&quot;La sessione non appartiene all&#39;utente&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        boolean completata = true;</b>
+<b class="nc">&nbsp;        for (Esercizio e : s.getEsercizi()) {</b>
+<b class="nc">&nbsp;            if (e.getRisultato().getRisultato() == null) {</b>
+<b class="nc">&nbsp;                completata = false; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti</b>
+&nbsp;                //Non può quindi essere completata la sessione
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (completata)</b>
+<b class="nc">&nbsp;            s.setStato(&quot;COMPLETATA&quot;); //Se viene eseguito questo metodo, la schermatura del for è stata superata</b>
+<b class="nc">&nbsp;        persistence_sessioni.salva(s);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Permette di ricercare una sessione dato il suo id
+&nbsp;     *
+&nbsp;     * @param id_sessione Id della sessione che stiamo cercando
+&nbsp;     * @return sessione richiesta
+&nbsp;     * @throws ResourceNotFoundException Se la sessione richiesta non è stata trovata
+&nbsp;     */
+&nbsp;    public SessioneDiAllenamento getSessione(Long id_sessione) throws ResourceNotFoundException {
+<b class="nc">&nbsp;        SessioneDiAllenamento s = persistence_sessioni.trovaPerId(SessioneDiAllenamento.class, id_sessione);</b>
+<b class="nc">&nbsp;        if (s == null) {</b>
+<b class="nc">&nbsp;            throw new ResourceNotFoundException(&quot;Sessione non trovata&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return s;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Crea la sessione di allenamento dati i suoi parametri
+&nbsp;     *
+&nbsp;     * @param id_allenatore Id dell&#39;allenatore che crea la sessione
+&nbsp;     * @param id_atleta     Id dell&#39;atleta che dovrà completare la sessione
+&nbsp;     * @param data          La data in cui ci si aspetta lo svolgimento della sessione
+&nbsp;     * @param descrizione   Descrizione della sessione
+&nbsp;     * @param esercizi      ArrayList degli esercizi che dovranno essere svolti
+&nbsp;     * @param titolo        Titolo della sessione
+&nbsp;     * @return La sessione appena creata
+&nbsp;     * @throws ResourceNotFoundException Se L&#39;allenatore non esiste nel database
+&nbsp;     */
+&nbsp;    public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, Duration durata,
+&nbsp;                                              ArrayList&lt;Esercizio&gt; esercizi, Long id_atleta, Long id_allenatore)
+&nbsp;            throws ResourceNotFoundException {
+&nbsp;
+<b class="nc">&nbsp;        GestoreUtenti utenti = GestoreUtenti.getInstance();</b>
+&nbsp;
+<b class="nc">&nbsp;        Allenatore allenatore = utenti.cercaAllenatore(id_allenatore);</b>
+<b class="nc">&nbsp;        Atleta atleta = allenatore.getAtleta(id_atleta);</b>
+&nbsp;
+<b class="nc">&nbsp;        SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, durata, atleta, allenatore);</b>
+<b class="nc">&nbsp;        s.setEsercizi(esercizi);</b>
+&nbsp;
+<b class="nc">&nbsp;        persistence_sessioni.salva(s);</b>
+&nbsp;
+<b class="nc">&nbsp;        return s;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-08 10:28</div>
+</div>
+</body>
+</html>
