@@ -55,5 +55,6 @@ public class JpaUtil {
      */
     public void chiudi() {
         emf.close();
+        instance = null;
     }
 }

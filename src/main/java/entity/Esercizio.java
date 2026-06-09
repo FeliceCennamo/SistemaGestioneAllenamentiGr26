@@ -87,11 +87,14 @@ public class Esercizio {
         this.descrizione = descrizione;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(int tipo) throws IllegalArgumentException {
         if (tipo == 0)
             this.tipo = TipoEsercizio.RIPETIZIONI;
         else if (tipo == 1)
             this.tipo = TipoEsercizio.TEMPO;
+        else{
+            throw new IllegalArgumentException("Valori accettati solo 0 e 1");
+        }
     }
 
     public void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException {

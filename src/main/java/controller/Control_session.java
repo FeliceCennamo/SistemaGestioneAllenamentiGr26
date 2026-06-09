@@ -26,6 +26,38 @@ public class Control_session {
         return instance;
     }
 
+    /**
+     * Completa una sessione di allenamento
+     * @param id_sessione id SessioneDiAllenamento
+     * @param risultati_row Mappa<IdEsercizio, String[Nota, Risultato]>
+     * */
+    public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row) throws ClassCastException, NumberFormatException{
+
+        GestoreSessioni gestore = GestoreSessioni.getInstance();
+
+        HashMap<Long, Integer> risultati = new HashMap<>();
+        HashMap<Long, String> note = new HashMap<>();
+
+        for(Long id : risultati_row.keySet()) {
+            int ris_intero = Integer.parseInt(risultati_row.get(id)[1]);
+            if(ris_intero < 0){
+                throw new NumberFormatException();
+            }
+            note.put(id, risultati_row.get(id)[0]);
+            risultati.put(id, ris_intero);
+        }
+
+        try {
+            gestore.completaSessione(this.id_utente_autenticato, id_sessione, risultati, note);
+        }catch (IllegalAccessException e){
+            System.out.println("Sessione non appartenente all'utente");
+        }
+    }
+
+    public Long getIdUtenteAutenticato(){
+        return id_utente_autenticato;
+    }
+
     public Set<Long> getIdSessioniPerUtente(Long id_utente){
         GestoreSessioni g_session = GestoreSessioni.getInstance();
 
@@ -36,29 +68,6 @@ public class Control_session {
         }
         return id_set;
     }
-
-    public Long getIdUtenteAutenticato(){
-        return id_utente_autenticato;
-    }
-
-   /* public void setAutenticato(Long id_utente){
-        this.id_utente_autenticato = id_utente;
-    }
-
-    public Set<SessioneDiAllenamento> stubGetSessioneforUtente(Long id_utente){
-        GestoreSessioni g_session = GestoreSessioni.getInstance();
-
-        HashSet<SessioneDiAllenamento> h = new HashSet<SessioneDiAllenamento>();
-
-        for(int i = 0; i < 10; i++){
-            SessioneDiAllenamento s = new SessioneDiAllenamento("Titolo " + i, "Descrizione " + i, LocalDate.now(),
-                    new Atleta(), new Allenatore());
-            h.add(s);
-        }
-
-        return h;
-
-    }*/
 
     /**
      * Restituisce gli Id degli esercizi appartenenti a una SessioneDiAllenamento
@@ -90,31 +99,22 @@ public class Control_session {
     }
 
     /**
-     * Completa una sessione di allenamento
+     *Restituisce una mappa contenente il dettaglio di una SessioneDiAllenamento
      * @param id_sessione id SessioneDiAllenamento
-     * @param risultati_row Mappa<IdEsercizio, String[Nota, Risultato]>
-     * */
-    public void completaSessione(Long id_sessione, Map<Long, String[]> risultati_row) throws ClassCastException, NumberFormatException{
+     * @return La mappa contiene Titolo,Nome e Cognome Allenatore,Descrizione, Stato e Data
+     */
+    public Map<String, Object> getDettaglioSessionePerId(Long id_sessione){
+        Map<String,Object> dettaglio = new HashMap<>();
+        SessioneDiAllenamento s = this.getSessionePerId(id_sessione);
 
-        GestoreSessioni gestore = GestoreSessioni.getInstance();
+        dettaglio.put("titolo", s.getTitolo());
+        dettaglio.put("allenatore", s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
+        dettaglio.put("email_allenatore", s.getAllenatore().getMail());
+        dettaglio.put("descrizione", s.getDescrizione());
+        dettaglio.put("stato", s.getStato().toString());
+        dettaglio.put("data", s.getDataSvolgimento());
 
-        HashMap<Long, Integer> risultati = new HashMap<>();
-        HashMap<Long, String> note = new HashMap<>();
-
-        for(Long id : risultati_row.keySet()) {
-            int ris_intero = Integer.parseInt(risultati_row.get(id)[1]);
-            if(ris_intero < 0){
-                throw new NumberFormatException();
-            }
-            note.put(id, risultati_row.get(id)[0]);
-            risultati.put(id, ris_intero);
-        }
-
-        try {
-            gestore.completaSessione(this.id_utente_autenticato, id_sessione, risultati, note);
-        }catch (IllegalAccessException e){
-            System.out.println("Sessione non appartenente all'utente");
-        }
+        return dettaglio;
     }
 
     /**
@@ -149,22 +149,4 @@ public class Control_session {
 
     }
 
-    /**
-     *Restituisce una mappa contenente il dettaglio di una SessioneDiAllenamento
-     * @param id_sessione id SessioneDiAllenamento
-     * @return La mappa contiene Titolo,Nome e Cognome Allenatore,Descrizione, Stato e Data
-     */
-    public Map<String, Object> getDettaglioSessionePerId(Long id_sessione){
-        Map<String,Object> dettaglio = new HashMap<>();
-        SessioneDiAllenamento s = this.getSessionePerId(id_sessione);
-
-        dettaglio.put("titolo", s.getTitolo());
-        dettaglio.put("allenatore", s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
-        dettaglio.put("email_allenatore", s.getAllenatore().getMail());
-        dettaglio.put("descrizione", s.getDescrizione());
-        dettaglio.put("stato", s.getStato().toString());
-        dettaglio.put("data", s.getDataSvolgimento());
-
-        return dettaglio;
-    }
 }

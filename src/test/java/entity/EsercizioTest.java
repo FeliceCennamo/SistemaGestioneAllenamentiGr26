@@ -98,9 +98,8 @@ class EsercizioTest {
         assertEquals(TipoEsercizio.RIPETIZIONI, e.getTipo());
         e.setTipo(1);
         assertEquals(TipoEsercizio.TEMPO, e.getTipo());
-        // Valori non 0 o 1 non cambiano il tipo (rimane l'ultimo impostato)
-        e.setTipo(99);
-        assertEquals(TipoEsercizio.TEMPO, e.getTipo());
+        assertThrows(IllegalArgumentException.class,
+                () -> e.setTipo(99));
     }
 
     // ==================== SET RISULTATO ATTESO ====================
@@ -131,6 +130,13 @@ class EsercizioTest {
         Esercizio e = new Esercizio(TEST_NOME_TEMPO, "desc", Duration.ofMinutes(10));
         assertThrows(IllegalArgumentException.class,
                 () -> e.setRisultatoAtteso(99));
+    }
+
+    @Test
+    void testSetRisultatoAtteso_OggettoNonValido_ThrowsException() {
+        Esercizio e = new Esercizio(TEST_NOME_TEMPO, "desc", Duration.ofMinutes(10));
+        assertThrows(IllegalArgumentException.class,
+                () -> e.setRisultatoAtteso("Prova_Stringa"));
     }
 
     // ==================== SET RISULTATO (con oggetto e nota) ====================
@@ -273,12 +279,15 @@ class EsercizioTest {
     @Test
     void testSetTipo_ValoriNon0o1_NonCambiaTipo() {
         Esercizio e = new Esercizio();
+        assertThrows(IllegalArgumentException.class,
+                () -> e.setTipo(99));
+        assertNull(e.getTipo());
         e.setTipo(0); // RIPETIZIONI
-        e.setTipo(2);
-        assertEquals(TipoEsercizio.RIPETIZIONI, e.getTipo()); // rimane invariato
+        assertThrows(IllegalArgumentException.class,
+                () -> e.setTipo(2));
         e.setTipo(1); // TEMPO
-        e.setTipo(-1);
-        assertEquals(TipoEsercizio.TEMPO, e.getTipo());
+        assertThrows(IllegalArgumentException.class,
+                () -> e.setTipo(-1));
     }
 
     // ==================== TEST AGGIUNTIVI per setRisultatoAtteso con tipo non ancora impostato ====================

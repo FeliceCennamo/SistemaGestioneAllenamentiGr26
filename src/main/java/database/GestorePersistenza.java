@@ -48,7 +48,15 @@ public class GestorePersistenza {
             T managed = em.merge(oggetto);
             em.getTransaction().commit();
             return managed;
-        } finally {
+        } catch (RuntimeException e) {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            throw e;
+
+        }finally {
             em.close();
         }
     }

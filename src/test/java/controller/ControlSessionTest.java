@@ -86,6 +86,21 @@ class ControlSessionTest {
         }
     }
 
+    // Helper per eseguire codice in transazione (utile per settare risultati)
+    private void eseguiInTransazione(Runnable runnable) {
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+        em.getTransaction().begin();
+        try {
+            runnable.run();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
     private void creaDatiDiProva() {
         // Crea e salva allenatore e atleta
         allenatore = gp.salva(new Allenatore("Mario", "Rossi", TEST_MAIL_ALLENATORE, "pass", "Calcio"));
@@ -236,40 +251,12 @@ class ControlSessionTest {
         assertEquals(sessione.getDescrizione(), dettaglio.get("descrizione"));
         assertEquals(sessione.getStato().toString(), dettaglio.get("stato"));
         assertEquals(sessione.getDataSvolgimento(), dettaglio.get("data"));
+        assertEquals(sessione.getAllenatore().getMail(), dettaglio.get("email_allenatore"));
     }
 
     @Test
     void testGetDettaglioSessionePerId_InvalidId_ThrowsException() {
         assertThrows(exceptions.ResourceNotFoundException.class,
                 () -> controller.getDettaglioSessionePerId(999999L));
-    }
-
-    // ==================== getMailfromSession ====================
-    @Test
-    void testGetMailfromSession_Valid() {
-        Map<String, String> mails = controller.getMailfromSession(sessione.getId());
-        assertEquals(atleta.getMail(), mails.get("Atleta"));
-        assertEquals(allenatore.getMail(), mails.get("Allenatore"));
-    }
-
-    @Test
-    void testGetMailfromSession_InvalidId_ThrowsException() {
-        assertThrows(exceptions.ResourceNotFoundException.class,
-                () -> controller.getMailfromSession(999999L));
-    }
-
-    // Helper per eseguire codice in transazione (utile per settare risultati)
-    private void eseguiInTransazione(Runnable runnable) {
-        EntityManager em = JpaUtil.getInstance().getEntityManager();
-        em.getTransaction().begin();
-        try {
-            runnable.run();
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            throw e;
-        } finally {
-            em.close();
-        }
     }
 }

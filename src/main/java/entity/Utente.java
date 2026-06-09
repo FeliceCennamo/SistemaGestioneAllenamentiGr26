@@ -5,6 +5,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 
 @MappedSuperclass
 public abstract class Utente {
@@ -140,7 +142,7 @@ public abstract class Utente {
      *
      */
     public void setPassword(String password) {
-        this.password = password;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     /**

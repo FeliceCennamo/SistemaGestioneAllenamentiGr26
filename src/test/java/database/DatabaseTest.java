@@ -27,6 +27,30 @@ public class DatabaseTest {
         cleanUpTestData();  // remove test data after each test
     }
 
+    private void cleanUpTestData() {
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Delete in the correct order (child tables first)
+            em.createNativeQuery("DELETE FROM atleta_obiettivo WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
+            em.createNativeQuery("DELETE FROM allenatore_atleta WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
+            em.createNativeQuery("DELETE FROM sessione_esercizio WHERE sessione_id IN (SELECT id FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com'))").executeUpdate();
+            em.createNativeQuery("DELETE FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
+            em.createNativeQuery("DELETE FROM atleti WHERE mail = 'luca.bianchi@test.com'").executeUpdate();
+
+            // Delete Risultati
+            em.createNativeQuery("DELETE FROM risultati WHERE nota IN ('NotaTest85693', 'testTutti1', 'testTutti2', 'queryParam', 'perOttieniTutti') OR (nota IS NULL AND (ripetizioni IS NULL OR tempo IS NULL))").executeUpdate();
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            // Log or ignore – the test may fail anyway
+        } finally {
+            em.close();
+        }
+    }
+
     @Test
     public void testSalvaRisultato() {
         Risultato risultato_rip = new RisultatoRipetizioni("NotaTest85693", 10);
@@ -146,27 +170,10 @@ public class DatabaseTest {
     public void testGetFiglie() {
         Set<EntityType<?>> figlie = gestorePersistenza.getFiglie(Allenatore.class);
         assertNotNull(figlie);
-        // Allenatore is a concrete entity, but has no subclasses in this model
-        // So the set should be empty
         assertTrue(figlie.isEmpty());
 
         Set<EntityType<?>> figlieUtente = gestorePersistenza.getFiglie(entity.Utente.class);
-        // Utente is a mapped superclass, not an entity, so also empty? Actually mapped superclass is not in metamodel.
-        // But our implementation uses getEntities() which returns only entity types.
-        // Since Utente is not an entity, the check `classe.isAssignableFrom` will not work because Utente is not in the set.
-        // So we need to test with a class that has subclasses. In this model, no entity inherits from another entity (all inherit from Utente which is MappedSuperclass).
-        // Therefore getFiglie will always return empty set. We can test it does not throw.
         assertNotNull(figlieUtente);
-    }
-
-    // Optional: test rollback on exception - more complex, requires mocking or forcing an error (e.g., violate constraint)
-    @Test
-    public void testSalva_RollbackOnException() {
-        Atleta atleta = new Atleta();
-        atleta.setNome(null); // assuming nome cannot be null in DB, may cause constraint violation
-        // This test might fail if no constraint, so we skip or use a dedicated entity with @Column(nullable=false)
-        // We'll just show the idea - you can add a unique constraint test.
-        // For brevity, we assume a proper test environment.
     }
 
     @Test
@@ -186,30 +193,6 @@ public class DatabaseTest {
         assertThrows(RuntimeException.class, () -> {
             gestorePersistenza.salvaTutti(validRisultato, null);
         });
-    }
-
-    private void cleanUpTestData() {
-        EntityManager em = JpaUtil.getInstance().getEntityManager();
-        try {
-            em.getTransaction().begin();
-
-            // Delete in the correct order (child tables first)
-            em.createNativeQuery("DELETE FROM atleta_obiettivo WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
-            em.createNativeQuery("DELETE FROM allenatore_atleta WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
-            em.createNativeQuery("DELETE FROM sessione_esercizio WHERE sessione_id IN (SELECT id FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com'))").executeUpdate();
-            em.createNativeQuery("DELETE FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
-            em.createNativeQuery("DELETE FROM atleti WHERE mail = 'luca.bianchi@test.com'").executeUpdate();
-
-            // Delete Risultati
-            em.createNativeQuery("DELETE FROM risultati WHERE nota IN ('NotaTest85693', 'testTutti1', 'testTutti2', 'queryParam', 'perOttieniTutti') OR (nota IS NULL AND (ripetizioni IS NULL OR tempo IS NULL))").executeUpdate();
-
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            // Log or ignore – the test may fail anyway
-        } finally {
-            em.close();
-        }
     }
 }
 

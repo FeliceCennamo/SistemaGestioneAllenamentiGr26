@@ -13,7 +13,7 @@ public class JPATest {
         assertNotNull(em);
         JpaUtil.getInstance().chiudi();
         assertThrows(RuntimeException.class, () -> {
-            JpaUtil.getInstance().getEntityManager();
+            em.getMetamodel(); //qualsiasi metodo per dimostrare che non è più utilizzabile
         });
     }
 }
