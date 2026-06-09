@@ -39,23 +39,20 @@ public class FormSessioniDiAllenamento {
         Control_session c_session = Control_session.getInstance();
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
         Set<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
-        LocalDate data_filtro = null;
-        try {
-            if (ANNO.getText().isEmpty() && MESE.getText().isEmpty() && GIORNO.getText().isEmpty()) {
-                data_filtro = LocalDate.of(4000, 12, 31);
-            } else {
-                data_filtro = LocalDate.of(Integer.parseInt(ANNO.getText()), Integer.parseInt(MESE.getText()), Integer.parseInt(GIORNO.getText()));
-            }
-        } catch (DateTimeException e) {
-            JOptionPane.showMessageDialog(null, "La data inserita non è una data realmente esistente", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException n) {
-            JOptionPane.showMessageDialog(null, "Inserire nel filtro data solo numeri interi", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
-        }
+
+        LocalDate data_filtro = inizializzaData();
+
         for (Long s : sessioni) {
+
             Map<String, Object> dettaglio = c_session.getDettaglioSessionePerId(s);
-            if (((LocalDate) dettaglio.get("data")).isAfter(data_filtro)) {
-                continue;
-            }
+            impaginaSessione(s, dettaglio, data_filtro);
+
+        }
+    }
+
+    public void impaginaSessione(Long s, Map<String, Object> dettaglio, LocalDate data_filtro){
+
+        if (((LocalDate) dettaglio.get("data")).isBefore(data_filtro)) {
             switch ((String) dettaglio.get("stato")) {
                 case "ASSEGNATA":
                     if (ASSEGNATECheckBox.getModel().isSelected()) {
@@ -86,6 +83,25 @@ public class FormSessioniDiAllenamento {
 
             }
         }
+
+    }
+
+    public LocalDate inizializzaData(){
+        LocalDate data_filtro = null;
+        try {
+
+            if (ANNO.getText().isEmpty() && MESE.getText().isEmpty() && GIORNO.getText().isEmpty()) {
+                data_filtro = LocalDate.of(4000, 12, 31);
+            } else {
+                data_filtro = LocalDate.of(Integer.parseInt(ANNO.getText()), Integer.parseInt(MESE.getText()), Integer.parseInt(GIORNO.getText()));
+            }
+
+        } catch (DateTimeException e) {
+            JOptionPane.showMessageDialog(null, "La data inserita non è una data realmente esistente", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException n) {
+            JOptionPane.showMessageDialog(null, "Inserire nel filtro data solo numeri interi", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+        }
+        return data_filtro;
     }
 
     {
