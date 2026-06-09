@@ -1,0 +1,46 @@
+id,livello,cognome,disciplina,disciplinaPrevalente,mail,nome,password
+55,4,Bruno,Ciclismo,Nuoto,matteo.bruno55@email.it,Matteo,Pass450533
+58,4,Costa,Nuoto,Lotta,valentina.costa58@email.it,Valentina,Pass337543
+60,5,Giordano,Ginnastica,Judo,elena.giordano60@email.it,Elena,Pass501429
+66,5,Santoro,Nuoto,Calcio,federica.santoro66@email.it,Federica,Pass436995
+67,4,Mariani,Lotta,Lotta,stefano.mariani67@email.it,Stefano,Pass387214
+71,2,Gallo,Ciclismo,Judo,simone.gallo71@email.it,Simone,Pass708317
+73,4,Leone,Judo,Lotta,emanuele.leone73@email.it,Emanuele,Pass277434
+74,5,Longo,Lotta,Pallacanestro,irene.longo74@email.it,Irene,Pass471434
+77,2,Ferrari,Ginnastica,Ginnastica,alessandro.ferrari77@email.it,Alessandro,Pass909670
+78,3,Esposito,Calcio,Ginnastica,beatrice.esposito78@email.it,Beatrice,Pass688937
+87,2,De Luca,Atletica,Boxe,andrea.de luca87@email.it,Andrea,Pass314919
+88,1,Costa,Tennis,Judo,valentina.costa88@email.it,Valentina,Pass651850
+90,5,Giordano,Calcio,Boxe,elena.giordano90@email.it,Elena,Pass877694
+91,3,Rizzo,Pallacanestro,Atletica,francesco.rizzo91@email.it,Francesco,Pass473799
+92,4,Lombardi,Tennis,Nuoto,marta.lombardi92@email.it,Marta,Pass752735
+93,3,Moretti,Tennis,Calcio,giovanni.moretti93@email.it,Giovanni,Pass948083
+95,1,Fontana,Atletica,Calcio,roberto.fontana95@email.it,Roberto,Pass363495
+96,4,Santoro,Judo,Judo,federica.santoro96@email.it,Federica,Pass568557
+99,1,Caruso,Pallacanestro,Calcio,antonio.caruso99@email.it,Antonio,Pass352408
+101,1,Gallo,Boxe,Calcio,simone.gallo101@email.it,Simone,Pass777520
+102,3,Martini,Lotta,Atletica,claudia.martini102@email.it,Claudia,Pass167190
+103,2,Leone,Ciclismo,Boxe,emanuele.leone103@email.it,Emanuele,Pass413186
+104,5,Longo,Boxe,Boxe,irene.longo104@email.it,Irene,Pass386774
+106,2,Rossi,Calcio,Atletica,silvia.rossi106@email.it,Silvia,Pass232812
+107,1,Ferrari,Ginnastica,Lotta,alessandro.ferrari107@email.it,Alessandro,Pass974034
+108,3,Esposito,Lotta,Atletica,beatrice.esposito108@email.it,Beatrice,Pass349361
+116,1,Conti,Tennis,Calcio,chiara.conti116@email.it,Chiara,Pass516808
+117,4,De Luca,Ginnastica,Nuoto,andrea.de luca117@email.it,Andrea,Pass385977
+118,1,Costa,Pallacanestro,Calcio,valentina.costa118@email.it,Valentina,Pass824771
+119,1,Mancini,Boxe,Pallacanestro,davide.mancini119@email.it,Davide,Pass248086
+120,1,Giordano,Pallacanestro,Atletica,elena.giordano120@email.it,Elena,Pass712748
+121,3,Rizzo,Ginnastica,Lotta,francesco.rizzo121@email.it,Francesco,Pass737826
+123,3,Moretti,Nuoto,Calcio,giovanni.moretti123@email.it,Giovanni,Pass499727
+124,5,Barbieri,Lotta,Tennis,alessia.barbieri124@email.it,Alessia,Pass588675
+128,1,Rinaldi,Lotta,Calcio,laura.rinaldi128@email.it,Laura,Pass596158
+129,4,Caruso,Tennis,Lotta,antonio.caruso129@email.it,Antonio,Pass809134
+130,2,Ferrara,Atletica,Ginnastica,paola.ferrara130@email.it,Paola,Pass117240
+132,5,Martini,Ginnastica,Boxe,claudia.martini132@email.it,Claudia,Pass222196
+133,5,Leone,Pallacanestro,Lotta,emanuele.leone133@email.it,Emanuele,Pass923747
+134,3,Longo,Nuoto,Lotta,irene.longo134@email.it,Irene,Pass482175
+137,4,Ferrari,Calcio,Nuoto,alessandro.ferrari137@email.it,Alessandro,Pass909743
+141,2,Colombo,Calcio,Lotta,luca.colombo141@email.it,Luca,Pass451712
+145,3,Bruno,Ginnastica,Atletica,matteo.bruno145@email.it,Matteo,Pass200471
+147,5,De Luca,Ciclismo,Ginnastica,andrea.de luca147@email.it,Andrea,Pass179640
+150,5,Giordano,Nuoto,Nuoto,elena.giordano150@email.it,Elena,Pass532931
