@@ -56,8 +56,6 @@ public class SchedaSingola extends JFrame {
             default:
                 this.Stato_real.setForeground(Color.BLACK);
         }
-
-
         this.Data_real.setText(dettaglio.get("data").toString());
 
         VISUALIZZADETTAGLIOButton.addActionListener(new ActionListener() {
@@ -70,9 +68,7 @@ public class SchedaSingola extends JFrame {
     }
 
     private void dettaglioEsercizi(Long id_sessione) {
-
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(PanelBase);
-
         FormEsercizi formEsercizi = new FormEsercizi(id_sessione, parentFrame, parentForm);
     }
 

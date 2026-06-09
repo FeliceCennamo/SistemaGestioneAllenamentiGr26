@@ -34,11 +34,12 @@ public class SchedaSingolaEsercizio {
 
         Map<String, Object> dettaglio = controller.getDettaglioEsercizioPerId(id_sessione, id_esercizio);
         if (dettaglio.get("risultato_atteso") instanceof Duration)
-            this.lblRisultatoAtteso.setText(Long.valueOf(((Duration) dettaglio.get("risultato_atteso")).toMinutes()).toString() + " minuti");
+            lblRisultatoAtteso.setText(Long.valueOf(((Duration) dettaglio.get("risultato_atteso")).toMinutes()).toString() + " minuti");
         else
-            this.lblRisultatoAtteso.setText(dettaglio.get("risultato_atteso").toString() + " ripetizioni");
-        this.lblDescrizione.setText((String) dettaglio.get("descrizione"));
-        this.lblTitolo.setText((String) dettaglio.get("nome"));
+            lblRisultatoAtteso.setText(dettaglio.get("risultato_atteso").toString() + " ripetizioni");
+
+        lblDescrizione.setText((String) dettaglio.get("descrizione"));
+        lblTitolo.setText((String) dettaglio.get("nome"));
 
         textFieldNota.setText(dettaglio.get("nota") != null ? (String) dettaglio.get("nota") : "");
         if (dettaglio.get("risultato") != null) {
@@ -46,7 +47,7 @@ public class SchedaSingolaEsercizio {
                 textFieldRisultato.setText(dettaglio.get("risultato").toString());
             else
                 textFieldRisultato.setText(Long.valueOf(((Duration) dettaglio.get("risultato")).toMinutes()).toString());
-        } else
+        }else
             textFieldRisultato.setText("");
 
         if (((String) dettaglio.get("stato")).equalsIgnoreCase("completata")) {

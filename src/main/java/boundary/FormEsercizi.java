@@ -19,7 +19,6 @@ public class FormEsercizi extends JFrame {
     private JScrollPane Scorrimento;
     private JPanel Header;
     private JPanel Footer;
-    private JPanel PanelCentrale;
     private JButton backBtn;
     private JButton completaBtn;
     private JPanel panelCentrale;
@@ -74,6 +73,7 @@ public class FormEsercizi extends JFrame {
             returnToPreviousFrame();
         });
 
+        // ----- LISTENER PER IL BOTTONE COMPLETA -----
         completaBtn.addActionListener(e -> {
             sendCompleta();
         });
@@ -88,14 +88,10 @@ public class FormEsercizi extends JFrame {
     }
 
     public void aggiungiEsercizi(Long id_sessione) {
-
         Control_session control_session = Control_session.getInstance();
 
         panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
-
         List<Long> id_esercizi = control_session.getIdEserciziPerSessione(id_sessione);
-
-
         if (!id_esercizi.isEmpty()) {
             for (Long id_esercizio : id_esercizi) {
                 SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(id_sessione, id_esercizio);
@@ -128,8 +124,7 @@ public class FormEsercizi extends JFrame {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
 
             if (control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                String mail_allenatore = (String) control_session.getDettaglioSessionePerId(idCurrentSession).get("allenatore");
-                Notifier.getInstance().sendMailComplete(mail_allenatore);
+                notifica((String) control_session.getDettaglioSessionePerId(idCurrentSession).get("allenatore"));
             }
 
             parentForm.refreshPanelCentrale();
@@ -141,6 +136,10 @@ public class FormEsercizi extends JFrame {
         }
 
 
+    }
+
+    public void notifica(String mail){
+        Notifier.getInstance().sendMailComplete(mail);
     }
 
     public JPanel getPanelBase() {

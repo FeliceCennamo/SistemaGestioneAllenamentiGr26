@@ -43,15 +43,12 @@ public class FormSessioniDiAllenamento {
         LocalDate data_filtro = inizializzaData();
 
         for (Long s : sessioni) {
-
             Map<String, Object> dettaglio = c_session.getDettaglioSessionePerId(s);
             impaginaSessione(s, dettaglio, data_filtro);
-
         }
     }
 
     private void impaginaSessione(Long s, Map<String, Object> dettaglio, LocalDate data_filtro){
-
         if (((LocalDate) dettaglio.get("data")).isBefore(data_filtro)) {
             switch ((String) dettaglio.get("stato")) {
                 case "ASSEGNATA":
@@ -233,13 +230,6 @@ public class FormSessioniDiAllenamento {
         return PanelBase;
     }
 
-    public static void main(String[] args) {
-
-        FormSessioniDiAllenamento form_base = new FormSessioniDiAllenamento();
-        form_base.setup();
-
-    }
-
     public void refreshPanelCentrale() {
         // Svuota il pannello centrale
         PanelCentrale.removeAll();
@@ -271,5 +261,10 @@ public class FormSessioniDiAllenamento {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        FormSessioniDiAllenamento form_base = new FormSessioniDiAllenamento();
+        form_base.setup();
     }
 }
