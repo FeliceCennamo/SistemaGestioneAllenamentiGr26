@@ -128,7 +128,7 @@ public class FormEsercizi extends JFrame {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
 
             if (control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                String mail_allenatore = (String) control_session.getMailfromSession(idCurrentSession).get("allenatore");
+                String mail_allenatore = (String) control_session.getDettaglioSessionePerId(idCurrentSession).get("allenatore");
                 Notifier.getInstance().sendMailComplete(mail_allenatore);
             }
 
