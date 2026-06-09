@@ -152,7 +152,7 @@ public class Control_session {
     /**
      *Restituisce una mappa contenente il dettaglio di una SessioneDiAllenamento
      * @param id_sessione id SessioneDiAllenamento
-     * @return La mappa contiene Titolo,Nome e Cognome Allenatore,Descrizione, Stato e Data
+     * @return La mappa contiene Titolo, Nome e Cognome Allenatore, Descrizione, Stato e Data
      */
     public Map<String, Object> getDettaglioSessionePerId(Long id_sessione){
         Map<String,Object> dettaglio = new HashMap<>();
@@ -160,11 +160,24 @@ public class Control_session {
 
         dettaglio.put("titolo", s.getTitolo());
         dettaglio.put("allenatore", s.getAllenatore().getNome() + " " + s.getAllenatore().getCognome());
-        dettaglio.put("email_allenatore", s.getAllenatore().getMail());
+
         dettaglio.put("descrizione", s.getDescrizione());
         dettaglio.put("stato", s.getStato().toString());
         dettaglio.put("data", s.getDataSvolgimento());
 
         return dettaglio;
+    }
+
+    public Map<String, String> getMailfromSession(Long id_sessione){
+
+        Map<String, String> mails = new HashMap<>();
+        SessioneDiAllenamento s = this.getSessionePerId(id_sessione);
+
+        mails.put("allenatore", s.getAllenatore().getMail() );
+        mails.put("atleta", s.getAtleta().getMail() );
+
+        return mails;
+
+
     }
 }

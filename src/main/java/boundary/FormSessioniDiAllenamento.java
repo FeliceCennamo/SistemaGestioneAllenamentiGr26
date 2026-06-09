@@ -50,7 +50,7 @@ public class FormSessioniDiAllenamento {
         }
     }
 
-    public void impaginaSessione(Long s, Map<String, Object> dettaglio, LocalDate data_filtro){
+    private void impaginaSessione(Long s, Map<String, Object> dettaglio, LocalDate data_filtro){
 
         if (((LocalDate) dettaglio.get("data")).isBefore(data_filtro)) {
             switch ((String) dettaglio.get("stato")) {
@@ -86,7 +86,7 @@ public class FormSessioniDiAllenamento {
 
     }
 
-    public LocalDate inizializzaData(){
+    private LocalDate inizializzaData(){
         LocalDate data_filtro = null;
         try {
 

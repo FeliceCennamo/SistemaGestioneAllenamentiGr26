@@ -248,8 +248,8 @@ class ControlSessionTest {
     @Test
     void testGetMailfromSession_Valid() {
         Map<String, String> mails = controller.getMailfromSession(sessione.getId());
-        assertEquals(atleta.getMail(), mails.get("Atleta"));
-        assertEquals(allenatore.getMail(), mails.get("Allenatore"));
+        assertEquals(atleta.getMail(), mails.get("atleta"));
+        assertEquals(allenatore.getMail(), mails.get("allenatore"));
     }
 
     @Test
