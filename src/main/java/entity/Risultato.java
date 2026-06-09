@@ -32,5 +32,8 @@ public abstract class Risultato {
 
     public abstract void setRisultato(Object risultato);
 
+    public Long getId() {
+        return id;
+    }
 
 }

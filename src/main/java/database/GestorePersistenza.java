@@ -15,6 +15,7 @@ public class GestorePersistenza {
      * @param oggetto oggetto da voler inserire
      *
      */
+    /*
     public void salva(Object oggetto) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -37,6 +38,17 @@ public class GestorePersistenza {
 
         } finally {
 
+            em.close();
+        }
+    }*/
+    public <T> T salva(T oggetto) {
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+        try {
+            em.getTransaction().begin();
+            T managed = em.merge(oggetto);
+            em.getTransaction().commit();
+            return managed;
+        } finally {
             em.close();
         }
     }

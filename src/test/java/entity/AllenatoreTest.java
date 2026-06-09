@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -24,23 +23,20 @@ class AllenatoreTest {
     private static final String TEST_MAIL_ATLETA1 = "test.atl1@example.com";
     private static final String TEST_MAIL_ATLETA2 = "test.atl2@example.com";
 
-    private Long idAllenatore;
-    private Long idAtleta1;
-    private Long idAtleta2;
+    private Allenatore a;
+    private Atleta at1;
+    private Atleta at2;
 
     @BeforeEach
     void setUp() {
         gp = new GestorePersistenza();
         pulisciDatabase();
         creaDatiDiProva();
-        idAllenatore = getIdAllenatore();
-        idAtleta1 = getIdAtleta(TEST_MAIL_ATLETA1);
-        idAtleta2 = getIdAtleta(TEST_MAIL_ATLETA2);
     }
 
     @AfterEach
     void tearDown() {
-        pulisciDatabase();
+        pulisciDatabase();  // solo pulizia, senza ricreare i dati
     }
 
     private void pulisciDatabase() {
@@ -73,8 +69,7 @@ class AllenatoreTest {
         }
     }
 
-    //Metodi che permettono di eseguire operazioni sul db (come DELETE) in maniera controllata, con blocchi try-catch
-    //-----------------------------
+    // Helper per eseguire operazioni con EntityManager aperto
     private void eseguiInTransazione(Consumer<EntityManager> consumer) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         em.getTransaction().begin();
@@ -103,36 +98,21 @@ class AllenatoreTest {
             em.close();
         }
     }
-    //-----------------------------
 
     private void creaDatiDiProva() {
-            Allenatore a = new Allenatore("Mario", "Rossi", TEST_MAIL_ALLENATORE, "pass123", "Nuoto");
-            Atleta at1 = new Atleta("Luigi", "Verdi", TEST_MAIL_ATLETA1, "pass456", "Corsa", 3);
-            Atleta at2 = new Atleta("Anna", "Neri", TEST_MAIL_ATLETA2, "pass789", "Ciclismo", 2);
-            gp.salva(a);
-            gp.salva(at1);
-            gp.salva(at2);
-    }
-
-    private Long getIdAllenatore() {
-        List<Allenatore> list = gp.eseguiQuery("SELECT a FROM Allenatore a WHERE a.mail = :mail", Allenatore.class,
-                Map.of("mail", TEST_MAIL_ALLENATORE));
-        return list.isEmpty() ? null : list.get(0).getId();
-    }
-
-    private Long getIdAtleta(String mail) {
-        List<Atleta> list = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.mail = :mail", Atleta.class,
-                Map.of("mail", mail));
-        return list.isEmpty() ? null : list.get(0).getId();
+        a = gp.salva(new Allenatore("Mario", "Rossi", TEST_MAIL_ALLENATORE, "pass123", "Nuoto"));
+        at1 = gp.salva(new Atleta("Luigi", "Verdi", TEST_MAIL_ATLETA1, "pass456", "Corsa", 3));
+        at2 = gp.salva(new Atleta("Anna", "Neri", TEST_MAIL_ATLETA2, "pass789", "Ciclismo", 2));
     }
 
     private Long getConteggioAtletiPerAllenatore() {
+        // Ora possiamo usare direttamente a.getId() perché l'oggetto è gestito e ha l'ID
         return gp.eseguiQuery(
                 "SELECT COUNT(a) FROM Allenatore al JOIN al.atleti a WHERE al.id = :id",
-                Long.class, Map.of("id", idAllenatore)).get(0);
+                Long.class, Map.of("id", a.getId())).get(0);
     }
 
-    // ---------- Constructors ----------
+    // ---------- Costruttori ----------
     @Test
     void testCostruttoriEGetters() {
         Allenatore a = new Allenatore();
@@ -154,24 +134,23 @@ class AllenatoreTest {
         assertEquals("Pallavolo", a3.getDisciplinaPrevalente());
     }
 
-    // ---------- addAtleta and getAtleti ----------
+    // ---------- addAtleta e getAtleti ----------
     @Test
     void testAddAtletaEGetAtleti() {
         assertEquals(0L, getConteggioAtletiPerAllenatore());
 
-        // Add atleta1
+        // Aggiungi atleta1
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            Atleta atleta = em.find(Atleta.class, idAtleta1);
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            Atleta atleta = em.find(Atleta.class, at1.getId());
             managed.addAtleta(atleta);
-            // No need for explicit merge because the entity is managed
         });
         assertEquals(1L, getConteggioAtletiPerAllenatore());
 
-        // Add atleta2
+        // Aggiungi atleta2
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            Atleta atleta = em.find(Atleta.class, idAtleta2);
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            Atleta atleta = em.find(Atleta.class, at2.getId());
             managed.addAtleta(atleta);
         });
         assertEquals(2L, getConteggioAtletiPerAllenatore());
@@ -180,52 +159,50 @@ class AllenatoreTest {
     // ---------- removeAtleta ----------
     @Test
     void testRemoveAtleta() {
-        // Add both atleti
+        // Aggiungi entrambi gli atleti
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            managed.addAtleta(em.find(Atleta.class, idAtleta1));
-            managed.addAtleta(em.find(Atleta.class, idAtleta2));
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            managed.addAtleta(em.find(Atleta.class, at1.getId()));
+            managed.addAtleta(em.find(Atleta.class, at2.getId()));
         });
         assertEquals(2L, getConteggioAtletiPerAllenatore());
 
-        // Remove atleta1
+        // Rimuovi atleta1
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            managed.removeAtleta(em.find(Atleta.class, idAtleta1));
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            managed.removeAtleta(em.find(Atleta.class, at1.getId()));
         });
         assertEquals(1L, getConteggioAtletiPerAllenatore());
     }
 
-    // ---------- getAtleta with valid id ----------
+    // ---------- getAtleta con id valido ----------
     @Test
     void testGetAtleta_ValidId() {
-        // Add association
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            managed.addAtleta(em.find(Atleta.class, idAtleta1));
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            managed.addAtleta(em.find(Atleta.class, at1.getId()));
         });
 
         Atleta found = eseguiInTransazioneConRisultato(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            return managed.getAtleta(idAtleta1);
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            return managed.getAtleta(at1.getId());
         });
 
         assertNotNull(found);
         assertEquals(TEST_MAIL_ATLETA1, found.getMail());
     }
 
-    // ---------- getAtleta with invalid id ----------
+    // ---------- getAtleta con id non valido ----------
     @Test
     void testGetAtleta_InvalidId_ThrowsException() {
-        // Add association
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            managed.addAtleta(em.find(Atleta.class, idAtleta1));
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            managed.addAtleta(em.find(Atleta.class, at1.getId()));
         });
 
         assertThrows(ResourceNotFoundException.class, () -> {
             eseguiInTransazioneConRisultato(em -> {
-                Allenatore managed = em.find(Allenatore.class, idAllenatore);
+                Allenatore managed = em.find(Allenatore.class, a.getId());
                 return managed.getAtleta(999999L);
             });
         });
@@ -234,10 +211,9 @@ class AllenatoreTest {
     // ---------- getSessioni ----------
     @Test
     void testGetSessioni() {
-        // Create a session
         eseguiInTransazione(em -> {
-            Allenatore managedAllenatore = em.find(Allenatore.class, idAllenatore);
-            Atleta managedAtleta = em.find(Atleta.class, idAtleta1);
+            Allenatore managedAllenatore = em.find(Allenatore.class, a.getId());
+            Atleta managedAtleta = em.find(Atleta.class, at1.getId());
             SessioneDiAllenamento sessione = new SessioneDiAllenamento(
                     "Test sessione", "Descrizione", LocalDate.now(), managedAtleta, managedAllenatore);
             em.persist(sessione);
@@ -245,30 +221,27 @@ class AllenatoreTest {
 
         Long count = gp.eseguiQuery(
                 "SELECT COUNT(s) FROM SessioneDiAllenamento s WHERE s.allenatore.id = :id",
-                Long.class, Map.of("id", idAllenatore)).get(0);
+                Long.class, Map.of("id", a.getId())).get(0);
         assertEquals(1L, count);
     }
 
-    // ---------- removeAtleta when atleta not present ----------
+    // ---------- removeAtleta quando l'atleta non è presente ----------
     @Test
     void testRemoveAtleta_AtletaNotPresent_NoSideEffects() {
         assertEquals(0L, getConteggioAtletiPerAllenatore());
 
-        // Try to remove a non-associated atleta
         eseguiInTransazione(em -> {
-            Allenatore managed = em.find(Allenatore.class, idAllenatore);
-            Atleta atleta2 = em.find(Atleta.class, idAtleta2);
-            managed.removeAtleta(atleta2); // Should do nothing
+            Allenatore managed = em.find(Allenatore.class, a.getId());
+            Atleta atleta2 = em.find(Atleta.class, at2.getId());
+            managed.removeAtleta(atleta2);
         });
 
         assertEquals(0L, getConteggioAtletiPerAllenatore());
     }
 
-    // ---------- getAtleti (just check not null) ----------
+    // ---------- getAtleti (solo controllo non null) ----------
     @Test
     void testGetAtleti_ReturnsNotNull() {
-        Allenatore a = gp.eseguiQuery("SELECT a FROM Allenatore a WHERE a.id = :id", Allenatore.class,
-                Map.of("id", idAllenatore)).get(0);
         assertNotNull(a.getAtleti());
     }
 }

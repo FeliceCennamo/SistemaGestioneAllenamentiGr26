@@ -43,8 +43,10 @@ public class RisultatoRipetizioni extends Risultato {
      */
     @Override
     public void setRisultato(Object ripetizioni) throws ClassCastException {
-
-        this.ripetizioni = (Integer) ripetizioni;
+        if (ripetizioni instanceof Integer || ripetizioni == null)
+            this.ripetizioni = (Integer) ripetizioni;
+        else
+            throw new ClassCastException("Tipo di risultato non valido");
     }
 
 

@@ -46,11 +46,11 @@ public class RisultatoTempo extends Risultato {
      *
      */
     @Override
-    public void setRisultato(Object tempo) throws IllegalArgumentException {
-        if (tempo instanceof Duration)
+    public void setRisultato(Object tempo) throws ClassCastException {
+        if (tempo instanceof Duration || tempo == null)
             this.tempo = (Duration) tempo;
         else
-            throw new IllegalArgumentException("Tipo di risultato non valido");
+            throw new ClassCastException("Tipo di risultato non valido");
     }
 
 }

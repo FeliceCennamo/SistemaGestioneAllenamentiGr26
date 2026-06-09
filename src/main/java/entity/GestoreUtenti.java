@@ -43,20 +43,6 @@ public class GestoreUtenti {
     }
 
     /**
-     * Permette di ottenere tutti gli utenti registrati nel sistema
-     *
-     * @return Set degli utenti registrati
-     */
-    public Set<Utente> getListaUtenti() {
-        Set<Utente> listaUtenti = new HashSet<>();
-        Set<EntityType<?>> listaFiglie = persistence_utenti.getFiglie(Utente.class);
-        for (EntityType<?> figlia : listaFiglie) {
-            persistence_utenti.ottieniTutti(figlia.getClass());
-        }
-        return listaUtenti;
-    }
-
-    /**
      * Dato in ingresso l'id dell'atleta, restituisce l'oggetto.
      *
      * @param id_atleta Id dell'atleta che si vuole ricercare
@@ -85,58 +71,4 @@ public class GestoreUtenti {
         }
         return a;
     }
-
-    /**
-     * Dati un allenatore e un atleta, permette a essi di associarsi l'un l'altro
-     *
-     * @param id_allenatore allenatore che vuole associare l'atleta
-     * @param id_atleta     atleta che deve essere associato a quell'allenatore
-     */
-    public void associaAtletaAllenatore(Long id_atleta, Long id_allenatore) {
-        Allenatore allenatore;
-        Atleta atleta;
-        try {
-            atleta = cercaAtleta(id_atleta);
-            allenatore = cercaAllenatore(id_allenatore);
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        allenatore.addAtleta(atleta);
-        atleta.addAllenatore(allenatore);
-    }
-
-    /**
-     * Permette all'allenatore di modificare le informazioni relative all'esperienza dell'atleta
-     *
-     * @param id_allenatore id dell'allenatore che compie l'operazione
-     * @param id_atleta     id dell'atleta a cui vanno modificati i valori di carriera
-     * @param disciplina    La nuova disciplina dell'atleta
-     * @param livello       il nuovo livello dell'atleta
-     * @param obiettivi     il nuovo obiettivo dell'atleta
-     */
-    public void gestisciProfiloAtleta(Long id_allenatore, Long id_atleta, Set<String> obiettivi, String disciplina, int livello) {
-        Allenatore allenatore;
-        Atleta atleta;
-        try {
-            allenatore = cercaAllenatore(id_allenatore);
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        try {
-            atleta = allenatore.getAtleta(id_atleta);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        atleta.setDisciplina(disciplina);
-        atleta.setLivello(livello);
-        atleta.setObiettivo(obiettivi);
-
-    }
-
-
 }

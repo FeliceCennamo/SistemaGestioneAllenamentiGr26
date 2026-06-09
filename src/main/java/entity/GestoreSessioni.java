@@ -151,34 +151,4 @@ public class GestoreSessioni {
         return s;
     }
 
-    /**
-     * Crea la sessione di allenamento dati i suoi parametri
-     *
-     * @param id_allenatore Id dell'allenatore che crea la sessione
-     * @param id_atleta     Id dell'atleta che dovrà completare la sessione
-     * @param data          La data in cui ci si aspetta lo svolgimento della sessione
-     * @param descrizione   Descrizione della sessione
-     * @param esercizi      ArrayList degli esercizi che dovranno essere svolti
-     * @param titolo        Titolo della sessione
-     * @return La sessione appena creata
-     * @throws ResourceNotFoundException Se L'allenatore non esiste nel database
-     */
-    public SessioneDiAllenamento creaSessione(String titolo, LocalDate data, String descrizione, Duration durata,
-                                              ArrayList<Esercizio> esercizi, Long id_atleta, Long id_allenatore)
-            throws ResourceNotFoundException {
-
-        GestoreUtenti utenti = GestoreUtenti.getInstance();
-
-        Allenatore allenatore = utenti.cercaAllenatore(id_allenatore);
-        Atleta atleta = allenatore.getAtleta(id_atleta);
-
-        SessioneDiAllenamento s = new SessioneDiAllenamento(titolo, descrizione, data, durata, atleta, allenatore);
-        s.setEsercizi(esercizi);
-
-        persistence_sessioni.salva(s);
-
-        return s;
-    }
-
-
 }

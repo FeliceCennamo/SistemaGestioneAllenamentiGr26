@@ -21,16 +21,14 @@ class AtletaTest {
     private static final String TEST_MAIL_ATLETA = "test.atleta@example.com";
     private static final String TEST_MAIL_ALLENATORE = "test.all@example.com";
 
-    private Long idAtleta;
-    private Long idAllenatore;
+    private Atleta atleta;
+    private Allenatore allenatore;
 
     @BeforeEach
     void setUp() {
         gp = new GestorePersistenza();
         pulisciDatabase();
         creaDatiDiProva();
-        idAtleta = getIdAtleta();
-        idAllenatore = getIdAllenatore();
     }
 
     @AfterEach
@@ -70,8 +68,7 @@ class AtletaTest {
         }
     }
 
-    //Metodi che permettono di eseguire operazioni sul db (come DELETE) in maniera controllata, con blocchi try-catch
-    //-----------------------------
+    // Helper per eseguire operazioni con EntityManager aperto
     private void eseguiInTransazione(Consumer<EntityManager> consumer) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         em.getTransaction().begin();
@@ -100,30 +97,26 @@ class AtletaTest {
             em.close();
         }
     }
-    //-----------------------------
 
     private void creaDatiDiProva() {
-        EntityManager em = JpaUtil.getInstance().getEntityManager();
-            Atleta a = new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass123", "Corsa", 3,
-                    new HashSet<>(Arrays.asList("Migliorare tempo", "Aumentare resistenza")));
-            Allenatore al = new Allenatore("Anna", "Verdi", TEST_MAIL_ALLENATORE, "pass456", "Atletica");
-            gp.salva(a);
-            gp.salva(al);
+        atleta = gp.salva(new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass123", "Corsa", 3,
+                new HashSet<>(Arrays.asList("Migliorare tempo", "Aumentare resistenza"))));
+        allenatore = gp.salva(new Allenatore("Anna", "Verdi", TEST_MAIL_ALLENATORE, "pass456", "Atletica"));
     }
 
-    private Long getIdAtleta() {
-        List<Atleta> list = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.mail = :mail", Atleta.class,
-                Map.of("mail", TEST_MAIL_ATLETA));
-        return list.isEmpty() ? null : list.get(0).getId();
+    private Long getConteggioAllenatoriPerAtleta() {
+        return gp.eseguiQuery(
+                "SELECT COUNT(al) FROM Atleta a JOIN a.allenatori al WHERE a.id = :id",
+                Long.class, Map.of("id", atleta.getId())).get(0);
     }
 
-    private Long getIdAllenatore() {
-        List<Allenatore> list = gp.eseguiQuery("SELECT a FROM Allenatore a WHERE a.mail = :mail", Allenatore.class,
-                Map.of("mail", TEST_MAIL_ALLENATORE));
-        return list.isEmpty() ? null : list.get(0).getId();
+    private Long getConteggioSessioniPerAtleta() {
+        return gp.eseguiQuery(
+                "SELECT COUNT(s) FROM SessioneDiAllenamento s WHERE s.atleta.id = :id",
+                Long.class, Map.of("id", atleta.getId())).get(0);
     }
 
-    // ---------- Constructors ----------
+    // ---------- Costruttori ----------
     @Test
     void testCostruttoriEGettersBase() {
         Atleta a = new Atleta();
@@ -149,26 +142,26 @@ class AtletaTest {
         assertEquals(obiettivi, a3.getObiettivo());
     }
 
-    // ---------- Getters and Setters ----------
+    // ---------- Setter ----------
     @Test
     void testSetDisciplina() {
         eseguiInTransazione(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             managed.setDisciplina("Pallavolo");
         });
         Atleta reloaded = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
-                Map.of("id", idAtleta)).get(0);
+                Map.of("id", atleta.getId())).get(0);
         assertEquals("Pallavolo", reloaded.getDisciplina());
     }
 
     @Test
     void testSetLivello() {
         eseguiInTransazione(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             managed.setLivello(5);
         });
         Atleta reloaded = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
-                Map.of("id", idAtleta)).get(0);
+                Map.of("id", atleta.getId())).get(0);
         assertEquals(5, reloaded.getLivello());
     }
 
@@ -176,86 +169,68 @@ class AtletaTest {
     void testSetObiettivo() {
         Set<String> nuoviObiettivi = new HashSet<>(Arrays.asList("Nuovo obbiettivo 1", "Nuovo obbiettivo 2"));
         eseguiInTransazione(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             managed.setObiettivo(nuoviObiettivi);
         });
 
-        // Verify using a JPQL query that fetches the collection inside a transaction
         Set<String> obiettiviFromDb = eseguiInTransazioneConRisultato(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
-            // Force initialization of the lazy collection within the transaction
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             Set<String> ob = managed.getObiettivo();
-            ob.size(); // triggers loading
+            ob.size(); // forza inizializzazione
             return new HashSet<>(ob);
         });
         assertEquals(nuoviObiettivi, obiettiviFromDb);
     }
 
-    // ---------- getAllenatori and addAllenatore ----------
+    // ---------- getAllenatori e addAllenatore ----------
     @Test
     void testAddAllenatoreEGetAllenatori() {
-        Long countBefore = getConteggioAllenatoriPerAtleta();
-        assertEquals(0L, countBefore);
+        assertEquals(0L, getConteggioAllenatoriPerAtleta());
 
         eseguiInTransazione(em -> {
-            Atleta managedAtleta = em.find(Atleta.class, idAtleta);
-            Allenatore managedAllenatore = em.find(Allenatore.class, idAllenatore);
+            Atleta managedAtleta = em.find(Atleta.class, atleta.getId());
+            Allenatore managedAllenatore = em.find(Allenatore.class, allenatore.getId());
             managedAtleta.addAllenatore(managedAllenatore);
             managedAllenatore.addAtleta(managedAtleta);
         });
 
-        Long countAfter = getConteggioAllenatoriPerAtleta();
-        assertEquals(1L, countAfter);
+        assertEquals(1L, getConteggioAllenatoriPerAtleta());
 
         Long allenatoreHasAtleta = gp.eseguiQuery(
                 "SELECT COUNT(a) FROM Allenatore al JOIN al.atleti a WHERE al.id = :idAllenatore AND a.id = :idAtleta",
-                Long.class, Map.of("idAllenatore", idAllenatore, "idAtleta", idAtleta)).get(0);
+                Long.class, Map.of("idAllenatore", allenatore.getId(), "idAtleta", atleta.getId())).get(0);
         assertEquals(1L, allenatoreHasAtleta);
-    }
-
-    private Long getConteggioAllenatoriPerAtleta() {
-        return gp.eseguiQuery(
-                "SELECT COUNT(al) FROM Atleta a JOIN a.allenatori al WHERE a.id = :id",
-                Long.class, Map.of("id", idAtleta)).get(0);
     }
 
     // ---------- getSessioni ----------
     @Test
     void testGetSessioni() {
-        Long countBefore = getConteggioSessioniPerAtleta();
-        assertEquals(0L, countBefore);
+        assertEquals(0L, getConteggioSessioniPerAtleta());
 
         eseguiInTransazione(em -> {
-            Atleta managedAtleta = em.find(Atleta.class, idAtleta);
-            Allenatore managedAllenatore = em.find(Allenatore.class, idAllenatore);
+            Atleta managedAtleta = em.find(Atleta.class, atleta.getId());
+            Allenatore managedAllenatore = em.find(Allenatore.class, allenatore.getId());
             SessioneDiAllenamento sessione = new SessioneDiAllenamento(
                     "Test sessione", "Descrizione", LocalDate.now(), managedAtleta, managedAllenatore);
             em.persist(sessione);
         });
 
-        Long countAfter = getConteggioSessioniPerAtleta();
-        assertEquals(1L, countAfter);
-    }
-
-    private Long getConteggioSessioniPerAtleta() {
-        return gp.eseguiQuery(
-                "SELECT COUNT(s) FROM SessioneDiAllenamento s WHERE s.atleta.id = :id",
-                Long.class, Map.of("id", idAtleta)).get(0);
+        assertEquals(1L, getConteggioSessioniPerAtleta());
     }
 
     @Test
     void testAddAllenatore_Duplicate_NoEffect() {
         eseguiInTransazione(em -> {
-            Atleta managedAtleta = em.find(Atleta.class, idAtleta);
-            Allenatore managedAllenatore = em.find(Allenatore.class, idAllenatore);
+            Atleta managedAtleta = em.find(Atleta.class, atleta.getId());
+            Allenatore managedAllenatore = em.find(Allenatore.class, allenatore.getId());
             managedAtleta.addAllenatore(managedAllenatore);
             managedAllenatore.addAtleta(managedAtleta);
         });
         assertEquals(1L, getConteggioAllenatoriPerAtleta());
 
         eseguiInTransazione(em -> {
-            Atleta managedAtleta = em.find(Atleta.class, idAtleta);
-            Allenatore managedAllenatore = em.find(Allenatore.class, idAllenatore);
+            Atleta managedAtleta = em.find(Atleta.class, atleta.getId());
+            Allenatore managedAllenatore = em.find(Allenatore.class, allenatore.getId());
             managedAtleta.addAllenatore(managedAllenatore);
         });
         assertEquals(1L, getConteggioAllenatoriPerAtleta());
@@ -263,32 +238,27 @@ class AtletaTest {
 
     @Test
     void testGetAllenatori_ReturnsSet() {
-        Atleta a = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
-                Map.of("id", idAtleta)).get(0);
-        assertNotNull(a.getAllenatori());
+        assertNotNull(atleta.getAllenatori());
     }
 
     @Test
     void testGetSessioni_ReturnsSet() {
-        Atleta a = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
-                Map.of("id", idAtleta)).get(0);
-        assertNotNull(a.getSessioni());
+        assertNotNull(atleta.getSessioni());
     }
 
-    // ---------- Obiettivi tests with lazy loading fixed ----------
+    // ---------- Obiettivi ----------
     @Test
     void testObiettivi_SetBehavior() {
         Set<String> obiettivi = new HashSet<>(Arrays.asList("A", "B", "C"));
         eseguiInTransazione(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             managed.setObiettivo(obiettivi);
         });
 
-        // Verify inside a transaction to initialize the lazy collection
         Set<String> retrieved = eseguiInTransazioneConRisultato(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             Set<String> ob = managed.getObiettivo();
-            ob.size(); // force initialization
+            ob.size();
             return new HashSet<>(ob);
         });
         assertEquals(3, retrieved.size());
@@ -297,11 +267,10 @@ class AtletaTest {
         assertTrue(retrieved.contains("C"));
     }
 
-    // Also test that the initial obiettivi from creaDatiDiProva are present
     @Test
     void testInitialObiettivi() {
         Set<String> initial = eseguiInTransazioneConRisultato(em -> {
-            Atleta managed = em.find(Atleta.class, idAtleta);
+            Atleta managed = em.find(Atleta.class, atleta.getId());
             Set<String> ob = managed.getObiettivo();
             ob.size();
             return new HashSet<>(ob);

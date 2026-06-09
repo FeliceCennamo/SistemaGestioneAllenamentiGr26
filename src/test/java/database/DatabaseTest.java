@@ -169,6 +169,25 @@ public class DatabaseTest {
         // For brevity, we assume a proper test environment.
     }
 
+    @Test
+    public void testSalva_ThrowsRuntimeExceptionWhenNullArgument() {
+        // Passing null to salva should cause IllegalArgumentException (a RuntimeException)
+        assertThrows(RuntimeException.class, () -> {
+            gestorePersistenza.salva(null);
+        });
+    }
+
+    @Test
+    public void testSalvaTutti_ThrowsRuntimeExceptionWhenNullElementInVarargs() {
+        // Create a valid entity
+        Risultato validRisultato = new RisultatoRipetizioni("validNote", 10);
+
+        // Passing a null as one of the arguments should cause RuntimeException
+        assertThrows(RuntimeException.class, () -> {
+            gestorePersistenza.salvaTutti(validRisultato, null);
+        });
+    }
+
     private void cleanUpTestData() {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {
@@ -191,25 +210,6 @@ public class DatabaseTest {
         } finally {
             em.close();
         }
-    }
-
-    @Test
-    public void testSalva_ThrowsRuntimeExceptionWhenNullArgument() {
-        // Passing null to salva should cause IllegalArgumentException (a RuntimeException)
-        assertThrows(RuntimeException.class, () -> {
-            gestorePersistenza.salva(null);
-        });
-    }
-
-    @Test
-    public void testSalvaTutti_ThrowsRuntimeExceptionWhenNullElementInVarargs() {
-        // Create a valid entity
-        Risultato validRisultato = new RisultatoRipetizioni("validNote", 10);
-
-        // Passing a null as one of the arguments should cause RuntimeException
-        assertThrows(RuntimeException.class, () -> {
-            gestorePersistenza.salvaTutti(validRisultato, null);
-        });
     }
 }
 
