@@ -4,7 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Control_session;
-import notifier.INotifier;
+
 import notifier.Notifier;
 
 import javax.swing.*;
@@ -128,7 +128,7 @@ public class FormEsercizi extends JFrame {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
 
             if (control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                String mail_allenatore = (String) control_session.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore");
+                String mail_allenatore = (String) control_session.getMailfromSession(idCurrentSession).get("allenatore");
                 Notifier.getInstance().sendMailComplete(mail_allenatore);
             }
 

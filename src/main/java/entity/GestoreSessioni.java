@@ -107,7 +107,7 @@ public class GestoreSessioni {
 
                 Object ris = null;
                 String nota = null;
-                if (risultati.containsKey(es)) {
+                if (risultati.get(es) != null) {
                     if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI)
                         ris = risultati.get(es);
                     else if (esercizio.getTipo() == TipoEsercizio.TEMPO)
