@@ -35,7 +35,9 @@ public class FormEsercizi extends JFrame {
 
     /**
      * Costruttore del FormEsercizi
-     *
+     * @param id_sessione id SessioneDiAllenamento
+     * @param parentForm oggetto FormSessioniDiAllenamento
+     * @param parentFrame Ancestor
      */
     public FormEsercizi(Long id_sessione, JFrame parentFrame, FormSessioniDiAllenamento parentForm) {
         this.previousFrame = parentFrame;
@@ -77,10 +79,11 @@ public class FormEsercizi extends JFrame {
         });
     }
 
+    /**
+     * Rende di nuovo visibile la finestra delle sessioni e chiude la finestra corrente
+     * */
     private void returnToPreviousFrame() {
-        // Rendi di nuovo visibile la finestra delle sessioni
         previousFrame.setVisible(true);
-        // Chiudi la finestra corrente
         currentFrame.dispose();
     }
 
@@ -125,7 +128,7 @@ public class FormEsercizi extends JFrame {
             control_session.completaSessione(this.idCurrentSession, risultati_row);
 
             if (control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                String mail_allenatore = control_session.getMailfromSession(idCurrentSession).get("Allenatore");
+                String mail_allenatore = (String) control_session.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore");
                 Notifier.getInstance().sendMailComplete(mail_allenatore);
             }
 
