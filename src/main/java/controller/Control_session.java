@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Control_session {
 
-    private Long id_utente_autenticato =77L;
+    private Long id_utente_autenticato =55L;
     private static Control_session instance;
 
     /**
@@ -102,9 +102,12 @@ public class Control_session {
         HashMap<Long, String> note = new HashMap<>();
 
         for(Long id : risultati_row.keySet()) {
-            int ris_intero = Integer.parseInt(risultati_row.get(id)[1]);
-            if(ris_intero < 0){
-                throw new NumberFormatException();
+            Integer ris_intero = null;
+            if(!risultati_row.get(id)[1].equalsIgnoreCase("")) {
+                 ris_intero = Integer.parseInt(risultati_row.get(id)[1]);
+                if (ris_intero < 0 && ris_intero > 100) {
+                    throw new NumberFormatException();
+                }
             }
             note.put(id, risultati_row.get(id)[0]);
             risultati.put(id, ris_intero);
