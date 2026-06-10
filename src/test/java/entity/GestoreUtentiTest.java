@@ -10,16 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GestoreUtentiTest {
 
-    private GestorePersistenza gp;
     private GestoreUtenti gu;
 
     private static final String TEST_MAIL_ATLETA = "gu.atleta@test.com";
@@ -28,11 +24,9 @@ class GestoreUtentiTest {
 
     private Allenatore a1;
     private Atleta at1;
-    private Atleta at2;
 
     @BeforeEach
     void setUp() {
-        gp = new GestorePersistenza();
         gu = GestoreUtenti.getInstance();
         pulisciDatabase();
         creaDatiDiProva();
@@ -73,10 +67,9 @@ class GestoreUtentiTest {
     }
 
     private void creaDatiDiProva() {
-         at1 = gp.salva(new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass1", "Corsa", 3,
+         at1 = GestorePersistenza.salva(new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass1", "Corsa", 3,
                 new HashSet<>(Arrays.asList("Obiettivo1", "Obiettivo2"))));
-         at2 = gp.salva(new Atleta("Luigi", "Verdi", TEST_MAIL_ALTRO_ATLETA, "pass2", "Nuoto", 2));
-         a1 = gp.salva(new Allenatore("Anna", "Bianchi", TEST_MAIL_ALLENATORE, "pass3", "Atletica"));
+         a1 = GestorePersistenza.salva(new Allenatore("Anna", "Bianchi", TEST_MAIL_ALLENATORE, "pass3", "Atletica"));
     }
 
     // ------------------------- cercaAtleta -------------------------

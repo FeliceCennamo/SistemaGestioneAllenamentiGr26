@@ -12,12 +12,7 @@ import java.util.Set;
  * Il costruttore è privato, di conseguenza richiamare il metodo gestoreUtente.getInstance()
  */
 public class GestoreUtenti {
-
-    /**
-     * Accesso al package database
-     */
-    private static final GestorePersistenza persistence_utenti = new GestorePersistenza();
-
+    
     /**
      * Istanza statica del gestoreUtenti
      */
@@ -50,7 +45,7 @@ public class GestoreUtenti {
      * @throws ResourceNotFoundException
      */
     public Atleta cercaAtleta(Long id_atleta) throws ResourceNotFoundException {
-        Atleta a = persistence_utenti.trovaPerId(Atleta.class, id_atleta);
+        Atleta a = GestorePersistenza.trovaPerId(Atleta.class, id_atleta);
         if (a == null) {
             throw new ResourceNotFoundException("Atleta non trovato");
         }
@@ -65,7 +60,7 @@ public class GestoreUtenti {
      * @throws ResourceNotFoundException
      */
     public Allenatore cercaAllenatore(Long id_allenatore) throws ResourceNotFoundException {
-        Allenatore a = persistence_utenti.trovaPerId(Allenatore.class, id_allenatore);
+        Allenatore a = GestorePersistenza.trovaPerId(Allenatore.class, id_allenatore);
         if (a == null) {
             throw new ResourceNotFoundException("Allenatore non trovato");
         }

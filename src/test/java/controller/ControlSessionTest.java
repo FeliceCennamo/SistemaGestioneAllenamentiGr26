@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControlSessionTest {
 
     private GestorePersistenza gp;
-    private Control_session controller;
+    private Controller controller;
 
     // Dati di test
     private Allenatore allenatore;
@@ -35,7 +35,7 @@ class ControlSessionTest {
     @BeforeEach
     void setUp() {
         gp = new GestorePersistenza();
-        controller = Control_session.getInstance();
+        controller = Controller.getInstance();
         pulisciDatabase();
         creaDatiDiProva();
     }

@@ -18,8 +18,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GestoreSessioniTest {
-
-    private GestorePersistenza gp;
+    
     private GestoreSessioni gs;
 
     // References to persisted objects (no manual ID queries)
@@ -31,7 +30,6 @@ class GestoreSessioniTest {
 
     @BeforeEach
     void setUp() {
-        gp = new GestorePersistenza();
         gs = GestoreSessioni.getInstance();
         pulisciDatabase();
         creaDatiDiProva();
@@ -91,16 +89,16 @@ class GestoreSessioniTest {
 
     private void creaDatiDiProva() {
         // Create and save entities using the new salva that returns managed objects
-        allenatore = gp.salva(new Allenatore("Mario", "Rossi", "gs.all@test.com", "pass", "Calcio"));
-        atleta = gp.salva(new Atleta("Luigi", "Verdi", "gs.atl@test.com", "pass", "Corsa", 3));
-        esercizioRip = gp.salva(new Esercizio("TestRip", "Descrizione rip", 10));
-        esercizioTempo = gp.salva(new Esercizio("TestTempo", "Descrizione tempo", Duration.ofMinutes(5)));
+        allenatore = GestorePersistenza.salva(new Allenatore("Mario", "Rossi", "gs.all@test.com", "pass", "Calcio"));
+        atleta = GestorePersistenza.salva(new Atleta("Luigi", "Verdi", "gs.atl@test.com", "pass", "Corsa", 3));
+        esercizioRip = GestorePersistenza.salva(new Esercizio("TestRip", "Descrizione rip", 10));
+        esercizioTempo = GestorePersistenza.salva(new Esercizio("TestTempo", "Descrizione tempo", Duration.ofMinutes(5)));
 
         // Create sessione
         sessione = new SessioneDiAllenamento(
                 "Sessione test", "Descrizione sessione", LocalDate.now().plusDays(1), atleta, allenatore);
         sessione.setEsercizi(Arrays.asList(esercizioRip, esercizioTempo));
-        sessione = gp.salva(sessione);
+        sessione = GestorePersistenza.salva(sessione);
     }
 
     // ------------------------- getSessione -------------------------
@@ -164,7 +162,7 @@ class GestoreSessioniTest {
         gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note);
 
         // Reload sessione to verify
-        SessioneDiAllenamento reloaded = gp.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
+        SessioneDiAllenamento reloaded = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
         assertEquals(StatoSessione.COMPLETATA, reloaded.getStato());
 
         for (Esercizio e : reloaded.getEsercizi()) {
@@ -187,7 +185,7 @@ class GestoreSessioniTest {
 
         gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note);
 
-        SessioneDiAllenamento reloaded = gp.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
+        SessioneDiAllenamento reloaded = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
         assertEquals(StatoSessione.IN_CORSO, reloaded.getStato());
 
         Esercizio eRip = reloaded.getEsercizi().stream()
@@ -207,7 +205,7 @@ class GestoreSessioniTest {
 
         gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note);
 
-        SessioneDiAllenamento reloaded = gp.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
+        SessioneDiAllenamento reloaded = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
         assertEquals(StatoSessione.IN_CORSO, reloaded.getStato());
         for (Esercizio e : reloaded.getEsercizi()) {
             assertNull(e.getRisultato().getRisultato());
@@ -238,7 +236,7 @@ class GestoreSessioniTest {
 
         gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note);
 
-        SessioneDiAllenamento reloaded = gp.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
+        SessioneDiAllenamento reloaded = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
         assertEquals(StatoSessione.IN_CORSO, reloaded.getStato());
 
         Esercizio e = reloaded.getEsercizi().stream()

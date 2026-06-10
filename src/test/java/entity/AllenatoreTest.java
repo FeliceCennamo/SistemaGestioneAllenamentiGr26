@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AllenatoreTest {
 
-    private GestorePersistenza gp;
-
     private static final String TEST_MAIL_ALLENATORE = "test.all@example.com";
     private static final String TEST_MAIL_ATLETA1 = "test.atl1@example.com";
     private static final String TEST_MAIL_ATLETA2 = "test.atl2@example.com";
@@ -29,7 +27,6 @@ class AllenatoreTest {
 
     @BeforeEach
     void setUp() {
-        gp = new GestorePersistenza();
         pulisciDatabase();
         creaDatiDiProva();
     }
@@ -100,14 +97,14 @@ class AllenatoreTest {
     }
 
     private void creaDatiDiProva() {
-        a = gp.salva(new Allenatore("Mario", "Rossi", TEST_MAIL_ALLENATORE, "pass123", "Nuoto"));
-        at1 = gp.salva(new Atleta("Luigi", "Verdi", TEST_MAIL_ATLETA1, "pass456", "Corsa", 3));
-        at2 = gp.salva(new Atleta("Anna", "Neri", TEST_MAIL_ATLETA2, "pass789", "Ciclismo", 2));
+        a = GestorePersistenza.salva(new Allenatore("Mario", "Rossi", TEST_MAIL_ALLENATORE, "pass123", "Nuoto"));
+        at1 = GestorePersistenza.salva(new Atleta("Luigi", "Verdi", TEST_MAIL_ATLETA1, "pass456", "Corsa", 3));
+        at2 = GestorePersistenza.salva(new Atleta("Anna", "Neri", TEST_MAIL_ATLETA2, "pass789", "Ciclismo", 2));
     }
 
     private Long getConteggioAtletiPerAllenatore() {
         // Ora possiamo usare direttamente a.getId() perché l'oggetto è gestito e ha l'ID
-        return gp.eseguiQuery(
+        return GestorePersistenza.eseguiQuery(
                 "SELECT COUNT(a) FROM Allenatore al JOIN al.atleti a WHERE al.id = :id",
                 Long.class, Map.of("id", a.getId())).get(0);
     }
@@ -219,7 +216,7 @@ class AllenatoreTest {
             em.persist(sessione);
         });
 
-        Long count = gp.eseguiQuery(
+        Long count = GestorePersistenza.eseguiQuery(
                 "SELECT COUNT(s) FROM SessioneDiAllenamento s WHERE s.allenatore.id = :id",
                 Long.class, Map.of("id", a.getId())).get(0);
         assertEquals(1L, count);

@@ -3,7 +3,7 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import controller.Control_session;
+import controller.Controller;
 
 import notifier.Notifier;
 
@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class FormEsercizi extends JFrame {
+public class FormListaEsercizi extends JFrame {
     private JPanel PanelBase;
     private JScrollPane Scorrimento;
     private JPanel Header;
@@ -28,7 +28,7 @@ public class FormEsercizi extends JFrame {
     private JFrame currentFrame;
 
     private Long idCurrentSession;
-    private FormSessioniDiAllenamento parentForm;
+    private FormListaSessioni parentForm;
 
     private ArrayList<SchedaSingolaEsercizio> schede = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class FormEsercizi extends JFrame {
      * @param parentForm oggetto FormSessioniDiAllenamento
      * @param parentFrame Ancestor
      */
-    public FormEsercizi(Long id_sessione, JFrame parentFrame, FormSessioniDiAllenamento parentForm) {
+    public FormListaEsercizi(Long id_sessione, JFrame parentFrame, FormListaSessioni parentForm) {
         this.previousFrame = parentFrame;
         this.idCurrentSession = id_sessione;
         this.parentForm = parentForm;
@@ -62,7 +62,7 @@ public class FormEsercizi extends JFrame {
         // Mostra la nuova finestra
         currentFrame.setVisible(true);
 
-        Control_session controller = Control_session.getInstance();
+        Controller controller = Controller.getInstance();
 
         if (((String) controller.getDettaglioSessionePerId(id_sessione).get("stato")).equalsIgnoreCase("COMPLETATA")) {
             completaBtn.setVisible(false);
@@ -88,10 +88,10 @@ public class FormEsercizi extends JFrame {
     }
 
     public void aggiungiEsercizi(Long id_sessione) {
-        Control_session control_session = Control_session.getInstance();
+        Controller controller = Controller.getInstance();
 
         panelCentrale.setLayout(new BoxLayout(panelCentrale, BoxLayout.Y_AXIS));
-        List<Long> id_esercizi = control_session.getIdEserciziPerSessione(id_sessione);
+        List<Long> id_esercizi = controller.getIdEserciziPerSessione(id_sessione);
         if (!id_esercizi.isEmpty()) {
             for (Long id_esercizio : id_esercizi) {
                 SchedaSingolaEsercizio scheda = new SchedaSingolaEsercizio(id_sessione, id_esercizio);
@@ -110,7 +110,7 @@ public class FormEsercizi extends JFrame {
      *
      */
     private void sendCompleta() {
-        Control_session control_session = Control_session.getInstance();
+        Controller controller = Controller.getInstance();
 
         Map<Long, String[]> risultati_row = new HashMap<>();
         for (SchedaSingolaEsercizio s : this.schede) {
@@ -121,10 +121,10 @@ public class FormEsercizi extends JFrame {
         }
 
         try {
-            control_session.completaSessione(this.idCurrentSession, risultati_row);
+            controller.completaSessione(this.idCurrentSession, risultati_row);
 
-            if (control_session.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                notifica((String) control_session.getDettaglioSessionePerId(idCurrentSession).get("allenatore"));
+            if (controller.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
+                notifica((String) controller.getDettaglioSessionePerId(idCurrentSession).get("allenatore"));
             }
 
             parentForm.refreshPanelCentrale();

@@ -2,7 +2,7 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import controller.Control_session;
+import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +30,7 @@ public class SchedaSingolaEsercizio {
 
         this.id = id_esercizio;
 
-        Control_session controller = Control_session.getInstance();
+        Controller controller = Controller.getInstance();
 
         Map<String, Object> dettaglio = controller.getDettaglioEsercizioPerId(id_sessione, id_esercizio);
         if (dettaglio.get("risultato_atteso") instanceof Duration)

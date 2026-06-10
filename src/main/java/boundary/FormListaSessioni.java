@@ -3,7 +3,7 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import controller.Control_session;
+import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -17,7 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-public class FormSessioniDiAllenamento {
+public class FormListaSessioni {
 
     private JPanel PanelBase;
     private JPanel PanelCentrale;
@@ -36,7 +36,7 @@ public class FormSessioniDiAllenamento {
 
 
     private void aggiungiComponenti() {
-        Control_session c_session = Control_session.getInstance();
+        Controller c_session = Controller.getInstance();
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
         Set<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
 
@@ -53,7 +53,7 @@ public class FormSessioniDiAllenamento {
             switch ((String) dettaglio.get("stato")) {
                 case "ASSEGNATA":
                     if (ASSEGNATECheckBox.getModel().isSelected()) {
-                        SchedaSingola scheda = new SchedaSingola(s, this);
+                        SchedaSingolaSessione scheda = new SchedaSingolaSessione(s, this);
                         PanelCentrale.add(scheda.$$$getRootComponent$$$());
                         PanelCentrale.add(Box.createVerticalStrut(5));
                         emptyLbl.setVisible(false);
@@ -62,7 +62,7 @@ public class FormSessioniDiAllenamento {
 
                 case "IN_CORSO":
                     if (INCORSOCheckBox.getModel().isSelected()) {
-                        SchedaSingola scheda = new SchedaSingola(s, this);
+                        SchedaSingolaSessione scheda = new SchedaSingolaSessione(s, this);
                         PanelCentrale.add(scheda.$$$getRootComponent$$$());
                         PanelCentrale.add(Box.createVerticalStrut(5));
                         emptyLbl.setVisible(false);
@@ -71,7 +71,7 @@ public class FormSessioniDiAllenamento {
 
                 case "COMPLETATA":
                     if (COMPLETATECheckBox.getModel().isSelected()) {
-                        SchedaSingola scheda = new SchedaSingola(s, this);
+                        SchedaSingolaSessione scheda = new SchedaSingolaSessione(s, this);
                         PanelCentrale.add(scheda.$$$getRootComponent$$$());
                         PanelCentrale.add(Box.createVerticalStrut(5));
                         emptyLbl.setVisible(false);
@@ -264,7 +264,7 @@ public class FormSessioniDiAllenamento {
     }
 
     public static void main(String[] args) {
-        FormSessioniDiAllenamento form_base = new FormSessioniDiAllenamento();
+        FormListaSessioni form_base = new FormListaSessioni();
         form_base.setup();
     }
 }

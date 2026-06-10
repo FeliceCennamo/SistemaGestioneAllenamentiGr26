@@ -2,10 +2,12 @@ package database;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.metamodel.EntityType;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class GestorePersistenza {
 
@@ -15,33 +17,7 @@ public class GestorePersistenza {
      * @param oggetto oggetto da voler inserire
      *
      */
-    /*
-    public void salva(Object oggetto) {
-
-        EntityManager em = JpaUtil.getInstance().getEntityManager();
-
-
-        try {
-            em.getTransaction().begin();
-
-            em.merge(oggetto);
-
-            em.getTransaction().commit();
-
-        } catch (RuntimeException e) {
-
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-
-            throw e;
-
-        } finally {
-
-            em.close();
-        }
-    }*/
-    public <T> T salva(T oggetto) {
+    public static <T> T salva(T oggetto) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
@@ -56,7 +32,7 @@ public class GestorePersistenza {
 
             throw e;
 
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -67,7 +43,7 @@ public class GestorePersistenza {
      * @param oggetti Lista eterogenea di oggetti da voler inserire
      *
      */
-    public void salvaTutti(Object... oggetti) {
+    public static void salvaTutti(Object... oggetti) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
@@ -101,7 +77,7 @@ public class GestorePersistenza {
      * @return oggetto cercato nel database
      *
      */
-    public <T> T trovaPerId(Class<T> classe, Long id) {
+    public static <T> T trovaPerId(Class<T> classe, Long id) {
 
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
@@ -122,7 +98,7 @@ public class GestorePersistenza {
      * @param parametri mappa che contiene i valori dinamici da inserire nella query
      *
      */
-    public <T> List<T> eseguiQuery(String jpql,
+    public static <T> List<T> eseguiQuery(String jpql,
                                    Class<T> classe,
                                    Map<String, Object> parametri) {
 
@@ -144,8 +120,7 @@ public class GestorePersistenza {
 
     }
 
-    //ottieniTutti2 dovrebbe essere una forma più compatta di questo
-    public <T> List<T> ottieniTutti(Class<T> classe) {
+    public static <T> List<T> ottieniTutti(Class<T> classe) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
         try {
@@ -167,7 +142,7 @@ public class GestorePersistenza {
         }
     }
 
-    public <T> Set<EntityType<?>> getFiglie(Class<T> classe) {
+    public static <T> Set<EntityType<?>> getFiglie(Class<T> classe) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
         Set<EntityType<?>> figlie = new HashSet<>(em.getMetamodel().getEntities());

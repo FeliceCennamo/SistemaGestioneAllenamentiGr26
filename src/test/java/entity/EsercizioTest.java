@@ -8,14 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EsercizioTest {
 
-    private GestorePersistenza gp;
 
     private static final String TEST_NOME_RIP = "TestEsRip_";
     private static final String TEST_NOME_TEMPO = "TestEsTempo_";
@@ -23,7 +20,6 @@ class EsercizioTest {
 
     @BeforeEach
     void setUp() {
-        gp = new GestorePersistenza();
         pulisciDatabase();
     }
 
@@ -195,10 +191,10 @@ class EsercizioTest {
     @Test
     void testPersistenzaEsercizioRipetizioni() {
         Esercizio originale = new Esercizio(TEST_NOME_RIP, "desc", 15);
-        Esercizio salvato = gp.salva(originale);
+        Esercizio salvato = GestorePersistenza.salva(originale);
         assertNotNull(salvato.getId());
 
-        Esercizio trovato = gp.trovaPerId(Esercizio.class, salvato.getId());
+        Esercizio trovato = GestorePersistenza.trovaPerId(Esercizio.class, salvato.getId());
         assertEquals(TEST_NOME_RIP, trovato.getNome());
         assertEquals(15, trovato.getRisultatoAtteso());
         assertEquals(TipoEsercizio.RIPETIZIONI, trovato.getTipo());
@@ -208,10 +204,10 @@ class EsercizioTest {
     void testPersistenzaEsercizioTempo() {
         Duration dur = Duration.ofMinutes(12);
         Esercizio originale = new Esercizio(TEST_NOME_TEMPO, "desc tempo", dur);
-        Esercizio salvato = gp.salva(originale);
+        Esercizio salvato = GestorePersistenza.salva(originale);
         assertNotNull(salvato.getId());
 
-        Esercizio trovato = gp.trovaPerId(Esercizio.class, salvato.getId());
+        Esercizio trovato = GestorePersistenza.trovaPerId(Esercizio.class, salvato.getId());
         assertEquals(dur, trovato.getRisultatoAtteso());
         assertEquals(TipoEsercizio.TEMPO, trovato.getTipo());
     }
@@ -220,11 +216,11 @@ class EsercizioTest {
     void testPersistenzaConRisultato() {
         Esercizio e = new Esercizio(TEST_NOME_RIP, "desc", 10);
         e.setRisultato(30, "Ottimo");
-        Esercizio salvato = gp.salva(e);
+        Esercizio salvato = GestorePersistenza.salva(e);
         assertNotNull(salvato.getRisultato());
         assertNotNull(salvato.getRisultato().getId());
 
-        Esercizio trovato = gp.trovaPerId(Esercizio.class, salvato.getId());
+        Esercizio trovato = GestorePersistenza.trovaPerId(Esercizio.class, salvato.getId());
         assertNotNull(trovato.getRisultato());
         assertEquals(30, trovato.getRisultato().getRisultato());
         assertEquals("Ottimo", trovato.getRisultato().getNota());
@@ -265,7 +261,7 @@ class EsercizioTest {
     void testGetId() {
         Esercizio e = new Esercizio(TEST_NOME_RIP, "desc", 5);
         assertNull(e.getId());
-        e = gp.salva(e);
+        e = GestorePersistenza.salva(e);
         assertNotNull(e.getId());
     }
 

@@ -12,12 +12,7 @@ import java.util.*;
  * Permette la visualizzazione e la modifica di esse
  */
 public class GestoreSessioni {
-
-    /**
-     * Accesso al package database
-     */
-    private static final GestorePersistenza persistence_sessioni = new GestorePersistenza();
-
+    
     /**
      * Istanza statica del gestoreSessioni
      */
@@ -65,7 +60,7 @@ public class GestoreSessioni {
      * @return Set di tutte le sessioni presenti nel sistema
      */
     public Set<SessioneDiAllenamento> cercaSessioni() {
-        List<SessioneDiAllenamento> listaSessioni = persistence_sessioni.ottieniTutti(SessioneDiAllenamento.class);
+        List<SessioneDiAllenamento> listaSessioni = GestorePersistenza.ottieniTutti(SessioneDiAllenamento.class);
         return new HashSet<>(listaSessioni);
     }
 
@@ -77,7 +72,7 @@ public class GestoreSessioni {
      */
     public Set<SessioneDiAllenamento> cercaSessioni(Long id_atleta) {
         String query = "SELECT s FROM SessioneDiAllenamento s WHERE s.atleta.id = :id_atleta";
-        List<SessioneDiAllenamento> lista_sessioni = persistence_sessioni.eseguiQuery(query, SessioneDiAllenamento.class, Map.of("id_atleta", id_atleta));
+        List<SessioneDiAllenamento> lista_sessioni = GestorePersistenza.eseguiQuery(query, SessioneDiAllenamento.class, Map.of("id_atleta", id_atleta));
         return new HashSet<>(lista_sessioni);
     }
 
@@ -103,7 +98,7 @@ public class GestoreSessioni {
         if (s.getAtleta().getId().equals(id_atleta)) {
             s.setStato("IN CORSO");
             for (Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
-                Esercizio esercizio = persistence_sessioni.trovaPerId(Esercizio.class, es);
+                Esercizio esercizio = GestorePersistenza.trovaPerId(Esercizio.class, es);
 
                 Object ris = null;
                 String nota = null;
@@ -133,7 +128,7 @@ public class GestoreSessioni {
         }
         if (completata)
             s.setStato("COMPLETATA"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
-        persistence_sessioni.salva(s);
+        GestorePersistenza.salva(s);
     }
 
     /**
@@ -144,7 +139,7 @@ public class GestoreSessioni {
      * @throws ResourceNotFoundException Se la sessione richiesta non è stata trovata
      */
     public SessioneDiAllenamento getSessione(Long id_sessione) throws ResourceNotFoundException {
-        SessioneDiAllenamento s = persistence_sessioni.trovaPerId(SessioneDiAllenamento.class, id_sessione);
+        SessioneDiAllenamento s = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, id_sessione);
         if (s == null) {
             throw new ResourceNotFoundException("Sessione non trovata");
         }

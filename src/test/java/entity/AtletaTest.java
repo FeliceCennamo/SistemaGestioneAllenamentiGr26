@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AtletaTest {
 
-    private GestorePersistenza gp;
 
     private static final String TEST_MAIL_ATLETA = "test.atleta@example.com";
     private static final String TEST_MAIL_ALLENATORE = "test.all@example.com";
@@ -26,7 +25,6 @@ class AtletaTest {
 
     @BeforeEach
     void setUp() {
-        gp = new GestorePersistenza();
         pulisciDatabase();
         creaDatiDiProva();
     }
@@ -99,19 +97,19 @@ class AtletaTest {
     }
 
     private void creaDatiDiProva() {
-        atleta = gp.salva(new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass123", "Corsa", 3,
+        atleta = GestorePersistenza.salva(new Atleta("Mario", "Rossi", TEST_MAIL_ATLETA, "pass123", "Corsa", 3,
                 new HashSet<>(Arrays.asList("Migliorare tempo", "Aumentare resistenza"))));
-        allenatore = gp.salva(new Allenatore("Anna", "Verdi", TEST_MAIL_ALLENATORE, "pass456", "Atletica"));
+        allenatore = GestorePersistenza.salva(new Allenatore("Anna", "Verdi", TEST_MAIL_ALLENATORE, "pass456", "Atletica"));
     }
 
     private Long getConteggioAllenatoriPerAtleta() {
-        return gp.eseguiQuery(
+        return GestorePersistenza.eseguiQuery(
                 "SELECT COUNT(al) FROM Atleta a JOIN a.allenatori al WHERE a.id = :id",
                 Long.class, Map.of("id", atleta.getId())).get(0);
     }
 
     private Long getConteggioSessioniPerAtleta() {
-        return gp.eseguiQuery(
+        return GestorePersistenza.eseguiQuery(
                 "SELECT COUNT(s) FROM SessioneDiAllenamento s WHERE s.atleta.id = :id",
                 Long.class, Map.of("id", atleta.getId())).get(0);
     }
@@ -149,7 +147,7 @@ class AtletaTest {
             Atleta managed = em.find(Atleta.class, atleta.getId());
             managed.setDisciplina("Pallavolo");
         });
-        Atleta reloaded = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
+        Atleta reloaded = GestorePersistenza.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
                 Map.of("id", atleta.getId())).get(0);
         assertEquals("Pallavolo", reloaded.getDisciplina());
     }
@@ -160,7 +158,7 @@ class AtletaTest {
             Atleta managed = em.find(Atleta.class, atleta.getId());
             managed.setLivello(5);
         });
-        Atleta reloaded = gp.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
+        Atleta reloaded = GestorePersistenza.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
                 Map.of("id", atleta.getId())).get(0);
         assertEquals(5, reloaded.getLivello());
     }
@@ -196,7 +194,7 @@ class AtletaTest {
 
         assertEquals(1L, getConteggioAllenatoriPerAtleta());
 
-        Long allenatoreHasAtleta = gp.eseguiQuery(
+        Long allenatoreHasAtleta = GestorePersistenza.eseguiQuery(
                 "SELECT COUNT(a) FROM Allenatore al JOIN al.atleti a WHERE al.id = :idAllenatore AND a.id = :idAtleta",
                 Long.class, Map.of("idAllenatore", allenatore.getId(), "idAtleta", atleta.getId())).get(0);
         assertEquals(1L, allenatoreHasAtleta);

@@ -15,16 +15,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RisultatoTest {
 
-    private GestorePersistenza gp;
 
     private long startId;
 
     @BeforeEach
     void setUp() {
-        gp = new GestorePersistenza();
         pulisciDatabase(); // eventuale pulizia precedente (opzionale)
         // Registra l'ID massimo attuale prima del test
-        startId = gp.eseguiQuery("SELECT COALESCE(MAX(id), 0) FROM Risultato", Long.class, Map.of()).get(0);
+        startId = GestorePersistenza.eseguiQuery("SELECT COALESCE(MAX(id), 0) FROM Risultato", Long.class, Map.of()).get(0);
         // ... resto del setup
     }
 
@@ -87,10 +85,10 @@ class RisultatoTest {
     @Test
     void testRisultatoRipetizioni_Persistence() {
         RisultatoRipetizioni originale = new RisultatoRipetizioni("Persist test", 100);
-        RisultatoRipetizioni salvato = gp.salva(originale);
+        RisultatoRipetizioni salvato = GestorePersistenza.salva(originale);
         assertNotNull(salvato.getId());
 
-        RisultatoRipetizioni trovato = gp.trovaPerId(RisultatoRipetizioni.class, salvato.getId());
+        RisultatoRipetizioni trovato = GestorePersistenza.trovaPerId(RisultatoRipetizioni.class, salvato.getId());
         assertNotNull(trovato);
         assertEquals("Persist test", trovato.getNota());
         assertEquals(100, trovato.getRisultato());
@@ -98,21 +96,21 @@ class RisultatoTest {
 
     @Test
     void testRisultatoRipetizioni_UpdateNota() {
-        RisultatoRipetizioni r = gp.salva(new RisultatoRipetizioni("Vecchia nota", 50));
+        RisultatoRipetizioni r = GestorePersistenza.salva(new RisultatoRipetizioni("Vecchia nota", 50));
         r.setNota("Nota aggiornata");
-        gp.salva(r);
+        GestorePersistenza.salva(r);
 
-        RisultatoRipetizioni reloaded = gp.trovaPerId(RisultatoRipetizioni.class, r.getId());
+        RisultatoRipetizioni reloaded = GestorePersistenza.trovaPerId(RisultatoRipetizioni.class, r.getId());
         assertEquals("Nota aggiornata", reloaded.getNota());
     }
 
     @Test
     void testRisultatoRipetizioni_UpdateRisultato() {
-        RisultatoRipetizioni r = gp.salva(new RisultatoRipetizioni("Nota", 10));
+        RisultatoRipetizioni r = GestorePersistenza.salva(new RisultatoRipetizioni("Nota", 10));
         r.setRisultato(99);
-        gp.salva(r);
+        GestorePersistenza.salva(r);
 
-        RisultatoRipetizioni reloaded = gp.trovaPerId(RisultatoRipetizioni.class, r.getId());
+        RisultatoRipetizioni reloaded = GestorePersistenza.trovaPerId(RisultatoRipetizioni.class, r.getId());
         assertEquals(99, reloaded.getRisultato());
     }
 
@@ -157,10 +155,10 @@ class RisultatoTest {
     void testRisultatoTempo_Persistence() {
         Duration durata = Duration.ofMinutes(15);
         RisultatoTempo originale = new RisultatoTempo("Persist tempo", durata);
-        RisultatoTempo salvato = gp.salva(originale);
+        RisultatoTempo salvato = GestorePersistenza.salva(originale);
         assertNotNull(salvato.getId());
 
-        RisultatoTempo trovato = gp.trovaPerId(RisultatoTempo.class, salvato.getId());
+        RisultatoTempo trovato = GestorePersistenza.trovaPerId(RisultatoTempo.class, salvato.getId());
         assertNotNull(trovato);
         assertEquals("Persist tempo", trovato.getNota());
         assertEquals(durata, trovato.getRisultato());
@@ -168,40 +166,40 @@ class RisultatoTest {
 
     @Test
     void testRisultatoTempo_UpdateNota() {
-        RisultatoTempo r = gp.salva(new RisultatoTempo("Vecchia", Duration.ofSeconds(10)));
+        RisultatoTempo r = GestorePersistenza.salva(new RisultatoTempo("Vecchia", Duration.ofSeconds(10)));
         r.setNota("Aggiornata");
-        gp.salva(r);
+        GestorePersistenza.salva(r);
 
-        RisultatoTempo reloaded = gp.trovaPerId(RisultatoTempo.class, r.getId());
+        RisultatoTempo reloaded = GestorePersistenza.trovaPerId(RisultatoTempo.class, r.getId());
         assertEquals("Aggiornata", reloaded.getNota());
     }
 
     @Test
     void testRisultatoTempo_UpdateRisultato() {
-        RisultatoTempo r = gp.salva(new RisultatoTempo("Nota", Duration.ofMinutes(5)));
+        RisultatoTempo r = GestorePersistenza.salva(new RisultatoTempo("Nota", Duration.ofMinutes(5)));
         Duration nuova = Duration.ofDays(2);
         r.setRisultato(nuova);
-        gp.salva(r);
+        GestorePersistenza.salva(r);
 
-        RisultatoTempo reloaded = gp.trovaPerId(RisultatoTempo.class, r.getId());
+        RisultatoTempo reloaded = GestorePersistenza.trovaPerId(RisultatoTempo.class, r.getId());
         assertEquals(nuova, reloaded.getRisultato());
     }
 
     // ---------- Polymorphic queries ----------
     @Test
     void testPolymorphicQuery_AllRisultati() {
-        RisultatoRipetizioni rip = gp.salva(new RisultatoRipetizioni("Rip", 10));
-        RisultatoTempo tempo = gp.salva(new RisultatoTempo("Tempo", Duration.ofMinutes(20)));
+        RisultatoRipetizioni rip = GestorePersistenza.salva(new RisultatoRipetizioni("Rip", 10));
+        RisultatoTempo tempo = GestorePersistenza.salva(new RisultatoTempo("Tempo", Duration.ofMinutes(20)));
 
-        List<Risultato> tutti = gp.eseguiQuery("SELECT r FROM Risultato r", Risultato.class, Map.of());
+        List<Risultato> tutti = GestorePersistenza.eseguiQuery("SELECT r FROM Risultato r", Risultato.class, Map.of());
         assertFalse(tutti.isEmpty());
 
-        List<Risultato> soloRipetizioni = gp.eseguiQuery(
+        List<Risultato> soloRipetizioni = GestorePersistenza.eseguiQuery(
                 "SELECT r FROM Risultato r WHERE TYPE(r) = RisultatoRipetizioni",
                 Risultato.class, Map.of());
         assertFalse(soloRipetizioni.isEmpty());
         assertTrue(soloRipetizioni.stream().anyMatch(r -> r.getId().equals(rip.getId())));
-        List<Risultato> soloTempo = gp.eseguiQuery(
+        List<Risultato> soloTempo = GestorePersistenza.eseguiQuery(
                 "SELECT r FROM Risultato r WHERE TYPE(r) = RisultatoTempo",
                 Risultato.class, Map.of());
         assertFalse(soloTempo.isEmpty());
@@ -212,10 +210,10 @@ class RisultatoTest {
     @Test
     void testRisultatoRipetizioni_NullValues() {
         RisultatoRipetizioni r = new RisultatoRipetizioni(null, null);
-        RisultatoRipetizioni saved = gp.salva(r);
+        RisultatoRipetizioni saved = GestorePersistenza.salva(r);
         assertNotNull(saved.getId());
 
-        RisultatoRipetizioni found = gp.trovaPerId(RisultatoRipetizioni.class, saved.getId());
+        RisultatoRipetizioni found = GestorePersistenza.trovaPerId(RisultatoRipetizioni.class, saved.getId());
         assertNull(found.getNota());
         assertNull(found.getRisultato());
     }
@@ -223,10 +221,10 @@ class RisultatoTest {
     @Test
     void testRisultatoTempo_NullValues() {
         RisultatoTempo r = new RisultatoTempo(null, null);
-        RisultatoTempo saved = gp.salva(r);
+        RisultatoTempo saved = GestorePersistenza.salva(r);
         assertNotNull(saved.getId());
 
-        RisultatoTempo found = gp.trovaPerId(RisultatoTempo.class, saved.getId());
+        RisultatoTempo found = GestorePersistenza.trovaPerId(RisultatoTempo.class, saved.getId());
         assertNull(found.getNota());
         assertNull(found.getRisultato());
     }

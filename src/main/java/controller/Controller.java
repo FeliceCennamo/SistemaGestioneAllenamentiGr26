@@ -4,23 +4,23 @@ import entity.*;
 
 import java.util.*;
 
-public class Control_session {
+public class Controller {
 
     private Long id_utente_autenticato =77L;
-    private static Control_session instance;
+    private static Controller instance;
 
     /**
      * Costruttore di GestoreSessioni
      */
-    private Control_session() {}
+    private Controller() {}
 
     /**
      * Fornisce l'istanza singola di GestoreSessioni, se essa non esiste viene creata
      * @return Istanza di gestoreSessioni operativa
      */
-    public static Control_session getInstance() {
+    public static Controller getInstance() {
         if (instance == null) {
-            instance = new Control_session();
+            instance = new Controller();
         }
 
         return instance;

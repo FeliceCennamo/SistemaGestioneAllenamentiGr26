@@ -3,7 +3,7 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import controller.Control_session;
+import controller.Controller;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.Map;
 
-public class SchedaSingola extends JFrame {
+public class SchedaSingolaSessione extends JFrame {
 
     private JButton VISUALIZZADETTAGLIOButton;
     private JPanel PanelBase;
@@ -28,13 +28,13 @@ public class SchedaSingola extends JFrame {
     private JLabel Stato_real;
     private JLabel Data_real;
 
-    private FormSessioniDiAllenamento parentForm;
+    private FormListaSessioni parentForm;
 
 
-    public SchedaSingola(Long id_sessione, FormSessioniDiAllenamento parentForm) {
+    public SchedaSingolaSessione(Long id_sessione, FormListaSessioni parentForm) {
 
         this.parentForm = parentForm;
-        Control_session controller = Control_session.getInstance();
+        Controller controller = Controller.getInstance();
 
         Map<String, Object> dettaglio = controller.getDettaglioSessionePerId(id_sessione);
 
@@ -69,7 +69,7 @@ public class SchedaSingola extends JFrame {
 
     private void dettaglioEsercizi(Long id_sessione) {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(PanelBase);
-        FormEsercizi formEsercizi = new FormEsercizi(id_sessione, parentFrame, parentForm);
+        FormListaEsercizi formEsercizi = new FormListaEsercizi(id_sessione, parentFrame, parentForm);
     }
 
     {
