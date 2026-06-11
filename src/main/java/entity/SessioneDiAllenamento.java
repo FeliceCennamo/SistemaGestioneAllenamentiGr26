@@ -173,7 +173,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param titolo Titolo
      *
      */
-    public void setTitolo(String titolo) {
+    protected void setTitolo(String titolo) {
         this.titolo = titolo;
     }
 
@@ -183,7 +183,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param descrizione Descrizione
      *
      */
-    public void setDescrizione(String descrizione) {
+    protected void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
@@ -193,7 +193,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param dataSvolgimento Data di Svolgimento
      *
      */
-    public void setDataSvolgimento(LocalDate dataSvolgimento) {
+    protected void setDataSvolgimento(LocalDate dataSvolgimento) {
         this.dataSvolgimento = dataSvolgimento;
     }
 
@@ -203,7 +203,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param durata Durata
      *
      */
-    public void setDurata(Duration durata) {
+    protected void setDurata(Duration durata) {
         this.durata = durata;
     }
 
@@ -213,7 +213,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param stato Stato
      *
      */
-    public void setStato(String stato) throws IllegalArgumentException {
+    protected void setStato(String stato) throws IllegalArgumentException {
         switch (stato) {
             case "COMPLETATA":
                 this.stato = StatoSessione.COMPLETATA;
@@ -235,7 +235,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param atleta Atleta
      *
      */
-    public void setAtleta(Atleta atleta) {
+    protected void setAtleta(Atleta atleta) {
         this.atleta = atleta;
         atleta.getSessioni().add(this);
     }
@@ -246,7 +246,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param allenatore Allenatore
      *
      */
-    public void setAllenatore(Allenatore allenatore) {
+    protected void setAllenatore(Allenatore allenatore) {
         this.allenatore = allenatore;
         allenatore.getSessioni().add(this);
     }
@@ -257,7 +257,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @return Lista degli esercizi che compongono la Sessione
      *
      */
-    public List<Esercizio> getEsercizi() {
+    protected List<Esercizio> getEsercizi() {
         return esercizi;
     }
 
@@ -280,7 +280,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param risultato    Risultato (Integer / Duration)
      *
      */
-    public void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException, ClassCastException {
+    protected void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException, ClassCastException {
         for (Esercizio e : esercizi) {
             if (e.getId().equals(id_esercizio)) {
                 if (risultato == null)

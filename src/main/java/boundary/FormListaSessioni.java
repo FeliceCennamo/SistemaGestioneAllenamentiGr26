@@ -42,9 +42,11 @@ public class FormListaSessioni {
 
         LocalDate data_filtro = inizializzaData();
 
-        for (Long s : sessioni) {
-            Map<String, Object> dettaglio = c_session.getDettaglioSessionePerId(s);
-            impaginaSessione(s, dettaglio, data_filtro);
+        if (data_filtro != null) {
+            for (Long s : sessioni) {
+                Map<String, Object> dettaglio = c_session.getDettaglioSessionePerId(s);
+                impaginaSessione(s, dettaglio, data_filtro);
+            }
         }
     }
 

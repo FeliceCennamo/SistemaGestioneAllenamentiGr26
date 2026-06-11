@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Controller {
 
-    private Long id_utente_autenticato =77L;
+    private Long id_utente_autenticato =87L;
     private static Controller instance;
 
     /**

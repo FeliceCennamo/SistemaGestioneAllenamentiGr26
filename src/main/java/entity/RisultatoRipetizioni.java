@@ -42,7 +42,7 @@ public class RisultatoRipetizioni extends Risultato {
      *
      */
     @Override
-    public void setRisultato(Object ripetizioni) throws ClassCastException {
+    protected void setRisultato(Object ripetizioni) throws ClassCastException {
         if (ripetizioni instanceof Integer || ripetizioni == null)
             this.ripetizioni = (Integer) ripetizioni;
         else

@@ -16,7 +16,7 @@ public abstract class Risultato {
     public Risultato() {
     }
 
-    public Risultato(String nota) {
+    protected Risultato(String nota) {
         this.nota = nota;
     }
 
@@ -24,13 +24,13 @@ public abstract class Risultato {
         return this.nota;
     }
 
-    public void setNota(String nota) {
+    protected void setNota(String nota) {
         this.nota = nota;
     }
 
     public abstract Object getRisultato();
 
-    public abstract void setRisultato(Object risultato);
+    protected abstract void setRisultato(Object risultato);
 
     public Long getId() {
         return id;

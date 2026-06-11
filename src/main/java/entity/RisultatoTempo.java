@@ -46,7 +46,7 @@ public class RisultatoTempo extends Risultato {
      *
      */
     @Override
-    public void setRisultato(Object tempo) throws ClassCastException {
+    protected void setRisultato(Object tempo) throws ClassCastException {
         if (tempo instanceof Duration || tempo == null)
             this.tempo = (Duration) tempo;
         else

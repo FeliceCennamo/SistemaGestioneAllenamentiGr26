@@ -57,7 +57,7 @@ public abstract class Utente {
      * @param password Password Utente
      *
      */
-    public Utente(String nome, String cognome, String mail, String password) {
+    protected Utente(String nome, String cognome, String mail, String password) {
         this.nome = nome;
         this.cognome = cognome;
         this.mail = mail;
@@ -81,7 +81,7 @@ public abstract class Utente {
      * @param nome Nome
      *
      */
-    public void setNome(String nome) {
+    protected void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -101,7 +101,7 @@ public abstract class Utente {
      * @param cognome Cognome
      *
      */
-    public void setCognome(String cognome) {
+    protected void setCognome(String cognome) {
         this.cognome = cognome;
     }
 
@@ -121,7 +121,7 @@ public abstract class Utente {
      * @param mail E-mail
      *
      */
-    public void setMail(String mail) {
+    protected void setMail(String mail) {
         this.mail = mail;
     }
 
@@ -141,7 +141,7 @@ public abstract class Utente {
      * @param password Password
      *
      */
-    public void setPassword(String password) {
+    protected void setPassword(String password) {
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
@@ -159,7 +159,7 @@ public abstract class Utente {
         return disciplinaPrevalente;
     }
 
-    public void setDisciplinaPrevalente(String disciplinaPrevalente) {
+    protected void setDisciplinaPrevalente(String disciplinaPrevalente) {
         this.disciplinaPrevalente = disciplinaPrevalente;
     }
 }

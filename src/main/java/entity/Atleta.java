@@ -29,13 +29,13 @@ public class Atleta extends Utente {
     public Atleta() {
     }
 
-    public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello) {
+    protected Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello) {
         super(nome, cognome, mail, password);
         this.disciplina = disciplina;
         this.livello = livello;
     }
 
-    public Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello, Set<String> obiettivi) {
+    protected Atleta(String nome, String cognome, String mail, String password, String disciplina, int livello, Set<String> obiettivi) {
         super(nome, cognome, mail, password);
         this.disciplina = disciplina;
         this.livello = livello;
@@ -48,7 +48,7 @@ public class Atleta extends Utente {
      * @return Lista di Obiettivi
      *
      */
-    public Set<String> getObiettivo() {
+    protected Set<String> getObiettivo() {
         return this.obiettivi;
     }
 
@@ -78,7 +78,7 @@ public class Atleta extends Utente {
      * @param obiettivi Lista di Obiettivi
      *
      */
-    public void setObiettivo(Set<String> obiettivi) {
+    protected void setObiettivo(Set<String> obiettivi) {
         this.obiettivi = obiettivi;
     }
 
@@ -88,7 +88,7 @@ public class Atleta extends Utente {
      * @param disciplina Disciplina
      *
      */
-    public void setDisciplina(String disciplina) {
+    protected void setDisciplina(String disciplina) {
         this.disciplina = disciplina;
     }
 
@@ -98,7 +98,7 @@ public class Atleta extends Utente {
      * @param livello Livello
      *
      */
-    public void setLivello(int livello) {
+    protected void setLivello(int livello) {
         this.livello = livello;
     }
 
@@ -108,7 +108,7 @@ public class Atleta extends Utente {
      * @return Lista Allenatori
      *
      */
-    public Set<Allenatore> getAllenatori() {
+    protected Set<Allenatore> getAllenatori() {
         return this.allenatori;
     }
 
@@ -118,7 +118,7 @@ public class Atleta extends Utente {
      * @param allenatore Allenatore da aggiungere alla lista
      *
      */
-    public void addAllenatore(Allenatore allenatore) {
+    protected void addAllenatore(Allenatore allenatore) {
         this.allenatori.add(allenatore);
     }
 
@@ -128,7 +128,7 @@ public class Atleta extends Utente {
      * @return Lista di Sessioni assegnate all'Atleta
      *
      */
-    public Set<SessioneDiAllenamento> getSessioni() {
+    protected Set<SessioneDiAllenamento> getSessioni() {
         return this.sessioni;
     }
 }

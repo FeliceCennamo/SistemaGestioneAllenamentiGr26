@@ -130,7 +130,7 @@ public class FormListaEsercizi extends JFrame {
             parentForm.refreshPanelCentrale();
             previousFrame.setVisible(true);
             currentFrame.dispose();
-        } catch (NumberFormatException | ClassCastException e) {
+        } catch (ClassCastException  | IllegalArgumentException e) {
             JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi maggiori di zero",
                     "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }

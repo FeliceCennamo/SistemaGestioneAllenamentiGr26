@@ -58,15 +58,15 @@ public class Allenatore extends Utente {
         super(nome, cognome, mail, password, disciplinaPrevalente);
     }
 
-    public Set<Atleta> getAtleti() {
+    protected Set<Atleta> getAtleti() {
         return this.atleti;
     }
 
-    public void addAtleta(Atleta a) {
+    protected void addAtleta(Atleta a) {
         atleti.add(a);
     }
 
-    public void removeAtleta(Atleta a) {
+    protected void removeAtleta(Atleta a) {
         atleti.remove(a);
         a.getAllenatori().remove(this);
     }
@@ -80,7 +80,7 @@ public class Allenatore extends Utente {
         throw new ResourceNotFoundException("Atleta non trovato");
     }
 
-    public Set<SessioneDiAllenamento> getSessioni() {
+    protected Set<SessioneDiAllenamento> getSessioni() {
         return this.sessioni;
     }
 

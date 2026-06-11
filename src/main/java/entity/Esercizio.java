@@ -79,15 +79,15 @@ public class Esercizio {
         return risultato;
     }
 
-    public void setNome(String nome) {
+    protected void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setDescrizione(String descrizione) {
+    protected void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
-    public void setTipo(int tipo) throws IllegalArgumentException {
+    protected void setTipo(int tipo) throws IllegalArgumentException {
         if (tipo == 0)
             this.tipo = TipoEsercizio.RIPETIZIONI;
         else if (tipo == 1)
@@ -97,7 +97,7 @@ public class Esercizio {
         }
     }
 
-    public void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException {
+    protected void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException {
 
         boolean esito = false;
         if (this.tipo == TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
@@ -120,7 +120,7 @@ public class Esercizio {
             throw new IllegalArgumentException("Tipo di risultato non valido");
     }
 
-    public void setRisultato(String nota) throws IllegalArgumentException {
+    protected void setRisultato(String nota) throws IllegalArgumentException {
         if (this.tipo == TipoEsercizio.TEMPO) {
             this.risultato = new RisultatoTempo(nota, null);
 

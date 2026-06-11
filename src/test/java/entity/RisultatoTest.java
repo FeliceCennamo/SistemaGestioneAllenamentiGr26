@@ -35,13 +35,17 @@ class RisultatoTest {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
-            // Elimina solo le righe con ID superiore a startId (quelle create durante il test)
-            em.createNativeQuery("DELETE FROM risultati WHERE id > :startId")
-                    .setParameter("startId", startId)
-                    .executeUpdate();
+            // 1. Elimina i riferimenti nella tabella di join
+            em.createNativeQuery(
+                    "DELETE se FROM sessione_esercizio se " +
+                            "WHERE se.esercizio_id IN (SELECT id FROM esercizi WHERE nome LIKE 'TestEs%')"
+            ).executeUpdate();
+            // 2. Elimina gli esercizi di test
+            em.createNativeQuery("DELETE FROM esercizi WHERE nome LIKE 'TestEs%'").executeUpdate();
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw new RuntimeException("Errore durante la pulizia del database", e);
         } finally {
             em.close();
         }
