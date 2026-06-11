@@ -64,7 +64,7 @@ public class Atleta extends Utente {
      * @param disciplina disciplina sportiva praticata
      * @param livello    livello di esperienza (es. 1 = principiante)
      */
-    protected Atleta(String nome, String cognome, String mail, String password,
+    public Atleta(String nome, String cognome, String mail, String password,
                      String disciplina, int livello) {
         super(nome, cognome, mail, password);
         this.disciplina = disciplina;
@@ -82,7 +82,7 @@ public class Atleta extends Utente {
      * @param livello    livello di esperienza
      * @param obiettivi  insieme degli obiettivi personali
      */
-    protected Atleta(String nome, String cognome, String mail, String password,
+    public Atleta(String nome, String cognome, String mail, String password,
                      String disciplina, int livello, Set<String> obiettivi) {
         super(nome, cognome, mail, password);
         this.disciplina = disciplina;

@@ -32,20 +32,52 @@ public class DatabaseTest {
         try {
             em.getTransaction().begin();
 
-            // Delete in the correct order (child tables first)
-            em.createNativeQuery("DELETE FROM atleta_obiettivo WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
-            em.createNativeQuery("DELETE FROM allenatore_atleta WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
-            em.createNativeQuery("DELETE FROM sessione_esercizio WHERE sessione_id IN (SELECT id FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com'))").executeUpdate();
-            em.createNativeQuery("DELETE FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')").executeUpdate();
-            em.createNativeQuery("DELETE FROM atleti WHERE mail = 'luca.bianchi@test.com'").executeUpdate();
+            // --- Pulizia atleta (invariata) ---
+            em.createNativeQuery(
+                    "DELETE FROM atleta_obiettivo WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')"
+            ).executeUpdate();
+            em.createNativeQuery(
+                    "DELETE FROM allenatore_atleta WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')"
+            ).executeUpdate();
+            em.createNativeQuery(
+                    "DELETE FROM sessione_esercizio WHERE sessione_id IN (SELECT id FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com'))"
+            ).executeUpdate();
+            em.createNativeQuery(
+                    "DELETE FROM sessioni WHERE atleta_id IN (SELECT id FROM atleti WHERE mail = 'luca.bianchi@test.com')"
+            ).executeUpdate();
+            em.createNativeQuery(
+                    "DELETE FROM atleti WHERE mail = 'luca.bianchi@test.com'"
+            ).executeUpdate();
 
-            // Delete Risultati
-            em.createNativeQuery("DELETE FROM risultati WHERE nota IN ('NotaTest85693', 'testTutti1', 'testTutti2', 'queryParam', 'perOttieniTutti') OR (nota IS NULL AND (ripetizioni IS NULL OR tempo IS NULL))").executeUpdate();
+            // --- Pulizia risultati: rispettiamo l'ordine delle dipendenze ---
+            // 1. Rimuovere i collegamenti in sessione_esercizio verso gli esercizi target
+            em.createNativeQuery(
+                    "DELETE FROM sessione_esercizio WHERE esercizio_id IN (" +
+                            "SELECT id FROM esercizi WHERE risultato IN (" +
+                            "SELECT id FROM risultati WHERE " +
+                            "nota IN ('NotaTest85693','testTutti1','testTutti2','queryParam','perOttieniTutti') " +
+                            "OR (nota IS NULL AND (ripetizioni IS NULL OR tempo IS NULL))))"
+            ).executeUpdate();
+
+            // 2. Eliminare gli esercizi che puntano ai risultati da cancellare
+            em.createNativeQuery(
+                    "DELETE FROM esercizi WHERE risultato IN (" +
+                            "SELECT id FROM risultati WHERE " +
+                            "nota IN ('NotaTest85693','testTutti1','testTutti2','queryParam','perOttieniTutti') " +
+                            "OR (nota IS NULL AND (ripetizioni IS NULL OR tempo IS NULL)))"
+            ).executeUpdate();
+
+            // 3. Infine cancellare i risultati
+            em.createNativeQuery(
+                    "DELETE FROM risultati WHERE " +
+                            "nota IN ('NotaTest85693','testTutti1','testTutti2','queryParam','perOttieniTutti') " +
+                            "OR (nota IS NULL AND (ripetizioni IS NULL OR tempo IS NULL))"
+            ).executeUpdate();
 
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            // Log or ignore – the test may fail anyway
+            // Eventualmente logga l'errore
         } finally {
             em.close();
         }
