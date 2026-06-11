@@ -2,47 +2,42 @@ package entity;
 
 import database.GestorePersistenza;
 import exceptions.ResourceNotFoundException;
-import jakarta.persistence.metamodel.EntityType;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
- * Fornisce i metodi per la gestione degli utenti registrati al sistema
- * Il costruttore è privato, di conseguenza richiamare il metodo gestoreUtente.getInstance()
+ * Gestore centralizzato per la ricerca degli utenti (atleti e allenatori)
+ * registrati nel sistema.
+ * <p>
+ * Implementa il pattern Singleton: l'unica istanza disponibile si ottiene
+ * tramite {@link #getInstance()}.
+ * </p>
  */
 public class GestoreUtenti {
-    
-    /**
-     * Istanza statica del gestoreUtenti
-     */
+
     private static GestoreUtenti instance;
 
-    /**
-     * Costruttore di GestoreUtenti
-     */
+    // Costruttore privato per impedire l'istanziazione diretta
     private GestoreUtenti() {
     }
 
     /**
-     * Fornisce l'istanza singola di GestoreUtente, se essa non esiste viene creata
+     * Fornisce l'istanza Singleton del gestore, creandola se non ancora
+     * inizializzata.
      *
-     * @return Istanza operativa di gestoreUtente
+     * @return l'istanza condivisa di {@code GestoreUtenti}
      */
     public static GestoreUtenti getInstance() {
         if (instance == null) {
             instance = new GestoreUtenti();
         }
-
         return instance;
     }
 
     /**
-     * Dato in ingresso l'id dell'atleta, restituisce l'oggetto.
+     * Cerca un atleta a partire dal suo identificativo.
      *
-     * @param id_atleta Id dell'atleta che si vuole ricercare
-     * @return Oggetto atleta che è stato trovato
-     * @throws ResourceNotFoundException
+     * @param id_atleta identificativo dell'atleta da cercare
+     * @return l'atleta trovato
+     * @throws ResourceNotFoundException se non esiste un atleta con l'id specificato
      */
     public Atleta cercaAtleta(Long id_atleta) throws ResourceNotFoundException {
         Atleta a = GestorePersistenza.trovaPerId(Atleta.class, id_atleta);
@@ -53,11 +48,11 @@ public class GestoreUtenti {
     }
 
     /**
-     * Dato in ingresso l'id dell'allenatore, restituisce l'oggetto.
+     * Cerca un allenatore a partire dal suo identificativo.
      *
-     * @param id_allenatore Id dell'allenatore che si vuole ricercare
-     * @return Oggetto allenatore che è stato trovato
-     * @throws ResourceNotFoundException
+     * @param id_allenatore identificativo dell'allenatore da cercare
+     * @return l'allenatore trovato
+     * @throws ResourceNotFoundException se non esiste un allenatore con l'id specificato
      */
     public Allenatore cercaAllenatore(Long id_allenatore) throws ResourceNotFoundException {
         Allenatore a = GestorePersistenza.trovaPerId(Allenatore.class, id_allenatore);

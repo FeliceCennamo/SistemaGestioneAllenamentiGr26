@@ -4,6 +4,17 @@ import jakarta.persistence.*;
 
 import java.time.Duration;
 
+/**
+ * Rappresenta un esercizio fisico, caratterizzato da un tipo
+ * (a ripetizioni o a tempo), un risultato atteso e un risultato
+ * effettivo opzionale.
+ * <p>
+ * La logica di gestione del risultato atteso è incapsulata
+ * nell'embeddable {@link RisultatoAtteso}, mentre il risultato
+ * effettivo viene modellato tramite un'entità separata
+ * {@link Risultato} (con sottoclassi specializzate).
+ * </p>
+ */
 @Entity
 @Table(name = "esercizi")
 public class Esercizio {
@@ -15,34 +26,62 @@ public class Esercizio {
     private String nome;
     private String descrizione;
 
+    /**
+     * Tipologia di esercizio: a ripetizioni o a tempo.
+     * Mappato come stringa nel database.
+     */
     @Enumerated(EnumType.STRING)
-    private TipoEsercizio tipo; // Enum semplice senza dati variabili
+    private TipoEsercizio tipo;
 
+    /**
+     * Valore target dell'esercizio (es. 15 ripetizioni o 30 minuti).
+     */
     @Embedded
     private RisultatoAtteso risultatoAtteso;
 
-
+    /**
+     * Risultato effettivamente conseguito durante una sessione.
+     * Relazione uno-a-uno con cascade completo.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "risultato")
     private Risultato risultato = null;
 
+    /**
+     * Costruttore di default obbligatorio per JPA.
+     */
     public Esercizio() {
     }
 
-    // Costruttore per ripetizioni
-    public Esercizio(String nome, String descrizione, int ripetizioni) throws IllegalArgumentException {
+    /**
+     * Crea un esercizio di tipo ripetizioni con il risultato atteso
+     * specificato.
+     *
+     * @param nome        nome dell'esercizio
+     * @param descrizione breve descrizione
+     * @param ripetizioni numero di ripetizioni target (deve essere positivo)
+     * @throws IllegalArgumentException se {@code ripetizioni} è minore o uguale a zero
+     */
+    public Esercizio(String nome, String descrizione, int ripetizioni) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.tipo = TipoEsercizio.RIPETIZIONI;
 
-        if (ripetizioni > 0)
+        if (ripetizioni > 0) {
             this.risultatoAtteso = new RisultatoAtteso(ripetizioni);
-        else
-            throw new IllegalArgumentException("Inserito un numero di ripetzioni negativo");
-
+        } else {
+            throw new IllegalArgumentException("Il numero di ripetizioni deve essere positivo");
+        }
     }
 
-    // Costruttore per tempo (Duration)
+    /**
+     * Crea un esercizio di tipo tempo con il risultato atteso espresso
+     * come durata.
+     *
+     * @param nome        nome dell'esercizio
+     * @param descrizione breve descrizione
+     * @param durata      durata target (es. 30 minuti)
+     */
     public Esercizio(String nome, String descrizione, Duration durata) {
         this.nome = nome;
         this.descrizione = descrizione;
@@ -62,19 +101,39 @@ public class Esercizio {
         return descrizione;
     }
 
-    // Ragionare se fargli ritornare una stringa o tradurre l'intero dopo e se ha senso il defoult a null
+    /**
+     * Restituisce il tipo di esercizio.
+     *
+     * @return {@link TipoEsercizio#RIPETIZIONI} o {@link TipoEsercizio#TEMPO}
+     */
     public TipoEsercizio getTipo() {
-        return this.tipo;
+        return tipo;
     }
 
+    /**
+     * Restituisce il risultato atteso sotto forma di oggetto generico.
+     * <p>
+     * Il tipo concreto dipende dal {@link #tipo}:
+     * <ul>
+     *   <li>{@link TipoEsercizio#RIPETIZIONI} → {@link Integer}</li>
+     *   <li>{@link TipoEsercizio#TEMPO} → {@link Duration}</li>
+     * </ul>
+     *
+     * @return il valore atteso, oppure {@code null} se non impostato
+     */
     public Object getRisultatoAtteso() {
-        if (tipo == TipoEsercizio.RIPETIZIONI)
+        if (tipo == TipoEsercizio.RIPETIZIONI) {
             return this.risultatoAtteso.getRipetizioni();
-        else
+        } else {
             return this.risultatoAtteso.getDurata();
+        }
     }
 
-
+    /**
+     * Restituisce il risultato effettivo registrato per questo esercizio.
+     *
+     * @return l'entità {@link Risultato} associata, oppure {@code null}
+     */
     public Risultato getRisultato() {
         return risultato;
     }
@@ -87,67 +146,110 @@ public class Esercizio {
         this.descrizione = descrizione;
     }
 
-    protected void setTipo(int tipo) throws IllegalArgumentException {
-        if (tipo == 0)
+    /**
+     * Imposta il tipo di esercizio a partire da un intero.
+     *
+     * @param tipo 0 per {@link TipoEsercizio#RIPETIZIONI}, 1 per {@link TipoEsercizio#TEMPO}
+     * @throws IllegalArgumentException se il valore non è 0 o 1
+     */
+    protected void setTipo(int tipo) {
+        if (tipo == 0) {
             this.tipo = TipoEsercizio.RIPETIZIONI;
-        else if (tipo == 1)
+        } else if (tipo == 1) {
             this.tipo = TipoEsercizio.TEMPO;
-        else{
+        } else {
             throw new IllegalArgumentException("Valori accettati solo 0 e 1");
         }
     }
 
-    protected void setRisultatoAtteso(Object risultatoAtteso) throws IllegalArgumentException {
+    /**
+     * Modifica il risultato atteso, adattandolo al tipo di esercizio.
+     *
+     * @param risultatoAtteso oggetto {@link Integer} per ripetizioni,
+     *                        o {@link Duration} per tempo
+     * @throws IllegalArgumentException se il tipo di dato non corrisponde
+     *                                  al tipo di esercizio corrente o se
+     *                                  l'aggiornamento fallisce
+     */
+    protected void setRisultatoAtteso(Object risultatoAtteso) {
+        boolean successo = false;
+        if (this.tipo == TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer) {
+            successo = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);
+        } else if (this.tipo == TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration) {
+            successo = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);
+        }
 
-        boolean esito = false;
-        if (this.tipo == TipoEsercizio.RIPETIZIONI && risultatoAtteso instanceof Integer)
-            esito = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);
-        else if (this.tipo == TipoEsercizio.TEMPO && risultatoAtteso instanceof Duration)
-            esito = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);
-
-        if (!esito)
-            throw new IllegalArgumentException("Risultato non valido");
+        if (!successo) {
+            throw new IllegalArgumentException("Risultato atteso non valido per il tipo di esercizio");
+        }
     }
 
-
-    public void setRisultato(Object risultato, String nota) throws IllegalArgumentException {
+    /**
+     * Registra il risultato effettivo dell'esercizio comprensivo di valore e nota.
+     *
+     * @param risultato valore ottenuto: {@link Duration} per esercizi a tempo,
+     *                  {@link Integer} per ripetizioni
+     * @param nota      eventuale annotazione testuale
+     * @throws IllegalArgumentException se il tipo di dato non corrisponde al tipo esercizio
+     */
+    public void setRisultato(Object risultato, String nota) {
         if (this.tipo == TipoEsercizio.TEMPO && risultato instanceof Duration) {
             this.risultato = new RisultatoTempo(nota, (Duration) risultato);
-
         } else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer) {
             this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);
-        } else
-            throw new IllegalArgumentException("Tipo di risultato non valido");
+        } else {
+            throw new IllegalArgumentException("Tipo di risultato non valido per questo esercizio");
+        }
     }
 
-    protected void setRisultato(String nota) throws IllegalArgumentException {
+    /**
+     * Registra un risultato con la sola nota, lasciando il valore numerico/durata vuoto.
+     *
+     * @param nota annotazione testuale
+     * @throws IllegalArgumentException se il tipo esercizio non è supportato
+     */
+    protected void setRisultato(String nota) {
         if (this.tipo == TipoEsercizio.TEMPO) {
             this.risultato = new RisultatoTempo(nota, null);
-
         } else if (this.tipo == TipoEsercizio.RIPETIZIONI) {
             this.risultato = new RisultatoRipetizioni(nota, null);
-        } else
-            throw new IllegalArgumentException("Tipo di risultato non valido");
+        } else {
+            throw new IllegalArgumentException("Tipo di esercizio non supportato");
+        }
     }
 
-    // Embeddable per memorizzare il risultato atteso in modo polimorfico
+    /**
+     * Classe embeddable che memorizza il risultato atteso in modo polimorfico:
+     * può contenere un numero di ripetizioni o una durata.
+     */
     @Embeddable
     static class RisultatoAtteso {
         private Integer ripetizioni;
-        private Duration durata; // JPA può mappare Duration come stringa ISO-8601 con @Convert o usando un AttributeConverter
+        private Duration durata; // Convertito in stringa ISO-8601 tramite AttributeConverter globale
 
+        /**
+         * Costruttore vuoto per JPA.
+         */
         public RisultatoAtteso() {
             this.ripetizioni = null;
             this.durata = null;
         }
 
-        // Costruttore per ripetizioni
+        /**
+         * Crea un risultato atteso basato su ripetizioni.
+         *
+         * @param ripetizioni numero target di ripetizioni
+         */
         public RisultatoAtteso(int ripetizioni) {
             this.ripetizioni = ripetizioni;
             this.durata = null;
         }
 
-        // Costruttore per durata
+        /**
+         * Crea un risultato atteso basato su durata.
+         *
+         * @param durata durata target
+         */
         public RisultatoAtteso(Duration durata) {
             this.durata = durata;
             this.ripetizioni = null;
@@ -161,14 +263,23 @@ public class Esercizio {
             return durata;
         }
 
+        /**
+         * Modifica il valore atteso, accettando solo il tipo coerente
+         * con lo stato corrente dell'oggetto.
+         *
+         * @param risultato {@link Integer} se l'oggetto è stato creato per ripetizioni,
+         *                  {@link Duration} se per tempo
+         * @return {@code true} se l'aggiornamento è riuscito, {@code false} altrimenti
+         */
         public boolean setRisultatoAtteso(Object risultato) {
-            if (risultato instanceof Integer && this.durata == null)
+            if (risultato instanceof Integer && this.durata == null) {
                 this.ripetizioni = (Integer) risultato;
-            else if (risultato instanceof Duration && this.ripetizioni == null)
+                return true;
+            } else if (risultato instanceof Duration && this.ripetizioni == null) {
                 this.durata = (Duration) risultato;
-            else
-                return false;
-            return true;
+                return true;
+            }
+            return false;
         }
     }
 }

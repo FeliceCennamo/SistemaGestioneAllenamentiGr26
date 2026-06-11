@@ -9,13 +9,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Gestore centralizzato per le operazioni di persistenza JPA.
+ * <p>
+ * Fornisce metodi statici per le operazioni CRUD di base e per l'esecuzione
+ * di query JPQL parametriche. Tutti i metodi si occupano di ottenere e
+ * rilasciare correttamente l'{@link EntityManager} e di gestire le transazioni
+ * quando necessario.
+ * </p>
+ *
+ * <p><b>Utilizzo tipico:</b>
+ * <pre>{@code
+ *   // Salvataggio di una singola entità
+ *   Utente utente = GestorePersistenza.salva(nuovoUtente);
+ *
+ *   // Recupero per id
+ *   Utente trovato = GestorePersistenza.trovaPerId(Utente.class, 1L);
+ *
+ *   // Query parametrica
+ *   List<Utente> utenti = GestorePersistenza.eseguiQuery(
+ *       "SELECT u FROM Utente u WHERE u.cognome = :cognome",
+ *       Utente.class,
+ *       Map.of("cognome", "Rossi")
+ *   );
+ * }</pre>
+ */
 public class GestorePersistenza {
 
     /**
-     * Inserisce un oggetto nel database
+     * Persiste un oggetto nel database, restituendo l'istanza gestita.
+     * <p>
+     * Se l'oggetto passato è nuovo (privo di id o con id non presente) viene
+     * effettuato un inserimento; se invece l'id corrisponde a una riga esistente
+     * i dati vengono aggiornati. In entrambi i casi si utilizza
+     * {@link EntityManager#merge(Object)} che restituisce l'entità managed.
+     * </p>
      *
-     * @param oggetto oggetto da voler inserire
-     *
+     * @param <T>    tipo dell'entità
+     * @param oggetto l'entità da salvare (può essere in stato detached o new)
+     * @return l'istanza managed dopo il salvataggio
+     * @throws RuntimeException in caso di errore di persistenza (la transazione
+     *                          viene rollbackata)
      */
     public static <T> T salva(T oggetto) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
@@ -25,137 +59,137 @@ public class GestorePersistenza {
             em.getTransaction().commit();
             return managed;
         } catch (RuntimeException e) {
-
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-
             throw e;
-
         } finally {
             em.close();
         }
     }
 
     /**
-     * Inserisce una lista di oggetti nel database
+     * Salva in blocco una lista eterogenea di oggetti in un'unica transazione.
+     * <p>
+     * Ogni oggetto viene passato a {@link EntityManager#merge(Object)}.
+     * In caso di errore l'intera transazione viene annullata.
+     * </p>
      *
-     * @param oggetti Lista eterogenea di oggetti da voler inserire
-     *
+     * @param oggetti uno o più oggetti entità da persistere/aggiornare
+     * @throws RuntimeException se si verifica un errore durante il merge
+     *                          o il commit
      */
     public static void salvaTutti(Object... oggetti) {
-
         EntityManager em = JpaUtil.getInstance().getEntityManager();
-
         try {
             em.getTransaction().begin();
-
             for (Object oggetto : oggetti) {
                 em.merge(oggetto);
             }
-
             em.getTransaction().commit();
-
         } catch (RuntimeException e) {
-
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-
             throw e;
-
         } finally {
             em.close();
         }
     }
 
     /**
-     * Restituisce l'oggetto cercato nel database
+     * Recupera un'entità dal database usando il suo identificatore.
      *
-     * @param classe classe dell'oggetto cercato nel database
-     * @param id     id dell'oggetto cercato nel database
-     * @return oggetto cercato nel database
-     *
+     * @param <T>    tipo dell'entità
+     * @param classe classe dell'entità da cercare
+     * @param id     valore della chiave primaria
+     * @return l'entità trovata, oppure {@code null} se non esiste
      */
     public static <T> T trovaPerId(Class<T> classe, Long id) {
-
         EntityManager em = JpaUtil.getInstance().getEntityManager();
-
         try {
-
             return em.find(classe, id);
-
         } finally {
             em.close();
         }
     }
 
     /**
-     * Restituisce una lista di oggetti corrispondente al risultato di una query jpql
+     * Esegue una query JPQL parametrica e restituisce la lista dei risultati.
      *
-     * @param jpql      String rappresentante la query tipizzata da eseguire
-     * @param classe    Classe letterale del tipo di dato aspettato
-     * @param parametri mappa che contiene i valori dinamici da inserire nella query
-     *
+     * @param <T>       tipo degli elementi attesi nel risultato
+     * @param jpql      stringa della query JPQL
+     * @param classe    classe corrispondente al tipo di ritorno
+     * @param parametri mappa che associa il nome di ogni parametro named ({@code :nome})
+     *                  al valore da sostituire; può essere vuota ma non {@code null}
+     * @return lista dei risultati (mai {@code null}, può essere vuota)
+     * @throws IllegalArgumentException se un parametro dichiarato nella query
+     *                                  non viene fornito o se la mappa è {@code null}
      */
     public static <T> List<T> eseguiQuery(String jpql,
-                                   Class<T> classe,
-                                   Map<String, Object> parametri) {
-
+                                          Class<T> classe,
+                                          Map<String, Object> parametri) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
-
         try {
             TypedQuery<T> query = em.createQuery(jpql, classe);
-
-            for (String nomeParametro : parametri.keySet()) {
-                query.setParameter(nomeParametro, parametri.get(nomeParametro));
+            for (Map.Entry<String, Object> entry : parametri.entrySet()) {
+                query.setParameter(entry.getKey(), entry.getValue());
             }
-
             return query.getResultList();
-
         } finally {
             em.close();
         }
-
-
     }
 
+    /**
+     * Restituisce tutte le istanze di una data entità presenti nel database.
+     * <p>
+     * Genera una query JPQL del tipo {@code SELECT e FROM NomeEntita e}
+     * e ne recupera tutti i risultati.
+     * </p>
+     *
+     * @param <T>    tipo dell'entità
+     * @param classe classe dell'entità
+     * @return lista contenente tutte le righe della tabella corrispondente
+     */
     public static <T> List<T> ottieniTutti(Class<T> classe) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
-
         try {
-            // Ricaviamo il nome dell'entità (di default è il nome della classe)
             String nomeEntita = classe.getSimpleName();
             String jpql = "SELECT e FROM " + nomeEntita + " e";
-
-            // Creiamo la query tipizzata senza bisogno di parametri esterni
             TypedQuery<T> query = em.createQuery(jpql, classe);
-
-            /*
-             * getResultList esegue la query e restituisce la lista
-             * di tutte le righe presenti nel database per questa entità.
-             */
             return query.getResultList();
-
         } finally {
             em.close();
         }
     }
 
+    /**
+     * Restituisce l'insieme dei tipi di entità che estendono (o implementano)
+     * la classe specificata, escludendo la classe stessa.
+     * <p>
+     * Utile per scoprire a runtime tutte le sottoclassi concrete mappate
+     * come entità JPA, ad esempio in strategie di ereditarietà.
+     * </p>
+     *
+     * @param <T>    tipo della classe base (superclasse astratta o interfaccia)
+     * @param classe classe base di cui si vogliono conoscere le figlie
+     * @return insieme di {@link EntityType} che rappresentano le entità
+     *         che sono assegnabili alla classe data ma non coincidono con essa
+     */
     public static <T> Set<EntityType<?>> getFiglie(Class<T> classe) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
 
+        // Partiamo da tutte le entità note al metamodel
         Set<EntityType<?>> figlie = new HashSet<>(em.getMetamodel().getEntities());
 
-        figlie.removeIf(e -> !classe.isAssignableFrom(e.getJavaType())
-                ||
-                e.getJavaType().equals(classe));
+        // Rimuoviamo i tipi che non sono sottoclassi di `classe`
+        // e la classe stessa se compare come entità concreta
+        figlie.removeIf(e ->
+                !classe.isAssignableFrom(e.getJavaType())
+                        || e.getJavaType().equals(classe)
+        );
 
         return figlie;
     }
-
 }
-
-
-
-

@@ -7,233 +7,185 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Rappresenta una sessione di allenamento assegnata a un atleta da un allenatore.
+ * <p>
+ * Ogni sessione contiene una lista ordinata di esercizi e tiene traccia
+ * del proprio stato (assegnata, in corso, completata), della data di
+ * svolgimento e di un'eventuale durata prevista.
+ * </p>
+ * <p>
+ * L'ordinamento naturale (implementato tramite {@link Comparable})
+ * ordina le sessioni per data di svolgimento e, a parità di data, per titolo.
+ * </p>
+ */
 @Entity
 @Table(name = "sessioni")
 public class SessioneDiAllenamento implements Comparable {
 
-    //Chiave primaria
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //Attributi di classe
     private String titolo;
     private String descrizione;
     private LocalDate dataSvolgimento;
+
+    @Enumerated(EnumType.STRING)
     private StatoSessione stato;
+
     private Duration durata = null;
 
+    /**
+     * Esercizi che compongono la sessione.
+     * Relazione uno-a-molti con tabella di join {@code sessione_esercizio}.
+     * Cascade e orphan removal assicurano che le modifiche alla lista
+     * vengano propagate e che gli esercizi orfani siano rimossi.
+     */
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinTable(name = "sessione_esercizio",   // nome della tabella associativa
+    @JoinTable(name = "sessione_esercizio",
             joinColumns = @JoinColumn(name = "sessione_id"),
             inverseJoinColumns = @JoinColumn(name = "esercizio_id"))
     private List<Esercizio> esercizi = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "atleta_id")   // chiave esterna verso Atleti
+    @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
     @ManyToOne
-    @JoinColumn(name = "allenatore_id") // chiave esterna verso Allenatori
+    @JoinColumn(name = "allenatore_id")
     private Allenatore allenatore;
 
     /**
-     * Costruttore vuoto dell'oggetto SessioneDiAllenamento
-     *
+     * Costruttore di default obbligatorio per JPA.
      */
     public SessioneDiAllenamento() {
     }
 
     /**
-     * Costruttore vuoto dell'oggetto SessioneDiAllenamento
+     * Crea una sessione con i dati essenziali e stato iniziale
+     * impostato ad {@link StatoSessione#ASSEGNATA}.
      *
-     * @param titolo          Titolo
-     * @param descrizione     Descrizione
-     * @param dataSvolgimento Data di Svolgimento della sessione
-     * @param atleta          Atleta a cui la sessione è assegnata
-     * @param allenatore      Allenatore che crea la sessione
-     *
+     * @param titolo          titolo della sessione
+     * @param descrizione     descrizione testuale
+     * @param dataSvolgimento giorno in cui si svolge la sessione
+     * @param atleta          atleta a cui è destinata
+     * @param allenatore      allenatore che l'ha creata
      */
-    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Atleta atleta, Allenatore allenatore) {
-
+    public SessioneDiAllenamento(String titolo, String descrizione,
+                                 LocalDate dataSvolgimento,
+                                 Atleta atleta, Allenatore allenatore) {
         this.titolo = titolo;
-        this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
+        this.dataSvolgimento = dataSvolgimento;
         this.stato = StatoSessione.ASSEGNATA;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
     }
 
     /**
-     * Costruttore vuoto dell'oggetto SessioneDiAllenamento (di cui si vuole specificare la durata)
+     * Crea una sessione con durata prevista esplicitamente indicata.
      *
-     * @param titolo          Titolo
-     * @param descrizione     Descrizione
-     * @param dataSvolgimento Data di Svolgimento della sessione
-     * @param atleta          Atleta a cui la sessione è assegnata
-     * @param allenatore      Allenatore che crea la sessione
-     * @param durata          Durata della Sessione
-     *
+     * @param titolo          titolo della sessione
+     * @param descrizione     descrizione testuale
+     * @param dataSvolgimento giorno di svolgimento
+     * @param durata          durata totale prevista
+     * @param atleta          atleta destinatario
+     * @param allenatore      allenatore creatore
      */
-    public SessioneDiAllenamento(String titolo, String descrizione, LocalDate dataSvolgimento, Duration durata, Atleta atleta, Allenatore allenatore) {
-
+    public SessioneDiAllenamento(String titolo, String descrizione,
+                                 LocalDate dataSvolgimento,
+                                 Duration durata,
+                                 Atleta atleta, Allenatore allenatore) {
         this.titolo = titolo;
-        this.dataSvolgimento = dataSvolgimento;
         this.descrizione = descrizione;
+        this.dataSvolgimento = dataSvolgimento;
         this.stato = StatoSessione.ASSEGNATA;
         this.durata = durata;
         this.setAtleta(atleta);
         this.setAllenatore(allenatore);
     }
 
+    // ---------- Getters ----------
 
-    /**
-     * Getter Titolo
-     *
-     * @return Titolo della Sessione
-     *
-     */
     public String getTitolo() {
         return titolo;
     }
 
-    /**
-     * Getter Descrizione
-     *
-     * @return Descrizione della Sessione
-     *
-     */
     public String getDescrizione() {
         return descrizione;
     }
 
-    /**
-     * Getter DataSvolgimento
-     *
-     * @return DataSvolgimento della Sessione
-     *
-     */
     public LocalDate getDataSvolgimento() {
         return dataSvolgimento;
     }
 
-    /**
-     * Getter Id
-     *
-     * @return Id della Sessione
-     *
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * Getter Atleta
-     *
-     * @return Atleta a cui è assegnata Sessione
-     *
-     */
     public Atleta getAtleta() {
         return atleta;
     }
 
-    /**
-     * Getter Allenatore
-     *
-     * @return Allenatore creatore della Sessione
-     *
-     */
     public Allenatore getAllenatore() {
         return allenatore;
     }
 
-    /**
-     * Getter Stato
-     *
-     * @return Stato della Sessione
-     *
-     */
     public StatoSessione getStato() {
         return stato;
     }
 
-    /**
-     * Getter Durata
-     *
-     * @return Durata della Sessione
-     *
-     */
     public Duration getDurata() {
         return durata;
     }
 
     /**
-     * Setter Titolo
+     * Restituisce la lista degli esercizi che compongono la sessione.
+     * L'ordine è quello di inserimento.
      *
-     * @param titolo Titolo
-     *
+     * @return lista di esercizi (non {@code null})
      */
+    protected List<Esercizio> getEsercizi() {
+        return esercizi;
+    }
+
+    // ---------- Setters protetti ----------
+
     protected void setTitolo(String titolo) {
         this.titolo = titolo;
     }
 
-    /**
-     * Setter Descrizione
-     *
-     * @param descrizione Descrizione
-     *
-     */
     protected void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
-    /**
-     * Setter DataSvolgimento
-     *
-     * @param dataSvolgimento Data di Svolgimento
-     *
-     */
     protected void setDataSvolgimento(LocalDate dataSvolgimento) {
         this.dataSvolgimento = dataSvolgimento;
     }
 
-    /**
-     * Setter Durata
-     *
-     * @param durata Durata
-     *
-     */
     protected void setDurata(Duration durata) {
         this.durata = durata;
     }
 
     /**
-     * Setter Stato
+     * Imposta lo stato della sessione a partire dalla stringa
+     * corrispondente al nome dell'enum.
      *
-     * @param stato Stato
-     *
+     * @param stato stringa che rappresenta il nuovo stato
+     *              ("COMPLETATA", "IN CORSO", "ASSEGNATA")
+     * @throws IllegalArgumentException se la stringa non corrisponde a
+     *                                  uno stato valido
      */
-    protected void setStato(String stato) throws IllegalArgumentException {
-        switch (stato) {
-            case "COMPLETATA":
-                this.stato = StatoSessione.COMPLETATA;
-                break;
-            case "IN CORSO":
-                this.stato = StatoSessione.IN_CORSO;
-                break;
-            case "ASSEGNATA":
-                this.stato = StatoSessione.ASSEGNATA;
-                break;
-            default:
-                throw new IllegalArgumentException("Stato non valido");
-        }
+    protected void setStato(String stato) {
+        this.stato = StatoSessione.valueOf(stato.toUpperCase().replace(" ", "_"));
     }
 
     /**
-     * Setter Atleta
+     * Associa un atleta a questa sessione e aggiorna il lato inverso
+     * della relazione aggiungendo la sessione all'atleta.
      *
-     * @param atleta Atleta
-     *
+     * @param atleta l'atleta da associare
      */
     protected void setAtleta(Atleta atleta) {
         this.atleta = atleta;
@@ -241,10 +193,10 @@ public class SessioneDiAllenamento implements Comparable {
     }
 
     /**
-     * Setter Allenatore
+     * Associa un allenatore a questa sessione e aggiorna il lato inverso
+     * della relazione.
      *
-     * @param allenatore Allenatore
-     *
+     * @param allenatore l'allenatore da associare
      */
     protected void setAllenatore(Allenatore allenatore) {
         this.allenatore = allenatore;
@@ -252,65 +204,71 @@ public class SessioneDiAllenamento implements Comparable {
     }
 
     /**
-     * Getter Esercizi
+     * Sostituisce completamente la lista degli esercizi della sessione.
      *
-     * @return Lista degli esercizi che compongono la Sessione
-     *
-     */
-    protected List<Esercizio> getEsercizi() {
-        return esercizi;
-    }
-
-    /**
-     * Setter Esercizi
-     *
-     * @param esercizi Lista di Esercizi
-     *
+     * @param esercizi nuova lista di esercizi
      */
     public void setEsercizi(List<Esercizio> esercizi) {
         this.esercizi = esercizi;
     }
 
+    // ---------- Logica di business ----------
 
     /**
-     * Registra il Risultato di un Esercizio
+     * Registra il risultato di un esercizio all'interno di questa sessione.
+     * <p>
+     * Se il valore del risultato è {@code null}, viene registrata solo
+     * una nota; altrimenti viene registrato il valore insieme alla nota.
+     * </p>
      *
-     * @param id_esercizio Id Esercizio
-     * @param nota         Nota
-     * @param risultato    Risultato (Integer / Duration)
-     *
+     * @param risultato   valore del risultato: {@link Integer} per ripetizioni,
+     *                    {@link Duration} per tempo, oppure {@code null}
+     * @param nota        annotazione testuale (può essere {@code null})
+     * @param idEsercizio identificativo dell'esercizio da aggiornare
+     * @throws IllegalArgumentException se non esiste un esercizio con l'id fornito
      */
-    protected void registraRisultato(Object risultato, String nota, Long id_esercizio) throws IllegalArgumentException, ClassCastException {
+    protected void registraRisultato(Object risultato, String nota, Long idEsercizio) {
         for (Esercizio e : esercizi) {
-            if (e.getId().equals(id_esercizio)) {
-                if (risultato == null)
+            if (e.getId().equals(idEsercizio)) {
+                if (risultato == null) {
                     e.setRisultato(nota);
-                else
+                } else {
                     e.setRisultato(risultato, nota);
+                }
                 return;
             }
         }
-
-        throw new IllegalArgumentException("Esercizio non trovato");
+        throw new IllegalArgumentException("Esercizio non trovato nella sessione");
     }
 
-    public Esercizio getEsercizioPerId(Long id_esercizio) {
-
+    /**
+     * Cerca un esercizio all'interno della sessione dato il suo id.
+     *
+     * @param idEsercizio identificativo dell'esercizio
+     * @return l'esercizio corrispondente, oppure {@code null} se non presente
+     */
+    public Esercizio getEsercizioPerId(Long idEsercizio) {
         for (Esercizio e : this.esercizi) {
-            if (e.getId().equals(id_esercizio))
+            if (e.getId().equals(idEsercizio)) {
                 return e;
+            }
         }
         return null;
-
     }
 
+    /**
+     * Confronta due sessioni per data di svolgimento e, a parità di data,
+     * per titolo (ordine alfabetico).
+     *
+     * @param o la sessione da confrontare
+     * @return un valore negativo, zero o positivo in base all'ordinamento
+     */
     @Override
     public int compareTo(Object o) {
-        SessioneDiAllenamento other_session = (SessioneDiAllenamento) o;
-        if (dataSvolgimento.isEqual(other_session.getDataSvolgimento())) {
-            return titolo.compareTo(other_session.getTitolo());
-        } else {
-            return dataSvolgimento.compareTo(other_session.getDataSvolgimento());
+        SessioneDiAllenamento other = (SessioneDiAllenamento) o;
+        if (dataSvolgimento.isEqual(other.getDataSvolgimento())) {
+            return titolo.compareTo(other.getTitolo());
         }
+        return dataSvolgimento.compareTo(other.getDataSvolgimento());
     }
 }

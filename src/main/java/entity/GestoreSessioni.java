@@ -4,146 +4,152 @@ import database.GestorePersistenza;
 import exceptions.ResourceNotFoundException;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
- * Classe di gestione di tutte le sessioni create, in corso e completate
- * Permette la visualizzazione e la modifica di esse
+ * Gestore centralizzato per le operazioni sulle sessioni di allenamento.
+ * <p>
+ * Espone metodi per cercare, visualizzare i dettagli e completare le sessioni,
+ * operando come unico punto di accesso alla logica di dominio relativa
+ * a {@link SessioneDiAllenamento}. Implementa il pattern Singleton.
+ * </p>
  */
 public class GestoreSessioni {
-    
-    /**
-     * Istanza statica del gestoreSessioni
-     */
+
     private static GestoreSessioni instance;
 
     /**
-     * Costruttore di GestoreSessioni
+     * Costruttore privato per impedire l'istanziazione diretta.
      */
     private GestoreSessioni() {
     }
 
     /**
-     * Fornisce l'istanza singola di GestoreSessioni, se essa non esiste viene creata
+     * Restituisce l'istanza Singleton del gestore, creandola se necessario.
      *
-     * @return Istanza di gestoreSessioni operativa
+     * @return l'istanza condivisa di {@code GestoreSessioni}
      */
     public static GestoreSessioni getInstance() {
         if (instance == null) {
             instance = new GestoreSessioni();
         }
-
         return instance;
     }
 
     /**
-     * Permette di vedere gli esercizi che compongono una sessione dato il suo id
+     * Recupera la lista degli esercizi che compongono una sessione.
      *
-     * @param id_sessione id della sessione di cui si vogliono visualizzare gli esercizi
-     * @return Lista degli esercizi presenti nella sessione
+     * @param idSessione identificativo della sessione
+     * @return lista ordinata degli esercizi presenti
+     * @throws ResourceNotFoundException se la sessione non esiste
      */
-    public List<Esercizio> dettaglioSessione(Long id_sessione) {
-        try {
-            SessioneDiAllenamento sessione = getSessione(id_sessione);
-            return sessione.getEsercizi();
-        } catch (ResourceNotFoundException e) {
-            System.out.println("sessione non trovata per l'id: " + id_sessione);
-            throw e;
-        }
-
+    public List<Esercizio> dettaglioSessione(Long idSessione) {
+        SessioneDiAllenamento sessione = getSessione(idSessione);
+        return sessione.getEsercizi();
     }
 
     /**
-     * Permette di cercare tutte le sessioni presenti e passate
+     * Restituisce tutte le sessioni presenti nel sistema, senza filtri.
      *
-     * @return Set di tutte le sessioni presenti nel sistema
+     * @return insieme di tutte le sessioni
      */
     public Set<SessioneDiAllenamento> cercaSessioni() {
-        List<SessioneDiAllenamento> listaSessioni = GestorePersistenza.ottieniTutti(SessioneDiAllenamento.class);
-        return new HashSet<>(listaSessioni);
+        List<SessioneDiAllenamento> lista = GestorePersistenza.ottieniTutti(SessioneDiAllenamento.class);
+        return new HashSet<>(lista);
     }
 
     /**
-     * Permette di cercare tutte le sessioni associate a un dato atleta
+     * Cerca tutte le sessioni associate a un determinato atleta.
      *
-     * @param id_atleta Id dell'atleta di cui si stanno cercando le sessioni di allenamento
-     * @return Set delle sessioni associate all'atleta
+     * @param idAtleta identificativo dell'atleta
+     * @return insieme delle sessioni a cui l'atleta partecipa
      */
-    public Set<SessioneDiAllenamento> cercaSessioni(Long id_atleta) {
+    public Set<SessioneDiAllenamento> cercaSessioni(Long idAtleta) {
         String query = "SELECT s FROM SessioneDiAllenamento s WHERE s.atleta.id = :id_atleta";
-        List<SessioneDiAllenamento> lista_sessioni = GestorePersistenza.eseguiQuery(query, SessioneDiAllenamento.class, Map.of("id_atleta", id_atleta));
-        return new HashSet<>(lista_sessioni);
+        List<SessioneDiAllenamento> lista = GestorePersistenza.eseguiQuery(
+                query, SessioneDiAllenamento.class, Map.of("id_atleta", idAtleta));
+        return new HashSet<>(lista);
     }
 
-
     /**
-     * Permette a un atleta di completare la sessione
+     * Permette a un atleta di completare una sessione registrando i risultati
+     * e le note per ciascun esercizio.
+     * <p>
+     * Lo stato della sessione viene impostato a "IN CORSO" all'inizio
+     * e, se tutti gli esercizi hanno un risultato valorizzato, a "COMPLETATA"
+     * al termine.
+     * </p>
      *
-     * @param id_atleta   Id dell'atleta che ha richiesto di completare la sessione
-     * @param id_sessione Id della sessione che si sta cercando di completare
-     * @throws IllegalAccessException Se l'utente prova a modificare una sessione che non è stata assegnata a lui
+     * @param idAtleta   identificativo dell'atleta che sta completando la sessione
+     * @param idSessione identificativo della sessione da completare
+     * @param risultati  mappa che associa l'id dell'esercizio al valore del risultato
+     *                   (numero di ripetizioni o minuti totali come intero)
+     * @param note       mappa che associa l'id dell'esercizio a una nota testuale
+     * @throws IllegalAccessException se l'atleta non è il destinatario della sessione
+     * @throws ClassCastException     se i tipi dei risultati non sono coerenti con gli esercizi
      */
-    public void completaSessione(Long id_atleta, Long id_sessione, HashMap<Long, Integer> risultati, HashMap<Long, String> note)
-            throws IllegalAccessException, ClassCastException {
+    public void completaSessione(Long idAtleta, Long idSessione,
+                                 HashMap<Long, Integer> risultati,
+                                 HashMap<Long, String> note)
+            throws IllegalAccessException {
 
-        SessioneDiAllenamento s;
+        SessioneDiAllenamento sessione;
         try {
-            s = getSessione(id_sessione);
+            sessione = getSessione(idSessione);
         } catch (ResourceNotFoundException e) {
             e.printStackTrace();
             return;
         }
 
-        if (s.getAtleta().getId().equals(id_atleta)) {
-            s.setStato("IN CORSO");
-            for (Long es : s.getEsercizi().stream().map(Esercizio::getId).toList()) {
-                Esercizio esercizio = GestorePersistenza.trovaPerId(Esercizio.class, es);
-
-                Object ris = null;
-                String nota = null;
-                if (risultati.get(es) != null) {
-                    if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI)
-                        ris = risultati.get(es);
-                    else if (esercizio.getTipo() == TipoEsercizio.TEMPO)
-                        ris = Duration.ofMinutes(risultati.get(es));
-                }
-                if (note.containsKey(es)) {
-                    nota = note.get(es);
-                }
-
-                s.registraRisultato(ris, nota, es);
-            }
-
-        } else {
+        // Verifica che l'atleta sia effettivamente assegnato alla sessione
+        if (!sessione.getAtleta().getId().equals(idAtleta)) {
             throw new IllegalAccessException("La sessione non appartiene all'utente");
         }
 
-        boolean completata = true;
-        for (Esercizio e : s.getEsercizi()) {
-            if (e.getRisultato().getRisultato() == null) {
-                completata = false; //Se trova un esercizio dove il risultato è null, allora non tutti i risultati sono stati inseriti
-                //Non può quindi essere completata la sessione
+        sessione.setStato("IN CORSO");
+
+        // Itera su tutti gli esercizi della sessione per registrare risultati e note
+        for (Long idEsercizio : sessione.getEsercizi().stream().map(Esercizio::getId).toList()) {
+            Esercizio esercizio = GestorePersistenza.trovaPerId(Esercizio.class, idEsercizio);
+
+            Object valore = null;
+            if (risultati.containsKey(idEsercizio)) {
+                // Converte l'intero in Duration per gli esercizi a tempo
+                if (esercizio.getTipo() == TipoEsercizio.TEMPO) {
+                    valore = Duration.ofMinutes(risultati.get(idEsercizio));
+                } else if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI) {
+                    valore = risultati.get(idEsercizio);
+                }
             }
+
+            String nota = note.getOrDefault(idEsercizio, null);
+
+            sessione.registraRisultato(valore, nota, idEsercizio);
         }
-        if (completata)
-            s.setStato("COMPLETATA"); //Se viene eseguito questo metodo, la schermatura del for è stata superata
-        GestorePersistenza.salva(s);
+
+        // Controlla se tutti gli esercizi hanno un risultato valorizzato
+        boolean completata = sessione.getEsercizi().stream()
+                .allMatch(e -> e.getRisultato() != null && e.getRisultato().getRisultato() != null);
+
+        if (completata) {
+            sessione.setStato("COMPLETATA");
+        }
+
+        GestorePersistenza.salva(sessione);
     }
 
     /**
-     * Permette di ricercare una sessione dato il suo id
+     * Carica una sessione dato il suo identificativo.
      *
-     * @param id_sessione Id della sessione che stiamo cercando
-     * @return sessione richiesta
-     * @throws ResourceNotFoundException Se la sessione richiesta non è stata trovata
+     * @param idSessione identificativo della sessione
+     * @return la sessione trovata
+     * @throws ResourceNotFoundException se non esiste una sessione con l'id fornito
      */
-    public SessioneDiAllenamento getSessione(Long id_sessione) throws ResourceNotFoundException {
-        SessioneDiAllenamento s = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, id_sessione);
+    public SessioneDiAllenamento getSessione(Long idSessione) throws ResourceNotFoundException {
+        SessioneDiAllenamento s = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, idSessione);
         if (s == null) {
             throw new ResourceNotFoundException("Sessione non trovata");
         }
         return s;
     }
-
 }

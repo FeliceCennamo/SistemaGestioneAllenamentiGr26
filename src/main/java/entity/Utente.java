@@ -7,7 +7,18 @@ import jakarta.persistence.MappedSuperclass;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-
+/**
+ * Classe base astratta per tutti gli utenti del sistema (atleti e allenatori).
+ * <p>
+ * Mappa i campi anagrafici comuni, le credenziali di accesso e una disciplina
+ * sportiva prevalente. La password viene memorizzata sotto forma di hash
+ * bcrypt e mai in chiaro.
+ * </p>
+ * <p>
+ * Le sottoclassi concrete ({@link Atleta}, {@link Allenatore}) ereditano
+ * questa mappatura grazie all'annotazione {@link MappedSuperclass}.
+ * </p>
+ */
 @MappedSuperclass
 public abstract class Utente {
 
@@ -23,39 +34,19 @@ public abstract class Utente {
     private String disciplinaPrevalente;
 
     /**
-     * Costruttore vuoto dell'oggetto Utente
-     *
+     * Costruttore di default richiesto da JPA.
      */
     public Utente() {
     }
 
     /**
-     * Costruttore dell'oggetto Utente avente disciplinaPrevalente
+     * Crea un utente con i soli dati anagrafici e le credenziali, senza
+     * specificare una disciplina prevalente (che rimane {@code null}).
      *
-     * @param nome                 Nome Utente
-     * @param cognome              Cognome Utente
-     * @param mail                 Indirizzo E-mail Utente
-     * @param password             Password Utente
-     * @param disciplinaPrevalente Disciplina Prevalente Utente
-     *
-     */
-    public Utente(String nome, String cognome, String mail, String password, String disciplinaPrevalente) {
-        this.nome = nome;
-        this.cognome = cognome;
-        this.mail = mail;
-        this.password = password;
-        this.disciplinaPrevalente = disciplinaPrevalente;
-    }
-
-
-    /**
-     * Costruttore dell'oggetto Utente avente disciplinaPrevalente
-     *
-     * @param nome     Nome Utente
-     * @param cognome  Cognome Utente
-     * @param mail     Indirizzo E-mail Utente
-     * @param password Password Utente
-     *
+     * @param nome     nome dell'utente
+     * @param cognome  cognome dell'utente
+     * @param mail     indirizzo email (usato come identificativo di accesso)
+     * @param password password in chiaro (verrà cifrata automaticamente)
      */
     protected Utente(String nome, String cognome, String mail, String password) {
         this.nome = nome;
@@ -66,99 +57,120 @@ public abstract class Utente {
     }
 
     /**
-     * Getter Nome
+     * Crea un utente completo di disciplina prevalente.
      *
-     * @return Nome Utente
+     * @param nome                 nome dell'utente
+     * @param cognome              cognome dell'utente
+     * @param mail                 indirizzo email
+     * @param password             password in chiaro (verrà cifrata)
+     * @param disciplinaPrevalente disciplina sportiva principale dell'utente
+     */
+    public Utente(String nome, String cognome, String mail, String password,
+                  String disciplinaPrevalente) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.mail = mail;
+        this.password = password;
+        this.disciplinaPrevalente = disciplinaPrevalente;
+    }
+
+    /**
+     * Restituisce il nome dell'utente.
      *
+     * @return il nome
      */
     public String getNome() {
         return nome;
     }
 
     /**
-     * Setter Nome
+     * Imposta il nome dell'utente.
      *
-     * @param nome Nome
-     *
+     * @param nome il nuovo nome
      */
     protected void setNome(String nome) {
         this.nome = nome;
     }
 
     /**
-     * Getter Cognome
+     * Restituisce il cognome dell'utente.
      *
-     * @return Cognome Utente
-     *
+     * @return il cognome
      */
     public String getCognome() {
         return cognome;
     }
 
     /**
-     * Setter Cognome
+     * Imposta il cognome dell'utente.
      *
-     * @param cognome Cognome
-     *
+     * @param cognome il nuovo cognome
      */
     protected void setCognome(String cognome) {
         this.cognome = cognome;
     }
 
     /**
-     * Getter E-mail
+     * Restituisce l'indirizzo email dell'utente.
      *
-     * @return E-mail Utente
-     *
+     * @return l'email
      */
     public String getMail() {
         return mail;
     }
 
     /**
-     * Setter E-mail
+     * Imposta l'indirizzo email.
      *
-     * @param mail E-mail
-     *
+     * @param mail la nuova email
      */
     protected void setMail(String mail) {
         this.mail = mail;
     }
 
     /**
-     * Getter Password
+     * Restituisce l'hash della password (non il valore in chiaro).
      *
-     * @return Password Utente
-     *
+     * @return la password cifrata
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * Setter Password
+     * Imposta la password dell'utente, memorizzandola in forma cifrata
+     * tramite l'algoritmo bcrypt.
      *
-     * @param password Password
-     *
+     * @param password la password in chiaro da cifrare
      */
     protected void setPassword(String password) {
+        // BCrypt.gensalt() genera un salt casuale e restituisce l'hash
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     /**
-     * Getter Id
+     * Restituisce l'identificativo univoco dell'utente.
      *
-     * @return Id Utente
-     *
+     * @return l'id
      */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Restituisce la disciplina sportiva prevalente dell'utente.
+     *
+     * @return la disciplina, o {@code null} se non impostata
+     */
     public String getDisciplinaPrevalente() {
         return disciplinaPrevalente;
     }
 
+    /**
+     * Imposta la disciplina sportiva prevalente.
+     *
+     * @param disciplinaPrevalente la nuova disciplina (può essere {@code null})
+     */
     protected void setDisciplinaPrevalente(String disciplinaPrevalente) {
         this.disciplinaPrevalente = disciplinaPrevalente;
     }

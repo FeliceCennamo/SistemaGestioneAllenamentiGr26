@@ -4,54 +4,71 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+/**
+ * Punto di accesso centralizzato per la creazione di {@link EntityManager}
+ * tramite una {@link EntityManagerFactory} configurata.
+ * <p>
+ * Implementa il pattern Singleton per garantire che esista una sola factory
+ * per l'intera applicazione, basata sull'unità di persistenza
+ * {@code GestioneAllenamentiPU} definita nel file {@code persistence.xml}.
+ * </p>
+ *
+ * <p>
+ * <b>Attenzione:</b> il Singleton non è thread-safe; in un ambiente
+ * multi-thread occorre sincronizzare il metodo {@link #getInstance()}
+ * o utilizzare un inizializzatore statico.
+ * </p>
+ */
 public class JpaUtil {
 
-    /**
-     * Oggetto JpaUtil instanziato seguendo il pattern Singleton
-     *
-     */
     private static JpaUtil instance;
 
-    /**
-     * EntityManagerFactory legge la persistence unit dal file
-     * persistence.xml e prepara Hibernate per comunicare con il database.
-     */
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     /**
-     * Costruttore privato secondo il pattern Singleton (non Thread-safe)
-     *
+     * Costruttore privato. Inizializza la {@link EntityManagerFactory}
+     * leggendo la configurazione dell'unità di persistenza.
      */
     private JpaUtil() {
         emf = Persistence.createEntityManagerFactory("GestioneAllenamentiPU");
     }
 
     /**
-     * Completa l'applicazione del pattern Singleton.
+     * Restituisce l'unica istanza di {@code JpaUtil}.
+     * <p>
+     * L'istanza viene creata al primo accesso (lazy initialization).
+     * </p>
      *
-     * @return Unico oggetto JpaUtil instanziabile
+     * @return l'istanza Singleton
      */
     public static JpaUtil getInstance() {
         if (instance == null) {
             instance = new JpaUtil();
         }
-
         return instance;
     }
 
     /**
-     * Restituisce un nuovo oggetto EntityManager, da utilizzare per una operazione di persistenza
+     * Crea e restituisce un nuovo {@link EntityManager}.
+     * <p>
+     * Ogni chiamata produce un manager indipendente, che deve essere chiuso
+     * dal chiamante dopo l'uso (tipicamente tramite il pattern try-finally
+     * o try-with-resources).
+     * </p>
      *
-     * @return Oggetto EntityManager
-     *
+     * @return una nuova istanza di {@link EntityManager}
      */
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
     /**
-     * Chiude l'istanza di EntityManagerFactory
-     *
+     * Chiude definitivamente la {@link EntityManagerFactory} e
+     * reimposta l'istanza Singleton a {@code null}.
+     * <p>
+     * Dopo la chiamata, ogni ulteriore utilizzo di {@code getEntityManager()}
+     * richiederà una nuova inizializzazione tramite {@code getInstance()}.
+     * </p>
      */
     public void chiudi() {
         emf.close();
