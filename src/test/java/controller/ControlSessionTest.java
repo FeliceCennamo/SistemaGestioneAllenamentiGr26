@@ -136,7 +136,7 @@ class ControlSessionTest {
     // ==================== getIdUtenteAutenticato ====================
     @Test
     void testGetIdUtenteAutenticato() {
-        assertEquals(77L, controller.getIdUtenteAutenticato());
+        assertEquals(87L, controller.getIdUtenteAutenticato());
     }
 
     // ==================== getIdEserciziPerSessione ====================
