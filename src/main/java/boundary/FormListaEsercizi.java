@@ -6,6 +6,7 @@ import com.intellij.uiDesigner.core.Spacer;
 import controller.Controller;
 
 import notifier.Notifier;
+import notifier.ThreadNotifier;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -130,10 +131,7 @@ public class FormListaEsercizi extends JFrame {
             controller.completaSessione(this.idCurrentSession, risultati_row);
 
             if (controller.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                Thread t = new Thread(() -> {
-                    notifica((String) controller.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore"));
-                });
-                t.start();
+                new ThreadNotifier().sendMailComplete((String) controller.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore"));
             }
 
             parentForm.refreshPanelCentrale();
@@ -143,7 +141,6 @@ public class FormListaEsercizi extends JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage(),
                     "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }
-
 
     }
 
