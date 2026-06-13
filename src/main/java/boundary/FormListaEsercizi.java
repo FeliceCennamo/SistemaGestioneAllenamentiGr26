@@ -124,14 +124,17 @@ public class FormListaEsercizi extends JFrame {
             controller.completaSessione(this.idCurrentSession, risultati_row);
 
             if (controller.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                notifica((String) controller.getDettaglioSessionePerId(idCurrentSession).get("allenatore"));
+                Thread t = new Thread(() -> {
+                    notifica((String) controller.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore"));
+                });
+                t.start();
             }
 
             parentForm.refreshPanelCentrale();
             previousFrame.setVisible(true);
             currentFrame.dispose();
-        } catch (ClassCastException  | IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, "I risultati devono essere necessariamente dei numeri interi maggiori di zero",
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(),
                     "Errore inserimento risultati", JOptionPane.ERROR_MESSAGE);
         }
 

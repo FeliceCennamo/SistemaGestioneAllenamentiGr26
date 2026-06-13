@@ -42,7 +42,7 @@ public class Notifier implements INotifier {
     @Override
     public void sendMailCreate(String destinatario) throws IllegalArgumentException {
         if (!destinatario.contains("@")) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Mail non accettabile");
         }
 
         try {
@@ -68,7 +68,7 @@ public class Notifier implements INotifier {
     @Override
     public void sendMailComplete(String destinatario) throws IllegalArgumentException {
         if (!destinatario.contains("@")) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Mail non accettabile");
         }
 
         try {

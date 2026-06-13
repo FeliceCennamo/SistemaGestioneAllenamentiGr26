@@ -131,8 +131,8 @@ public class Controller {
 
             // dati[1] contiene il risultato come stringa
             int valore = Integer.parseInt(dati[1]);
-            if (valore < 0) {
-                throw new NumberFormatException("Il risultato non può essere negativo.");
+            if (valore <= 0) {
+                throw new NumberFormatException("Il risultato deve essere necessariamente un numero maggiore di 0");
             }
 
             risultati.put(idEsercizio, valore);

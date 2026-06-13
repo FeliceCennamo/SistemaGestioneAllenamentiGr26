@@ -27,7 +27,7 @@
                       value="root"/>
 
             <property name="jakarta.persistence.jdbc.password"
-                      value="V@lerio18"/>
+                      value="Felice2004!"/>
 
             <property name="hibernate.hbm2ddl.auto"
                       value="update"/>

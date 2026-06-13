@@ -40,7 +40,12 @@ public class FormListaSessioni {
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
         Set<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
 
-        LocalDate data_filtro = inizializzaData();
+        LocalDate data_filtro;
+        try {
+            data_filtro = inizializzaData();
+        } catch (RuntimeException r) {
+            data_filtro = LocalDate.of(4000, 12, 31);
+        }
 
         if (data_filtro != null) {
             for (Long s : sessioni) {
@@ -48,9 +53,10 @@ public class FormListaSessioni {
                 impaginaSessione(s, dettaglio, data_filtro);
             }
         }
+        PanelCentrale.setPreferredSize(null);
     }
 
-    private void impaginaSessione(Long s, Map<String, Object> dettaglio, LocalDate data_filtro){
+    private void impaginaSessione(Long s, Map<String, Object> dettaglio, LocalDate data_filtro) {
         if (((LocalDate) dettaglio.get("data")).isBefore(data_filtro)) {
             switch ((String) dettaglio.get("stato")) {
                 case "ASSEGNATA":
@@ -85,20 +91,39 @@ public class FormListaSessioni {
 
     }
 
-    private LocalDate inizializzaData(){
+    private LocalDate inizializzaData() {
         LocalDate data_filtro = null;
         try {
+            String anno;
+            String mese;
+            String giorno;
 
-            if (ANNO.getText().isEmpty() && MESE.getText().isEmpty() && GIORNO.getText().isEmpty()) {
-                data_filtro = LocalDate.of(4000, 12, 31);
+            if (ANNO.getText().isEmpty()) {
+                anno = "4000";
             } else {
-                data_filtro = LocalDate.of(Integer.parseInt(ANNO.getText()), Integer.parseInt(MESE.getText()), Integer.parseInt(GIORNO.getText()));
+                anno = ANNO.getText();
             }
+
+            if (MESE.getText().isEmpty()) {
+                mese = "12";
+            } else {
+                mese = MESE.getText();
+            }
+
+            if (GIORNO.getText().isEmpty()) {
+                giorno = "31";
+            } else {
+                giorno = GIORNO.getText();
+            }
+
+            data_filtro = LocalDate.of(Integer.parseInt(anno), Integer.parseInt(mese), Integer.parseInt(giorno));
 
         } catch (DateTimeException e) {
             JOptionPane.showMessageDialog(null, "La data inserita non è una data realmente esistente", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+            throw e;
         } catch (NumberFormatException n) {
             JOptionPane.showMessageDialog(null, "Inserire nel filtro data solo numeri interi", "Errore inserimento data", JOptionPane.ERROR_MESSAGE);
+            throw n;
         }
         return data_filtro;
     }
@@ -121,9 +146,9 @@ public class FormListaSessioni {
         PanelBase = new JPanel();
         PanelBase.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         PanelBase.setBackground(new Color(-1));
-        PanelBase.setMaximumSize(new Dimension(650, 600));
+        PanelBase.setMaximumSize(new Dimension(750, 600));
         PanelBase.setMinimumSize(new Dimension(28, 500));
-        PanelBase.setPreferredSize(new Dimension(650, 600));
+        PanelBase.setPreferredSize(new Dimension(750, 600));
         Scorrimento = new JScrollPane();
         Scorrimento.setHorizontalScrollBarPolicy(30);
         Scorrimento.setInheritsPopupMenu(true);
@@ -137,7 +162,7 @@ public class FormListaSessioni {
         PanelCentrale.setMaximumSize(new Dimension(-1, -1));
         PanelCentrale.setMinimumSize(new Dimension(-1, -1));
         PanelCentrale.setOpaque(true);
-        PanelCentrale.setPreferredSize(new Dimension(-1, -1));
+        PanelCentrale.setPreferredSize(new Dimension(-1, 180));
         Scorrimento.setViewportView(PanelCentrale);
         Header = new JPanel();
         Header.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -240,6 +265,7 @@ public class FormListaSessioni {
         // Forza il ricalcolo del layout
         PanelCentrale.revalidate();
         PanelCentrale.repaint();
+        Scorrimento.getViewport().revalidate();
     }
 
     public void setup() {
