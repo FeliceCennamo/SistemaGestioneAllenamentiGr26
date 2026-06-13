@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -119,14 +122,14 @@ class ControlSessionTest {
     // ==================== getIdSessioniPerUtente ====================
     @Test
     void testGetIdSessioniPerUtente_AtletaConSessioni() {
-        Set<Long> ids = controller.getIdSessioniPerUtente(atleta.getId());
+        List<Long> ids = controller.getIdSessioniPerUtente(atleta.getId());
         assertEquals(1, ids.size());
         assertTrue(ids.contains(sessione.getId()));
     }
 
     @Test
     void testGetIdSessioniPerUtente_UtenteSenzaSessioni() {
-        Set<Long> ids = controller.getIdSessioniPerUtente(999999L);
+        List<Long> ids = controller.getIdSessioniPerUtente(999999L);
         assertTrue(ids.isEmpty());
     }
 

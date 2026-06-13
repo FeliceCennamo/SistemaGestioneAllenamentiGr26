@@ -13,9 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class FormListaSessioni {
 
@@ -38,7 +38,7 @@ public class FormListaSessioni {
     private void aggiungiComponenti() {
         Controller c_session = Controller.getInstance();
         PanelCentrale.setLayout(new BoxLayout(PanelCentrale, BoxLayout.Y_AXIS));
-        Set<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
+        List<Long> sessioni = c_session.getIdSessioniPerUtente(c_session.getIdUtenteAutenticato());
 
         LocalDate data_filtro;
         try {
@@ -274,7 +274,7 @@ public class FormListaSessioni {
         this.Scorrimento.getVerticalScrollBar().setUnitIncrement(20);
         ASSEGNATECheckBox.setSelected(true);
         INCORSOCheckBox.setSelected(true);
-        COMPLETATECheckBox.setSelected(true);
+        COMPLETATECheckBox.setSelected(false);
         APPLICA.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -285,6 +285,7 @@ public class FormListaSessioni {
         this.aggiungiComponenti();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
+
 
         frame.pack();
         frame.setLocationRelativeTo(null);

@@ -50,11 +50,12 @@ public class Controller {
      * @param idUtente identificativo dell'atleta
      * @return insieme degli id delle sessioni trovate
      */
-    public Set<Long> getIdSessioniPerUtente(Long idUtente) {
+    public ArrayList<Long> getIdSessioniPerUtente(Long idUtente) {
         GestoreSessioni gestoreSessioni = GestoreSessioni.getInstance();
-        Set<SessioneDiAllenamento> sessioni = gestoreSessioni.cercaSessioni(idUtente);
+        TreeSet<SessioneDiAllenamento> sessioni = new TreeSet<>(gestoreSessioni.cercaSessioni(idUtente));
 
-        Set<Long> ids = new HashSet<>();
+
+        ArrayList<Long> ids = new ArrayList<>();
         for (SessioneDiAllenamento sessione : sessioni) {
             ids.add(sessione.getId());
         }

@@ -30,7 +30,7 @@ public class Allenatore extends Utente {
             joinColumns = @JoinColumn(name = "allenatore_id"),
             inverseJoinColumns = @JoinColumn(name = "atleta_id")
     )
-    private final Set<Atleta> atleti = new HashSet<>();
+    private Set<Atleta> atleti = new HashSet<>();
 
     /**
      * Insieme delle sessioni di allenamento create da questo allenatore,
@@ -38,7 +38,7 @@ public class Allenatore extends Utente {
      * {@link SessioneDiAllenamento}.
      */
     @OneToMany(mappedBy = "allenatore")
-    private final Set<SessioneDiAllenamento> sessioni = new TreeSet<>();
+    private Set<SessioneDiAllenamento> sessioni = new TreeSet<>();
 
     /**
      * Costruttore di default richiesto da JPA.

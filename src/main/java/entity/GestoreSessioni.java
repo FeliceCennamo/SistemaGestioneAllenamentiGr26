@@ -122,7 +122,7 @@ public class GestoreSessioni {
                 }
             }
 
-            String nota = note.getOrDefault(idEsercizio, "no note");
+            String nota = note.getOrDefault(idEsercizio, "");
 
             sessione.registraRisultato(valore, nota, idEsercizio);
         }

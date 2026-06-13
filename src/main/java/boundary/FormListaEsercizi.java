@@ -66,6 +66,12 @@ public class FormListaEsercizi extends JFrame {
 
         if (((String) controller.getDettaglioSessionePerId(id_sessione).get("stato")).equalsIgnoreCase("COMPLETATA")) {
             completaBtn.setVisible(false);
+        } else if (((String) controller.getDettaglioSessionePerId(id_sessione).get("stato")).equalsIgnoreCase("IN_CORSO")) {
+            completaBtn.setVisible(true);
+            completaBtn.setText("Completa sessione e invia email");
+        } else if (((String) controller.getDettaglioSessionePerId(id_sessione).get("stato")).equalsIgnoreCase("ASSEGNATA")) {
+            completaBtn.setVisible(true);
+            completaBtn.setText("Avvia sessione");
         }
 
         // ----- LISTENER PER IL BOTTONE BACK -----

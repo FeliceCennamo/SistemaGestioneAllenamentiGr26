@@ -38,14 +38,14 @@ public class Atleta extends Utente {
      * {@link Allenatore#atleti}.
      */
     @ManyToMany(mappedBy = "atleti")
-    private final Set<Allenatore> allenatori = new HashSet<>();
+    private Set<Allenatore> allenatori = new HashSet<>();
 
     /**
      * Sessioni di allenamento a cui l'atleta partecipa, ordinate per data e ora
      * secondo l'ordinamento naturale di {@link SessioneDiAllenamento}.
      */
     @OneToMany(mappedBy = "atleta")
-    private final Set<SessioneDiAllenamento> sessioni = new TreeSet<>();
+    private Set<SessioneDiAllenamento> sessioni = new TreeSet<>();
 
     /**
      * Costruttore di default richiesto da JPA.
