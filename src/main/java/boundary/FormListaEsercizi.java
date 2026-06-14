@@ -130,8 +130,8 @@ public class FormListaEsercizi extends JFrame {
         try {
             controller.completaSessione(this.idCurrentSession, risultati_row);
 
-            if (controller.getDettaglioSessionePerId(idCurrentSession).get("stato").equals("COMPLETATA")) {
-                new ThreadNotifier().sendMailComplete((String) controller.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore"));
+            if (controller.isCompleted(idCurrentSession)) {
+                notifica((String) controller.getDettaglioSessionePerId(idCurrentSession).get("email_allenatore"));
             }
 
             parentForm.refreshPanelCentrale();
@@ -145,7 +145,7 @@ public class FormListaEsercizi extends JFrame {
     }
 
     public void notifica(String mail){
-        Notifier.getInstance().sendMailComplete(mail);
+        ThreadNotifier.getInstance().sendMailComplete(mail);
     }
 
     public JPanel getPanelBase() {

@@ -1,6 +1,18 @@
 package notifier;
 
 public class ThreadNotifier implements INotifier{
+
+    private static ThreadNotifier instance = null;
+
+    private ThreadNotifier() {
+    }
+
+    public static ThreadNotifier getInstance() {
+        if (instance == null) {
+            instance = new ThreadNotifier();
+        }
+        return instance;
+    }
     @Override
     public void sendMailComplete(String destinatario){
         Thread t = new Thread(() -> {

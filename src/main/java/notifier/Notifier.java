@@ -16,7 +16,7 @@ public class Notifier implements INotifier {
     private Notifier() {
     }
 
-    public static Notifier getInstance() {
+    public static synchronized Notifier getInstance() {
         if (instance == null) {
             instance = new Notifier();
         }

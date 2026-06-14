@@ -218,4 +218,8 @@ public class Controller {
 
         return dettaglio;
     }
+
+    public boolean isCompleted(Long id_sessione){
+        return GestoreSessioni.getInstance().getSessione(id_sessione).getStato().toString().equals("COMPLETATA");
+    }
 }
