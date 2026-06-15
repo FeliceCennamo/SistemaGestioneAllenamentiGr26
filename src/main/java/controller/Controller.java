@@ -1,6 +1,7 @@
 package controller;
 
-import entity.*;
+import entity.GestoreSessioni;
+import entity.GestoreUtenti;
 import java.util.*;
 
 /**
@@ -22,7 +23,7 @@ public class Controller {
      * Identificativo dell'utente correntemente autenticato.
      * In una implementazione reale verrebbe recuperato dal contesto di sicurezza.
      */
-    private Long idUtenteAutenticato = 150L;
+    private Long idUtenteAutenticato = 87L;
 
     private static Controller instance;
 
@@ -50,15 +51,11 @@ public class Controller {
      * @param idUtente identificativo dell'atleta
      * @return insieme degli id delle sessioni trovate
      */
-    public ArrayList<Long> getIdSessioniPerUtente(Long idUtente) {
+    public List<Long> getIdSessioniPerUtente(Long idUtente) {
         GestoreSessioni gestoreSessioni = GestoreSessioni.getInstance();
-        TreeSet<SessioneDiAllenamento> sessioni = new TreeSet<>(gestoreSessioni.cercaSessioni(idUtente));
 
+        List<Long> ids = gestoreSessioni.getIdSessioniForUtente(idUtente);
 
-        ArrayList<Long> ids = new ArrayList<>();
-        for (SessioneDiAllenamento sessione : sessioni) {
-            ids.add(sessione.getId());
-        }
         return ids;
     }
 
@@ -78,25 +75,7 @@ public class Controller {
      * @return lista ordinata degli id degli esercizi
      */
     public List<Long> getIdEserciziPerSessione(Long idSessione) {
-        GestoreSessioni gestoreSessioni = GestoreSessioni.getInstance();
-        List<Long> ids = new ArrayList<>();
-
-        for (Esercizio esercizio : gestoreSessioni.dettaglioSessione(idSessione)) {
-            ids.add(esercizio.getId());
-        }
-        return ids;
-    }
-
-    /**
-     * Carica una sessione a partire dal suo identificativo.
-     *
-     * @param idSessione id della sessione
-     * @return l'oggetto sessione corrispondente
-     * @throws exceptions.ResourceNotFoundException se la sessione non esiste
-     */
-    public SessioneDiAllenamento getSessionePerId(Long idSessione) {
-        GestoreSessioni gestore = GestoreSessioni.getInstance();
-        return gestore.getSessione(idSessione);
+        return GestoreSessioni.getInstance().getIdEserciziForSessione(idSessione);
     }
 
     /**
@@ -120,7 +99,7 @@ public class Controller {
      * @throws ClassCastException    in caso di incompatibilità di tipo durante la
      *                               registrazione dei risultati
      */
-    public void completaSessione(Long idSessione, Map<Long, String[]> risultatiRow) {
+    public void completaSessione(Long idSessione, Map<Long, String[]> risultatiRow) throws IllegalArgumentException {
         GestoreSessioni gestore = GestoreSessioni.getInstance();
 
         HashMap<Long, Integer> risultati = new HashMap<>();
@@ -131,6 +110,10 @@ public class Controller {
             String[] dati = entry.getValue();
 
             // dati[1] contiene il risultato come stringa
+            if("".equals(dati[1])){
+                throw new IllegalArgumentException("È proibito inserire la nota senza inserire il risultato.\n" +
+                                                    "Svolgere l'esercizio inserendo sia la nota che il risultato");
+            }
             int valore = Integer.parseInt(dati[1]);
             if (valore <= 0) {
                 throw new NumberFormatException("Il risultato deve essere necessariamente un numero maggiore di 0");
@@ -141,7 +124,7 @@ public class Controller {
         }
 
         try {
-            gestore.completaSessione(this.idUtenteAutenticato, idSessione, risultati, note);
+            gestore.completaSessione(idUtenteAutenticato, idSessione, risultati, note);
         } catch (IllegalAccessException e) {
             System.out.println(e.getMessage());
         }
@@ -166,26 +149,9 @@ public class Controller {
      * @return mappa contenente le informazioni di dettaglio
      */
     public Map<String, Object> getDettaglioEsercizioPerId(Long idSessione, Long idEsercizio) {
-        Map<String, Object> dettaglio = new HashMap<>();
-        SessioneDiAllenamento sessione = this.getSessionePerId(idSessione);
-        Esercizio esercizio = sessione.getEsercizioPerId(idEsercizio);
 
-        dettaglio.put("nome", esercizio.getNome());
-        dettaglio.put("descrizione", esercizio.getDescrizione());
-        dettaglio.put("stato", sessione.getStato().toString());
+        return GestoreSessioni.getInstance().getDettaglioEsercizioPerId(idSessione, idEsercizio);
 
-        Risultato risultato = esercizio.getRisultato();
-        if (risultato == null) {
-            dettaglio.put("nota", null);
-            dettaglio.put("risultato", null);
-        } else {
-            dettaglio.put("nota", risultato.getNota());
-            dettaglio.put("risultato", risultato.getRisultato());
-        }
-
-        dettaglio.put("risultato_atteso", esercizio.getRisultatoAtteso());
-
-        return dettaglio;
     }
 
     /**
@@ -205,21 +171,11 @@ public class Controller {
      * @return mappa contenente il dettaglio
      */
     public Map<String, Object> getDettaglioSessionePerId(Long idSessione) {
-        Map<String, Object> dettaglio = new HashMap<>();
-        SessioneDiAllenamento sessione = this.getSessionePerId(idSessione);
+        return GestoreSessioni.getInstance().getDettaglioSessionePerId(idSessione);
 
-        dettaglio.put("titolo", sessione.getTitolo());
-        dettaglio.put("allenatore", sessione.getAllenatore().getNome() + " " +
-                sessione.getAllenatore().getCognome());
-        dettaglio.put("email_allenatore", sessione.getAllenatore().getMail());
-        dettaglio.put("descrizione", sessione.getDescrizione());
-        dettaglio.put("stato", sessione.getStato().toString());
-        dettaglio.put("data", sessione.getDataSvolgimento());
-
-        return dettaglio;
     }
 
     public boolean isCompleted(Long id_sessione){
-        return GestoreSessioni.getInstance().getSessione(id_sessione).getStato().toString().equals("COMPLETATA");
+        return GestoreSessioni.getInstance().isSessionCompleted(id_sessione);
     }
 }

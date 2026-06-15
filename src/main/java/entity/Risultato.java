@@ -45,7 +45,7 @@ public abstract class Risultato {
      *
      * @return la nota, oppure {@code null} se assente
      */
-    public String getNota() {
+    protected String getNota() {
         return nota;
     }
 
@@ -65,7 +65,7 @@ public abstract class Risultato {
      *
      * @return il valore del risultato
      */
-    public abstract Object getRisultato();
+    protected abstract Object getRisultato();
 
     /**
      * Imposta il valore concreto del risultato.
