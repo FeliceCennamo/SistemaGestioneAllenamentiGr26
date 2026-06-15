@@ -1,4 +1,4 @@
-package notifier;
+package boundary.notifier;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;

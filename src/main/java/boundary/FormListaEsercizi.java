@@ -5,8 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.Controller;
 
-import notifier.Notifier;
-import notifier.ThreadNotifier;
+import boundary.notifier.ThreadNotifier;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;

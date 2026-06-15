@@ -1,4 +1,4 @@
-package notifier;
+package boundary.notifier;
 
 public class ThreadNotifier implements INotifier{
 
