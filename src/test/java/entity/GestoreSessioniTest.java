@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -243,5 +240,20 @@ class GestoreSessioniTest {
                 .filter(ex -> ex.getId().equals(esercizioRip.getId())).findFirst().orElseThrow();
         assertNull(e.getRisultato().getRisultato());
         assertEquals("Solo nota", e.getRisultato().getNota());
+    }
+
+    @Test
+    void testCompletaSessione_SessioneGiaCompletata() throws IllegalAccessException{
+        HashMap<Long, Integer> risultati = new HashMap<>();
+        HashMap<Long, String> note = new HashMap<>();
+        risultati.put(esercizioRip.getId(), 15);
+        risultati.put(esercizioTempo.getId(), 8); // 8 minuti
+        note.put(esercizioRip.getId(), "Buono");
+        note.put(esercizioTempo.getId(), "Ottimo");
+
+        gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note);
+
+        assertThrows(IllegalAccessException.class, () ->
+                gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note));
     }
 }

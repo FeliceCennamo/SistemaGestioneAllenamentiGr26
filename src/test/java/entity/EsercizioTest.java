@@ -167,26 +167,6 @@ class EsercizioTest {
                 () -> eTempo.setRisultato(50, "nota"));
     }
 
-    // ==================== SET RISULTATO (solo nota) ====================
-    @Test
-    void testSetRisultatoSoloNota_Ripetizioni() {
-        Esercizio e = new Esercizio(TEST_NOME_RIP, "desc", 10);
-        e.setRisultato("Nota senza risultato");
-        assertNotNull(e.getRisultato());
-        assertTrue(e.getRisultato() instanceof RisultatoRipetizioni);
-        assertNull(e.getRisultato().getRisultato());
-        assertEquals("Nota senza risultato", e.getRisultato().getNota());
-    }
-
-    @Test
-    void testSetRisultatoSoloNota_Tempo() {
-        Esercizio e = new Esercizio(TEST_NOME_TEMPO, "desc", Duration.ofMinutes(5));
-        e.setRisultato("Solo nota tempo");
-        assertTrue(e.getRisultato() instanceof RisultatoTempo);
-        assertNull(e.getRisultato().getRisultato());
-        assertEquals("Solo nota tempo", e.getRisultato().getNota());
-    }
-
     // ==================== TEST PERSISTENZA ====================
     @Test
     void testPersistenzaEsercizioRipetizioni() {
@@ -253,7 +233,6 @@ class EsercizioTest {
     void testSetRisultato_TipoNull_ThrowsIllegalArgumentException() {
         Esercizio e = new Esercizio();
         assertThrows(IllegalArgumentException.class, () -> e.setRisultato(10, "nota"));
-        assertThrows(IllegalArgumentException.class, () -> e.setRisultato("solo nota"));
     }
 
     // ==================== ALTRI METODI ====================

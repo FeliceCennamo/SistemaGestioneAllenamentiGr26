@@ -143,7 +143,7 @@ public class Controller {
         try {
             gestore.completaSessione(this.idUtenteAutenticato, idSessione, risultati, note);
         } catch (IllegalAccessException e) {
-            System.out.println("Sessione non appartenente all'utente");
+            System.out.println(e.getMessage());
         }
     }
 

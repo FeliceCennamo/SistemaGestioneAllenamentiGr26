@@ -105,8 +105,9 @@ public class GestoreSessioni {
         if (!sessione.getAtleta().getId().equals(idAtleta)) {
             throw new IllegalAccessException("La sessione non appartiene all'utente");
         }
-
-        sessione.setStato("IN CORSO");
+        if(sessione.getStato() == StatoSessione.COMPLETATA){
+            throw new IllegalAccessException("La sessione è già stata completata");
+        }
 
         // Itera su tutti gli esercizi della sessione per registrare risultati e note
         for (Long idEsercizio : sessione.getEsercizi().stream().map(Esercizio::getId).toList()) {
@@ -133,6 +134,8 @@ public class GestoreSessioni {
 
         if (completata) {
             sessione.setStato("COMPLETATA");
+        }else{
+            sessione.setStato("IN CORSO");
         }
 
         GestorePersistenza.salva(sessione);

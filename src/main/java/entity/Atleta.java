@@ -65,10 +65,10 @@ public class Atleta extends Utente {
      * @param livello    livello di esperienza (es. 1 = principiante)
      */
     public Atleta(String nome, String cognome, String mail, String password,
-                     String disciplina, int livello) {
+                     String disciplina, int livello) throws IllegalArgumentException{
         super(nome, cognome, mail, password);
-        this.disciplina = disciplina;
-        this.livello = livello;
+        setDisciplina(disciplina);
+        setLivello(livello);
     }
 
     /**
@@ -83,10 +83,10 @@ public class Atleta extends Utente {
      * @param obiettivi  insieme degli obiettivi personali
      */
     public Atleta(String nome, String cognome, String mail, String password,
-                     String disciplina, int livello, Set<String> obiettivi) {
+                     String disciplina, int livello, Set<String> obiettivi) throws IllegalArgumentException{
         super(nome, cognome, mail, password);
-        this.disciplina = disciplina;
-        this.livello = livello;
+        setDisciplina(disciplina);
+        setLivello(livello);
         this.obiettivi = obiettivi;
     }
 
@@ -131,8 +131,12 @@ public class Atleta extends Utente {
      *
      * @param disciplina la nuova disciplina
      */
-    protected void setDisciplina(String disciplina) {
-        this.disciplina = disciplina;
+    protected void setDisciplina(String disciplina) throws IllegalArgumentException{
+        if(disciplina.matches("[a-zA-Z]+")) {
+            this.disciplina = disciplina;
+        }else{
+            throw new IllegalArgumentException("Disciplina può contenere solo caratteri alfabetici");
+        }
     }
 
     /**
@@ -140,8 +144,12 @@ public class Atleta extends Utente {
      *
      * @param livello il nuovo livello
      */
-    protected void setLivello(int livello) {
-        this.livello = livello;
+    protected void setLivello(int livello) throws IllegalArgumentException {
+        if (livello >= 1 && livello <= 10) {
+            this.livello = livello;
+        }else{
+            throw new IllegalArgumentException("Il livello può essere compreso solo tra 1 e 10");
+        }
     }
 
     /**
