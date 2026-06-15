@@ -230,14 +230,14 @@ public class SessioneDiAllenamento implements Comparable {
     protected void registraRisultato(Object risultato, String nota, Long idEsercizio) {
         for (Esercizio e : esercizi) {
             if (e.getId().equals(idEsercizio)) {
-                if (nota == null) {
-                    e.setRisultato(risultato, "");
+                if(risultato != null) {
+                    if (nota == null) {
+                        e.setRisultato(risultato, "");
+                    } else {
+                        e.setRisultato(risultato, nota);
+                    }
+                    return;
                 }
-
-                else {
-                    e.setRisultato(risultato, nota);
-                }
-                return;
             }
         }
         throw new IllegalArgumentException("Esercizio non trovato nella sessione");

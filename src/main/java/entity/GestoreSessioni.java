@@ -117,9 +117,9 @@ public class GestoreSessioni {
             if (risultati.containsKey(idEsercizio)) {
                 // Converte l'intero in Duration per gli esercizi a tempo
                 if (esercizio.getTipo() == TipoEsercizio.TEMPO) {
-                    valore = Duration.ofMinutes(risultati.get(idEsercizio));
+                    valore = Duration.ofMinutes(risultati.getOrDefault(idEsercizio, null));
                 } else if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI) {
-                    valore = risultati.get(idEsercizio);
+                    valore = risultati.getOrDefault(idEsercizio, null);
                 }
             }
 
