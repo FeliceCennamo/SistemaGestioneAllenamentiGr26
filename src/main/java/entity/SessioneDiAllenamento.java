@@ -230,9 +230,11 @@ public class SessioneDiAllenamento implements Comparable {
     protected void registraRisultato(Object risultato, String nota, Long idEsercizio) {
         for (Esercizio e : esercizi) {
             if (e.getId().equals(idEsercizio)) {
-                if (risultato == null) {
-                    e.setRisultato(nota);
-                } else {
+                if (nota == null) {
+                    e.setRisultato(risultato, "");
+                }
+
+                else {
                     e.setRisultato(risultato, nota);
                 }
                 return;

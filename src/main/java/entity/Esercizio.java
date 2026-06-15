@@ -203,22 +203,6 @@ public class Esercizio {
     }
 
     /**
-     * Registra un risultato con la sola nota, lasciando il valore numerico/durata vuoto.
-     *
-     * @param nota annotazione testuale
-     * @throws IllegalArgumentException se il tipo esercizio non è supportato
-     */
-    protected void setRisultato(String nota) {
-        if (this.tipo == TipoEsercizio.TEMPO) {
-            this.risultato = new RisultatoTempo(nota, null);
-        } else if (this.tipo == TipoEsercizio.RIPETIZIONI) {
-            this.risultato = new RisultatoRipetizioni(nota, null);
-        } else {
-            throw new IllegalArgumentException("Tipo di esercizio non supportato");
-        }
-    }
-
-    /**
      * Classe embeddable che memorizza il risultato atteso in modo polimorfico:
      * può contenere un numero di ripetizioni o una durata.
      */
