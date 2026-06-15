@@ -22,7 +22,7 @@ public class Controller {
      * Identificativo dell'utente correntemente autenticato.
      * In una implementazione reale verrebbe recuperato dal contesto di sicurezza.
      */
-    private Long idUtenteAutenticato = 87L;
+    private Long idUtenteAutenticato = 150L;
 
     private static Controller instance;
 

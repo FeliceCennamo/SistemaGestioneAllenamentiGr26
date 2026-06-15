@@ -236,8 +236,8 @@ public class SessioneDiAllenamento implements Comparable {
                     } else {
                         e.setRisultato(risultato, nota);
                     }
-                    return;
                 }
+                return;
             }
         }
         throw new IllegalArgumentException("Esercizio non trovato nella sessione");
