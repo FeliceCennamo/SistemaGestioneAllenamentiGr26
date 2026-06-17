@@ -292,8 +292,5 @@ public class FormListaSessioni {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        FormListaSessioni form_base = new FormListaSessioni();
-        form_base.setup();
-    }
+
 }

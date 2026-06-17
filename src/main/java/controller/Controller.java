@@ -68,6 +68,11 @@ public class Controller {
         return idUtenteAutenticato;
     }
 
+
+    public void setIdUtenteAutenticato(Long idUtenteAutenticato) {
+        this.idUtenteAutenticato = idUtenteAutenticato;
+    }
+
     /**
      * Elenca gli identificativi di tutti gli esercizi contenuti in una sessione.
      *
