@@ -41,7 +41,7 @@ public class RisultatoTempo extends Risultato {
      * @return oggetto {@link Duration}, oppure {@code null}
      */
     @Override
-    public Duration getRisultato() {
+    protected Duration getRisultato() {
         return tempo;
     }
 

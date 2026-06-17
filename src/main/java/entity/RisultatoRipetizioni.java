@@ -37,7 +37,7 @@ public class RisultatoRipetizioni extends Risultato {
      * @return valore intero delle ripetizioni, oppure {@code null}
      */
     @Override
-    public Integer getRisultato() {
+    protected Integer getRisultato() {
         return ripetizioni;
     }
 

@@ -108,35 +108,35 @@ public class SessioneDiAllenamento implements Comparable {
 
     // ---------- Getters ----------
 
-    public String getTitolo() {
+    protected String getTitolo() {
         return titolo;
     }
 
-    public String getDescrizione() {
+    protected String getDescrizione() {
         return descrizione;
     }
 
-    public LocalDate getDataSvolgimento() {
+    protected LocalDate getDataSvolgimento() {
         return dataSvolgimento;
     }
 
-    public Long getId() {
+    protected Long getId() {
         return id;
     }
 
-    public Atleta getAtleta() {
+    protected Atleta getAtleta() {
         return atleta;
     }
 
-    public Allenatore getAllenatore() {
+    protected Allenatore getAllenatore() {
         return allenatore;
     }
 
-    public StatoSessione getStato() {
+    protected StatoSessione getStato() {
         return stato;
     }
 
-    public Duration getDurata() {
+    protected Duration getDurata() {
         return durata;
     }
 
@@ -208,7 +208,7 @@ public class SessioneDiAllenamento implements Comparable {
      *
      * @param esercizi nuova lista di esercizi
      */
-    public void setEsercizi(List<Esercizio> esercizi) {
+    protected void setEsercizi(List<Esercizio> esercizi) {
         this.esercizi = esercizi;
     }
 
@@ -249,7 +249,7 @@ public class SessioneDiAllenamento implements Comparable {
      * @param idEsercizio identificativo dell'esercizio
      * @return l'esercizio corrispondente, oppure {@code null} se non presente
      */
-    public Esercizio getEsercizioPerId(Long idEsercizio) {
+    protected Esercizio getEsercizioPerId(Long idEsercizio) {
         for (Esercizio e : this.esercizi) {
             if (e.getId().equals(idEsercizio)) {
                 return e;

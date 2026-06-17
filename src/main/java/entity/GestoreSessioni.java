@@ -72,6 +72,110 @@ public class GestoreSessioni {
     }
 
     /**
+     * Cerca tutte le sessioni associate a un determinato utente e restituisce il loro id.
+     *
+     * @param idUtente identificativo dell'utente
+     * @return insieme degli id delle sessioni associate all'utente
+     */
+    public List<Long> getIdSessioniForUtente(Long idUtente) {
+        TreeSet<SessioneDiAllenamento> sessioni = new TreeSet<>(cercaSessioni(idUtente));
+
+        List<Long> ids = new ArrayList<>();
+        for (SessioneDiAllenamento sessione : sessioni) {
+            ids.add(sessione.getId());
+        }
+
+        return ids;
+    }
+
+    /**
+     * Elenca gli identificativi di tutti gli esercizi contenuti in una sessione.
+     *
+     * @param idSessione identificativo della sessione
+     * @return lista ordinata degli id degli esercizi
+     */
+    public List<Long> getIdEserciziForSessione(Long idSessione){
+        List<Long> ids = new ArrayList<>();
+
+        for (Esercizio esercizio : dettaglioSessione(idSessione)) {
+            ids.add(esercizio.getId());
+        }
+        return ids;
+    }
+
+    /**
+     * Restituisce una mappa con i dati riepilogativi di una sessione.
+     * <p>
+     * Le chiavi presenti sono:
+     * <ul>
+     *   <li>{@code titolo} – titolo della sessione</li>
+     *   <li>{@code allenatore} – nome e cognome dell'allenatore</li>
+     *   <li>{@code email_allenatore} – email dell'allenatore</li>
+     *   <li>{@code descrizione} – descrizione testuale</li>
+     *   <li>{@code stato} – stato corrente</li>
+     *   <li>{@code data} – data di svolgimento</li>
+     * </ul>
+     *
+     * @param idSessione identificativo della sessione
+     * @return mappa contenente il dettaglio
+     */
+    public Map<String, Object> getDettaglioSessionePerId(Long idSessione) {
+        Map<String, Object> dettaglio = new HashMap<>();
+        SessioneDiAllenamento sessione = getSessione(idSessione);
+
+        dettaglio.put("titolo", sessione.getTitolo());
+        dettaglio.put("allenatore", sessione.getAllenatore().getNome() + " " +
+                sessione.getAllenatore().getCognome());
+        dettaglio.put("email_allenatore", sessione.getAllenatore().getMail());
+        dettaglio.put("descrizione", sessione.getDescrizione());
+        dettaglio.put("stato", sessione.getStato().toString());
+        dettaglio.put("data", sessione.getDataSvolgimento());
+
+        return dettaglio;
+    }
+
+    /**
+     * Restituisce una mappa con i dettagli di un esercizio all'interno di una
+     * sessione.
+     * <p>
+     * Le chiavi presenti sono:
+     * <ul>
+     *   <li>{@code nome} – nome dell'esercizio</li>
+     *   <li>{@code descrizione} – descrizione testuale</li>
+     *   <li>{@code stato} – stato della sessione di appartenenza</li>
+     *   <li>{@code nota} – nota associata al risultato (o null)</li>
+     *   <li>{@code risultato} – valore effettivo del risultato (o null)</li>
+     *   <li>{@code risultato_atteso} – target dell'esercizio</li>
+     * </ul>
+     *
+     * @param idSessione  identificativo della sessione
+     * @param idEsercizio identificativo dell'esercizio
+     * @return mappa contenente le informazioni di dettaglio
+     */
+    public Map<String, Object> getDettaglioEsercizioPerId(Long idSessione, Long idEsercizio) {
+        Map<String, Object> dettaglio = new HashMap<>();
+        SessioneDiAllenamento sessione = this.getSessione(idSessione);
+        Esercizio esercizio = sessione.getEsercizioPerId(idEsercizio);
+
+        dettaglio.put("nome", esercizio.getNome());
+        dettaglio.put("descrizione", esercizio.getDescrizione());
+        dettaglio.put("stato", sessione.getStato().toString());
+
+        Risultato risultato = esercizio.getRisultato();
+        if (risultato == null) {
+            dettaglio.put("nota", null);
+            dettaglio.put("risultato", null);
+        } else {
+            dettaglio.put("nota", risultato.getNota());
+            dettaglio.put("risultato", risultato.getRisultato());
+        }
+
+        dettaglio.put("risultato_atteso", esercizio.getRisultatoAtteso());
+
+        return dettaglio;
+    }
+
+    /**
      * Permette a un atleta di completare una sessione registrando i risultati
      * e le note per ciascun esercizio.
      * <p>
@@ -154,5 +258,9 @@ public class GestoreSessioni {
             throw new ResourceNotFoundException("Sessione non trovata");
         }
         return s;
+    }
+
+    public boolean isSessionCompleted(Long idSessione){
+        return getSessione(idSessione).getStato().toString().equals("COMPLETATA");
     }
 }
