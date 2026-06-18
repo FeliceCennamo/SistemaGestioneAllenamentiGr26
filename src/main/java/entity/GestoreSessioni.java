@@ -239,7 +239,7 @@ public class GestoreSessioni {
         if (completata) {
             sessione.setStato("COMPLETATA");
         }else{
-            sessione.setStato("IN CORSO");
+            sessione.setStato("IN_CORSO");
         }
 
         GestorePersistenza.salva(sessione);

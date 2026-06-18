@@ -192,7 +192,7 @@ class GestoreSessioniTest {
 
         Esercizio eTempo = reloaded.getEsercizi().stream()
                 .filter(e -> e.getId().equals(esercizioTempo.getId())).findFirst().orElseThrow();
-        assertNull(eTempo.getRisultato().getRisultato());
+        assertNull(eTempo.getRisultato());
     }
 
     @Test
@@ -205,7 +205,7 @@ class GestoreSessioniTest {
         SessioneDiAllenamento reloaded = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
         assertEquals(StatoSessione.IN_CORSO, reloaded.getStato());
         for (Esercizio e : reloaded.getEsercizi()) {
-            assertNull(e.getRisultato().getRisultato());
+            assertNull(e.getRisultato());
         }
     }
 
@@ -227,6 +227,11 @@ class GestoreSessioniTest {
 
     @Test
     void testCompletaSessione_WithOnlyNote() throws IllegalAccessException {
+
+        /*
+        Se l'esercizio riceve solo la nota, l'esercizio non è completato, in quanto deve necessariamente ricevere il risultato
+         */
+
         HashMap<Long, Integer> risultati = new HashMap<>();
         HashMap<Long, String> note = new HashMap<>();
         note.put(esercizioRip.getId(), "Solo nota");
@@ -238,8 +243,7 @@ class GestoreSessioniTest {
 
         Esercizio e = reloaded.getEsercizi().stream()
                 .filter(ex -> ex.getId().equals(esercizioRip.getId())).findFirst().orElseThrow();
-        assertNull(e.getRisultato().getRisultato());
-        assertEquals("Solo nota", e.getRisultato().getNota());
+        assertNull(e.getRisultato());
     }
 
     @Test

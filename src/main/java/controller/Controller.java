@@ -119,9 +119,14 @@ public class Controller {
                 throw new IllegalArgumentException("È proibito inserire la nota senza inserire il risultato.\n" +
                                                     "Svolgere l'esercizio inserendo sia la nota che il risultato");
             }
-            int valore = Integer.parseInt(dati[1]);
+            int valore;
+            try {
+                valore = Integer.parseInt(dati[1]);
+            }catch(NumberFormatException b){
+                throw new NumberFormatException("Il risultato deve essere necessariamente un numero");
+            }
             if (valore <= 0) {
-                throw new NumberFormatException("Il risultato deve essere necessariamente un numero maggiore di 0");
+                throw new NumberFormatException("Il risultato deve essere necessariamente maggiore di 0");
             }
 
             risultati.put(idEsercizio, valore);

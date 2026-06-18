@@ -150,6 +150,8 @@ class AtletaTest {
         Atleta reloaded = GestorePersistenza.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
                 Map.of("id", atleta.getId())).get(0);
         assertEquals("Pallavolo", reloaded.getDisciplina());
+        assertThrows(IllegalArgumentException.class, () -> reloaded.setDisciplina("Pall@vol0"));
+        assertDoesNotThrow(() -> reloaded.setDisciplina("Calcio"));
     }
 
     @Test
@@ -161,6 +163,11 @@ class AtletaTest {
         Atleta reloaded = GestorePersistenza.eseguiQuery("SELECT a FROM Atleta a WHERE a.id = :id", Atleta.class,
                 Map.of("id", atleta.getId())).get(0);
         assertEquals(5, reloaded.getLivello());
+        assertThrows(IllegalArgumentException.class, () -> reloaded.setLivello(-1));
+        assertThrows(IllegalArgumentException.class, () -> reloaded.setLivello(0));
+        assertDoesNotThrow(() -> reloaded.setLivello(1));
+        assertDoesNotThrow(() -> reloaded.setLivello(10));
+        assertThrows(IllegalArgumentException.class, () -> reloaded.setLivello(11));
     }
 
     @Test
