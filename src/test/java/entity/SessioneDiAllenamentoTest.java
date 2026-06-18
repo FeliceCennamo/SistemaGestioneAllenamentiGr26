@@ -201,18 +201,19 @@ class SessioneDiAllenamentoTest {
     }
 
     @Test
-    void testRegistraRisultato_SoloNota() {
+    void testRegistraRisultato_SoloRisultato() {
         Long idEs = esercizioRip.getId();
+
         eseguiInTransazione(() -> {
             SessioneDiAllenamento s = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
-            s.registraRisultato(null, "Solo nota", idEs);
+            s.registraRisultato(10, null, idEs);
             GestorePersistenza.salva(s);
         });
 
         SessioneDiAllenamento reloaded = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, sessione.getId());
         Esercizio e = reloaded.getEsercizioPerId(idEs);
-        assertNull(e.getRisultato().getRisultato());
-        assertEquals("Solo nota", e.getRisultato().getNota());
+        assertEquals(10, e.getRisultato().getRisultato());
+        assertEquals("",e.getRisultato().getNota());
     }
 
     @Test

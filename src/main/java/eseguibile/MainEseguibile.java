@@ -4,10 +4,10 @@ import boundary.FormListaSessioni;
 
 public class MainEseguibile {
 
-    public void main(String[] args){
+    public static void main(String[] args){
 
         Controller c_session = Controller.getInstance();
-        c_session.setIdUtenteAutenticato(150L);
+        c_session.setIdUtenteAutenticato(74L);
 
         FormListaSessioni form_base = new FormListaSessioni();
         form_base.setup();
