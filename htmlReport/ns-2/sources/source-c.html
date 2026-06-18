@@ -1,0 +1,281 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Utente</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Utente (entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Utente</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (24/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package entity;
+&nbsp;
+&nbsp;import jakarta.persistence.GeneratedValue;
+&nbsp;import jakarta.persistence.GenerationType;
+&nbsp;import jakarta.persistence.Id;
+&nbsp;import jakarta.persistence.MappedSuperclass;
+&nbsp;
+&nbsp;import org.mindrot.jbcrypt.BCrypt;
+&nbsp;
+&nbsp;/**
+&nbsp; * Classe base astratta per tutti gli utenti del sistema (atleti e allenatori).
+&nbsp; * &lt;p&gt;
+&nbsp; * Mappa i campi anagrafici comuni, le credenziali di accesso e una disciplina
+&nbsp; * sportiva prevalente. La password viene memorizzata sotto forma di hash
+&nbsp; * bcrypt e mai in chiaro.
+&nbsp; * &lt;/p&gt;
+&nbsp; * &lt;p&gt;
+&nbsp; * Le sottoclassi concrete ({@link Atleta}, {@link Allenatore}) ereditano
+&nbsp; * questa mappatura grazie all&#39;annotazione {@link MappedSuperclass}.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;@MappedSuperclass
+&nbsp;public abstract class Utente {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Long id;
+&nbsp;
+&nbsp;    private String nome;
+&nbsp;    private String cognome;
+&nbsp;    private String mail;
+&nbsp;    private String password;
+&nbsp;
+&nbsp;    private String disciplinaPrevalente;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Costruttore di default richiesto da JPA.
+&nbsp;     */
+<b class="fc">&nbsp;    public Utente() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Crea un utente con i soli dati anagrafici e le credenziali, senza
+&nbsp;     * specificare una disciplina prevalente (che rimane {@code null}).
+&nbsp;     *
+&nbsp;     * @param nome     nome dell&#39;utente
+&nbsp;     * @param cognome  cognome dell&#39;utente
+&nbsp;     * @param mail     indirizzo email (usato come identificativo di accesso)
+&nbsp;     * @param password password in chiaro (verrà cifrata automaticamente)
+&nbsp;     */
+<b class="fc">&nbsp;    protected Utente(String nome, String cognome, String mail, String password) {</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.cognome = cognome;</b>
+<b class="fc">&nbsp;        this.mail = mail;</b>
+<b class="fc">&nbsp;        this.password = password;</b>
+<b class="fc">&nbsp;        this.disciplinaPrevalente = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Crea un utente completo di disciplina prevalente.
+&nbsp;     *
+&nbsp;     * @param nome                 nome dell&#39;utente
+&nbsp;     * @param cognome              cognome dell&#39;utente
+&nbsp;     * @param mail                 indirizzo email
+&nbsp;     * @param password             password in chiaro (verrà cifrata)
+&nbsp;     * @param disciplinaPrevalente disciplina sportiva principale dell&#39;utente
+&nbsp;     */
+&nbsp;    public Utente(String nome, String cognome, String mail, String password,
+<b class="fc">&nbsp;                  String disciplinaPrevalente) {</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.cognome = cognome;</b>
+<b class="fc">&nbsp;        this.mail = mail;</b>
+<b class="fc">&nbsp;        this.password = password;</b>
+<b class="fc">&nbsp;        this.disciplinaPrevalente = disciplinaPrevalente;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce il nome dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @return il nome
+&nbsp;     */
+&nbsp;    public String getNome() {
+<b class="fc">&nbsp;        return nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Imposta il nome dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @param nome il nuovo nome
+&nbsp;     */
+&nbsp;    protected void setNome(String nome) {
+<b class="fc">&nbsp;        this.nome = nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce il cognome dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @return il cognome
+&nbsp;     */
+&nbsp;    public String getCognome() {
+<b class="fc">&nbsp;        return cognome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Imposta il cognome dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @param cognome il nuovo cognome
+&nbsp;     */
+&nbsp;    protected void setCognome(String cognome) {
+<b class="fc">&nbsp;        this.cognome = cognome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce l&#39;indirizzo email dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @return l&#39;email
+&nbsp;     */
+&nbsp;    public String getMail() {
+<b class="fc">&nbsp;        return mail;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Imposta l&#39;indirizzo email.
+&nbsp;     *
+&nbsp;     * @param mail la nuova email
+&nbsp;     */
+&nbsp;    protected void setMail(String mail) {
+<b class="fc">&nbsp;        this.mail = mail;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce l&#39;hash della password (non il valore in chiaro).
+&nbsp;     *
+&nbsp;     * @return la password cifrata
+&nbsp;     */
+&nbsp;    public String getPassword() {
+<b class="fc">&nbsp;        return password;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Imposta la password dell&#39;utente, memorizzandola in forma cifrata
+&nbsp;     * tramite l&#39;algoritmo bcrypt.
+&nbsp;     *
+&nbsp;     * @param password la password in chiaro da cifrare
+&nbsp;     */
+&nbsp;    protected void setPassword(String password) {
+&nbsp;        // BCrypt.gensalt() genera un salt casuale e restituisce l&#39;hash
+<b class="fc">&nbsp;        this.password = BCrypt.hashpw(password, BCrypt.gensalt());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce l&#39;identificativo univoco dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @return l&#39;id
+&nbsp;     */
+&nbsp;    public Long getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce la disciplina sportiva prevalente dell&#39;utente.
+&nbsp;     *
+&nbsp;     * @return la disciplina, o {@code null} se non impostata
+&nbsp;     */
+&nbsp;    public String getDisciplinaPrevalente() {
+<b class="fc">&nbsp;        return disciplinaPrevalente;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Imposta la disciplina sportiva prevalente.
+&nbsp;     *
+&nbsp;     * @param disciplinaPrevalente la nuova disciplina (può essere {@code null})
+&nbsp;     */
+&nbsp;    protected void setDisciplinaPrevalente(String disciplinaPrevalente) {
+<b class="fc">&nbsp;        this.disciplinaPrevalente = disciplinaPrevalente;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-18 12:22</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,382 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GestoreSessioni</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">entity</a>
+</div>
+
+<h1>Coverage Summary for Class: GestoreSessioni (entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GestoreSessioni</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,9%
+  </span>
+  <span class="absValue">
+    (26/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (72/72)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package entity;
+&nbsp;
+&nbsp;import database.GestorePersistenza;
+&nbsp;import exceptions.ResourceNotFoundException;
+&nbsp;
+&nbsp;import java.time.Duration;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Gestore centralizzato per le operazioni sulle sessioni di allenamento.
+&nbsp; * &lt;p&gt;
+&nbsp; * Espone metodi per cercare, visualizzare i dettagli e completare le sessioni,
+&nbsp; * operando come unico punto di accesso alla logica di dominio relativa
+&nbsp; * a {@link SessioneDiAllenamento}. Implementa il pattern Singleton.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+&nbsp;public class GestoreSessioni {
+&nbsp;
+&nbsp;    private static GestoreSessioni instance;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Costruttore privato per impedire l&#39;istanziazione diretta.
+&nbsp;     */
+<b class="fc">&nbsp;    private GestoreSessioni() {</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce l&#39;istanza Singleton del gestore, creandola se necessario.
+&nbsp;     *
+&nbsp;     * @return l&#39;istanza condivisa di {@code GestoreSessioni}
+&nbsp;     */
+&nbsp;    public static GestoreSessioni getInstance() {
+<b class="fc">&nbsp;        if (instance == null) {</b>
+<b class="fc">&nbsp;            instance = new GestoreSessioni();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return instance;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Recupera la lista degli esercizi che compongono una sessione.
+&nbsp;     *
+&nbsp;     * @param idSessione identificativo della sessione
+&nbsp;     * @return lista ordinata degli esercizi presenti
+&nbsp;     * @throws ResourceNotFoundException se la sessione non esiste
+&nbsp;     */
+&nbsp;    public List&lt;Esercizio&gt; dettaglioSessione(Long idSessione) {
+<b class="fc">&nbsp;        SessioneDiAllenamento sessione = getSessione(idSessione);</b>
+<b class="fc">&nbsp;        return sessione.getEsercizi();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce tutte le sessioni presenti nel sistema, senza filtri.
+&nbsp;     *
+&nbsp;     * @return insieme di tutte le sessioni
+&nbsp;     */
+&nbsp;    public Set&lt;SessioneDiAllenamento&gt; cercaSessioni() {
+<b class="fc">&nbsp;        List&lt;SessioneDiAllenamento&gt; lista = GestorePersistenza.ottieniTutti(SessioneDiAllenamento.class);</b>
+<b class="fc">&nbsp;        return new HashSet&lt;&gt;(lista);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Cerca tutte le sessioni associate a un determinato atleta.
+&nbsp;     *
+&nbsp;     * @param idAtleta identificativo dell&#39;atleta
+&nbsp;     * @return insieme delle sessioni a cui l&#39;atleta partecipa
+&nbsp;     */
+&nbsp;    public Set&lt;SessioneDiAllenamento&gt; cercaSessioni(Long idAtleta) {
+<b class="fc">&nbsp;        String query = &quot;SELECT s FROM SessioneDiAllenamento s WHERE s.atleta.id = :id_atleta&quot;;</b>
+<b class="fc">&nbsp;        List&lt;SessioneDiAllenamento&gt; lista = GestorePersistenza.eseguiQuery(</b>
+<b class="fc">&nbsp;                query, SessioneDiAllenamento.class, Map.of(&quot;id_atleta&quot;, idAtleta));</b>
+<b class="fc">&nbsp;        return new HashSet&lt;&gt;(lista);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Cerca tutte le sessioni associate a un determinato utente e restituisce il loro id.
+&nbsp;     *
+&nbsp;     * @param idUtente identificativo dell&#39;utente
+&nbsp;     * @return insieme degli id delle sessioni associate all&#39;utente
+&nbsp;     */
+&nbsp;    public List&lt;Long&gt; getIdSessioniForUtente(Long idUtente) {
+<b class="fc">&nbsp;        TreeSet&lt;SessioneDiAllenamento&gt; sessioni = new TreeSet&lt;&gt;(cercaSessioni(idUtente));</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;Long&gt; ids = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (SessioneDiAllenamento sessione : sessioni) {</b>
+<b class="fc">&nbsp;            ids.add(sessione.getId());</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return ids;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Elenca gli identificativi di tutti gli esercizi contenuti in una sessione.
+&nbsp;     *
+&nbsp;     * @param idSessione identificativo della sessione
+&nbsp;     * @return lista ordinata degli id degli esercizi
+&nbsp;     */
+&nbsp;    public List&lt;Long&gt; getIdEserciziForSessione(Long idSessione){
+<b class="fc">&nbsp;        List&lt;Long&gt; ids = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Esercizio esercizio : dettaglioSessione(idSessione)) {</b>
+<b class="fc">&nbsp;            ids.add(esercizio.getId());</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return ids;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce una mappa con i dati riepilogativi di una sessione.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * Le chiavi presenti sono:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;{@code titolo} – titolo della sessione&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code allenatore} – nome e cognome dell&#39;allenatore&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code email_allenatore} – email dell&#39;allenatore&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code descrizione} – descrizione testuale&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code stato} – stato corrente&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code data} – data di svolgimento&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * @param idSessione identificativo della sessione
+&nbsp;     * @return mappa contenente il dettaglio
+&nbsp;     */
+&nbsp;    public Map&lt;String, Object&gt; getDettaglioSessionePerId(Long idSessione) {
+<b class="fc">&nbsp;        Map&lt;String, Object&gt; dettaglio = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        SessioneDiAllenamento sessione = getSessione(idSessione);</b>
+&nbsp;
+<b class="fc">&nbsp;        dettaglio.put(&quot;titolo&quot;, sessione.getTitolo());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;allenatore&quot;, sessione.getAllenatore().getNome() + &quot; &quot; +</b>
+<b class="fc">&nbsp;                sessione.getAllenatore().getCognome());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;email_allenatore&quot;, sessione.getAllenatore().getMail());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;descrizione&quot;, sessione.getDescrizione());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;stato&quot;, sessione.getStato().toString());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;data&quot;, sessione.getDataSvolgimento());</b>
+&nbsp;
+<b class="fc">&nbsp;        return dettaglio;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce una mappa con i dettagli di un esercizio all&#39;interno di una
+&nbsp;     * sessione.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * Le chiavi presenti sono:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;{@code nome} – nome dell&#39;esercizio&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code descrizione} – descrizione testuale&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code stato} – stato della sessione di appartenenza&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code nota} – nota associata al risultato (o null)&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code risultato} – valore effettivo del risultato (o null)&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code risultato_atteso} – target dell&#39;esercizio&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * @param idSessione  identificativo della sessione
+&nbsp;     * @param idEsercizio identificativo dell&#39;esercizio
+&nbsp;     * @return mappa contenente le informazioni di dettaglio
+&nbsp;     */
+&nbsp;    public Map&lt;String, Object&gt; getDettaglioEsercizioPerId(Long idSessione, Long idEsercizio) {
+<b class="fc">&nbsp;        Map&lt;String, Object&gt; dettaglio = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        SessioneDiAllenamento sessione = this.getSessione(idSessione);</b>
+<b class="fc">&nbsp;        Esercizio esercizio = sessione.getEsercizioPerId(idEsercizio);</b>
+&nbsp;
+<b class="fc">&nbsp;        dettaglio.put(&quot;nome&quot;, esercizio.getNome());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;descrizione&quot;, esercizio.getDescrizione());</b>
+<b class="fc">&nbsp;        dettaglio.put(&quot;stato&quot;, sessione.getStato().toString());</b>
+&nbsp;
+<b class="fc">&nbsp;        Risultato risultato = esercizio.getRisultato();</b>
+<b class="fc">&nbsp;        if (risultato == null) {</b>
+<b class="fc">&nbsp;            dettaglio.put(&quot;nota&quot;, null);</b>
+<b class="fc">&nbsp;            dettaglio.put(&quot;risultato&quot;, null);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            dettaglio.put(&quot;nota&quot;, risultato.getNota());</b>
+<b class="fc">&nbsp;            dettaglio.put(&quot;risultato&quot;, risultato.getRisultato());</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        dettaglio.put(&quot;risultato_atteso&quot;, esercizio.getRisultatoAtteso());</b>
+&nbsp;
+<b class="fc">&nbsp;        return dettaglio;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Permette a un atleta di completare una sessione registrando i risultati
+&nbsp;     * e le note per ciascun esercizio.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * Lo stato della sessione viene impostato a &quot;IN CORSO&quot; all&#39;inizio
+&nbsp;     * e, se tutti gli esercizi hanno un risultato valorizzato, a &quot;COMPLETATA&quot;
+&nbsp;     * al termine.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param idAtleta   identificativo dell&#39;atleta che sta completando la sessione
+&nbsp;     * @param idSessione identificativo della sessione da completare
+&nbsp;     * @param risultati  mappa che associa l&#39;id dell&#39;esercizio al valore del risultato
+&nbsp;     *                   (numero di ripetizioni o minuti totali come intero)
+&nbsp;     * @param note       mappa che associa l&#39;id dell&#39;esercizio a una nota testuale
+&nbsp;     * @throws IllegalAccessException se l&#39;atleta non è il destinatario della sessione
+&nbsp;     * @throws ClassCastException     se i tipi dei risultati non sono coerenti con gli esercizi
+&nbsp;     */
+&nbsp;    public void completaSessione(Long idAtleta, Long idSessione,
+&nbsp;                                 HashMap&lt;Long, Integer&gt; risultati,
+&nbsp;                                 HashMap&lt;Long, String&gt; note)
+&nbsp;            throws IllegalAccessException {
+&nbsp;
+&nbsp;        SessioneDiAllenamento sessione;
+&nbsp;        try {
+<b class="fc">&nbsp;            sessione = getSessione(idSessione);</b>
+&nbsp;        } catch (ResourceNotFoundException e) {
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+&nbsp;        // Verifica che l&#39;atleta sia effettivamente assegnato alla sessione
+<b class="fc">&nbsp;        if (!sessione.getAtleta().getId().equals(idAtleta)) {</b>
+<b class="fc">&nbsp;            throw new IllegalAccessException(&quot;La sessione non appartiene all&#39;utente&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if(sessione.getStato() == StatoSessione.COMPLETATA){</b>
+<b class="fc">&nbsp;            throw new IllegalAccessException(&quot;La sessione è già stata completata&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Itera su tutti gli esercizi della sessione per registrare risultati e note
+<b class="fc">&nbsp;        for (Long idEsercizio : sessione.getEsercizi().stream().map(Esercizio::getId).toList()) {</b>
+<b class="fc">&nbsp;            Esercizio esercizio = GestorePersistenza.trovaPerId(Esercizio.class, idEsercizio);</b>
+&nbsp;
+<b class="fc">&nbsp;            Object valore = null;</b>
+<b class="fc">&nbsp;            if (risultati.containsKey(idEsercizio)) {</b>
+&nbsp;                // Converte l&#39;intero in Duration per gli esercizi a tempo
+<b class="fc">&nbsp;                if (esercizio.getTipo() == TipoEsercizio.TEMPO) {</b>
+<b class="fc">&nbsp;                    valore = Duration.ofMinutes(risultati.getOrDefault(idEsercizio, null));</b>
+<b class="pc">&nbsp;                } else if (esercizio.getTipo() == TipoEsercizio.RIPETIZIONI) {</b>
+<b class="fc">&nbsp;                    valore = risultati.getOrDefault(idEsercizio, null);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            String nota = note.getOrDefault(idEsercizio, &quot;&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            sessione.registraRisultato(valore, nota, idEsercizio);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Controlla se tutti gli esercizi hanno un risultato valorizzato
+<b class="fc">&nbsp;        boolean completata = sessione.getEsercizi().stream()</b>
+<b class="pc">&nbsp;                .allMatch(e -&gt; e.getRisultato() != null &amp;&amp; e.getRisultato().getRisultato() != null);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (completata) {</b>
+<b class="fc">&nbsp;            sessione.setStato(&quot;COMPLETATA&quot;);</b>
+&nbsp;        }else{
+<b class="fc">&nbsp;            sessione.setStato(&quot;IN_CORSO&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        GestorePersistenza.salva(sessione);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Carica una sessione dato il suo identificativo.
+&nbsp;     *
+&nbsp;     * @param idSessione identificativo della sessione
+&nbsp;     * @return la sessione trovata
+&nbsp;     * @throws ResourceNotFoundException se non esiste una sessione con l&#39;id fornito
+&nbsp;     */
+&nbsp;    public SessioneDiAllenamento getSessione(Long idSessione) throws ResourceNotFoundException {
+<b class="fc">&nbsp;        SessioneDiAllenamento s = GestorePersistenza.trovaPerId(SessioneDiAllenamento.class, idSessione);</b>
+<b class="fc">&nbsp;        if (s == null) {</b>
+<b class="fc">&nbsp;            throw new ResourceNotFoundException(&quot;Sessione non trovata&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return s;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isSessionCompleted(Long idSessione){
+<b class="fc">&nbsp;        return getSessione(idSessione).getStato().toString().equals(&quot;COMPLETATA&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-18 12:22</div>
+</div>
+</body>
+</html>
