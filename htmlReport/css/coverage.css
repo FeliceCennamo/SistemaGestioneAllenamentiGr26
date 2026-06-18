@@ -15,140 +15,140 @@
  */
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: #fff;
-    font-family: helvetica neue, tahoma, arial, sans-serif;
-    font-size: 82%;
-    color: #151515;
+  background-color: #fff;
+  font-family: helvetica neue, tahoma, arial, sans-serif;
+  font-size: 82%;
+  color: #151515;
 }
 
 h1 {
-    margin: 0.5em 0;
-    color: #010101;
-    font-weight: normal;
-    font-size: 18px;
+  margin: 0.5em 0;
+  color: #010101;
+  font-weight: normal;
+  font-size: 18px;
 }
 
 h2 {
-    margin: 0.5em 0;
-    color: #010101;
-    font-weight: normal;
-    font-size: 16px;
+  margin: 0.5em 0;
+  color: #010101;
+  font-weight: normal;
+  font-size: 16px;
 }
 
 a {
-    color: #1564C2;
-    text-decoration: none;
+  color: #1564C2;
+  text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 span.separator {
-    color: #9BA9BA;
-    padding-left: 5px;
-    padding-right: 5px;
+  color: #9BA9BA;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 div.content {
-    width: 99%;
+  width: 99%;
 }
 
 table.coverageStats {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 table.overallStats {
-    width: 20%;
+  width: 20%;
 }
 
 table.coverageStats td, table.coverageStats th {
-    padding: 4px 2px;
-    border-bottom: 1px solid #ccc;
+  padding: 4px 2px;
+  border-bottom: 1px solid #ccc;
 }
 
 table.coverageStats th {
-    background-color: #959BA4;
-    border: none;
-    font-weight: bold;
-    text-align: left;
-    color: #FFF;
+  background-color: #959BA4;
+  border: none;
+  font-weight: bold;
+  text-align: left;
+  color: #FFF;
 }
 
 table.coverageStats th.coverageStat {
-    width: 15%;
+  width: 15%;
 }
 
 table.coverageStats th a {
-    color: #FFF;
+  color: #FFF;
 }
 
 table.coverageStats th a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 table.coverageStats th.sortedDesc a {
-    background: url(../img/arrowDown.gif) no-repeat 100% 2px;
-    padding-right: 20px;
+  background: url(../img/arrowDown.gif) no-repeat 100% 2px;
+  padding-right: 20px;
 }
 
 table.coverageStats th.sortedAsc a {
-    background: url(../img/arrowUp.gif) no-repeat 100% 2px;
-    padding-right: 20px;
+  background: url(../img/arrowUp.gif) no-repeat 100% 2px;
+  padding-right: 20px;
 }
 
 div.footer {
-    margin: 2em .5em;
-    font-size: 85%;
-    text-align: left;
-    line-height: 140%;
+  margin: 2em .5em;
+  font-size: 85%;
+  text-align: left;
+  line-height: 140%;
 }
 
 code.sourceCode {
-    width: 100%;
-    border: 1px solid #ccc;
-    font: normal 12px 'Menlo', 'Bitstream Vera Sans Mono', 'Courier New', 'Courier', monospace;
-    white-space: pre;
+  width: 100%;
+  border: 1px solid #ccc;
+  font: normal 12px 'Menlo', 'Bitstream Vera Sans Mono', 'Courier New', 'Courier', monospace;
+  white-space: pre;
 }
 
 code.sourceCode b {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 code.sourceCode span.number {
-    color: #151515;
+  color: #151515;
 }
 
 code.sourceCode .fc {
-    background-color: #cfc;
+  background-color: #cfc;
 }
 
 code.sourceCode .pc {
-    background-color: #ffc;
+  background-color: #ffc;
 }
 
 code.sourceCode .nc {
-    background-color: #fcc;
+  background-color: #fcc;
 }
 
 .percent, .absValue {
-    font-size: 90%;
+  font-size: 90%;
 }
 
 .percent .green, .absValue .green {
-    color: #32cc32;
+  color: #32cc32;
 }
 
 .percent .red, .absValue .red {
-    color: #f00;
+  color: #f00;
 }
 
 .percent .totalDiff {
-    color: #3f3f3f;
+  color: #3f3f3f;
 }

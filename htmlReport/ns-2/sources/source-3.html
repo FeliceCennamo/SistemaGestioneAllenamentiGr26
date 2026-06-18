@@ -1,164 +1,407 @@
+
+
+
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-    <meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
-    <title>Coverage Report > JpaUtil</title>
-    <style type="text/css">
-        @import "../../css/coverage.css";
-        @import "../../css/idea.min.css";
-    </style>
-    <script src="../../js/highlight.min.js" type="text/javascript"></script>
-    <script src="../../js/highlightjs-line-numbers.min.js" type="text/javascript"></script>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Esercizio</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
 </head>
 
 <body>
 <div class="content">
-    <div class="breadCrumbs">
-        Current scope: <a href="../../index.html">all classes</a>
-        <span class="separator">|</span>
-        <a href="../index.html">database</a>
-    </div>
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">entity</a>
+</div>
 
-    <h1>Coverage Summary for Class: JpaUtil (database)</h1>
+<h1>Coverage Summary for Class: Esercizio (entity)</h1>
 
-    <table class="coverageStats">
-        <tr>
-            <th class="name">Class</th>
-            <th class="coverageStat
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
 ">
-                Class, %
-            </th>
-            <th class="coverageStat
+  Method, %
+</th>
+<th class="coverageStat 
 ">
-                Method, %
-            </th>
-            <th class="coverageStat
+  Branch, %
+</th>
+<th class="coverageStat 
 ">
-                Branch, %
-            </th>
-            <th class="coverageStat
-">
-                Line, %
-            </th>
-        </tr>
-        <tr>
-            <td class="name">JpaUtil</td>
-            <td class="coverageStat">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Esercizio</td>
+<td class="coverageStat">
   <span class="percent">
     100%
   </span>
-                <span class="absValue">
-    (1/1)
+  <span class="absValue">
+    (14/14)
   </span>
-            </td>
-            <td class="coverageStat">
+</td>
+<td class="coverageStat">
   <span class="percent">
     100%
   </span>
-                <span class="absValue">
-    (4/4)
+  <span class="absValue">
+    (26/26)
   </span>
-            </td>
-            <td class="coverageStat">
+</td>
+<td class="coverageStat">
   <span class="percent">
     100%
   </span>
-                <span class="absValue">
-    (2/2)
+  <span class="absValue">
+    (41/41)
   </span>
-            </td>
-            <td class="coverageStat">
+</td>
+</tr>
+  <tr>
+    <td class="name">Esercizio$HibernateInstantiator</td>
+  </tr>
+  <tr>
+    <td class="name">Esercizio$HibernateProxy</td>
+  </tr>
+  <tr>
+    <td class="name">Esercizio$RisultatoAtteso</td>
+<td class="coverageStat">
   <span class="percent">
     100%
   </span>
-                <span class="absValue">
-    (8/8)
+  <span class="absValue">
+    (6/6)
   </span>
-            </td>
-        </tr>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    62,5%
+  </span>
+  <span class="absValue">
+    (5/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94,4%
+  </span>
+  <span class="absValue">
+    (17/18)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (20/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,2%
+  </span>
+  <span class="absValue">
+    (31/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98,3%
+  </span>
+  <span class="absValue">
+    (58/59)
+  </span>
+</td>
+</tr>
+</table>
 
-    </table>
-
-    <br/>
-    <br/>
+<br/>
+<br/>
 
 
-    <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package database;
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package entity;
 &nbsp;
-&nbsp;import jakarta.persistence.EntityManager;
-&nbsp;import jakarta.persistence.EntityManagerFactory;
-&nbsp;import jakarta.persistence.Persistence;
+&nbsp;import jakarta.persistence.*;
+&nbsp;
+&nbsp;import java.time.Duration;
 &nbsp;
 &nbsp;/**
-&nbsp; * Punto di accesso centralizzato per la creazione di {@link EntityManager}
-&nbsp; * tramite una {@link EntityManagerFactory} configurata.
+&nbsp; * Rappresenta un esercizio fisico, caratterizzato da un tipo
+&nbsp; * (a ripetizioni o a tempo), un risultato atteso e un risultato
+&nbsp; * effettivo opzionale.
 &nbsp; * &lt;p&gt;
-&nbsp; * Implementa il pattern Singleton per garantire che esista una sola factory
-&nbsp; * per l&#39;intera applicazione, basata sull&#39;unità di persistenza
-&nbsp; * {@code GestioneAllenamentiPU} definita nel file {@code persistence.xml}.
-&nbsp; * &lt;/p&gt;
-&nbsp; *
-&nbsp; * &lt;p&gt;
-&nbsp; * &lt;b&gt;Attenzione:&lt;/b&gt; il Singleton non è thread-safe; in un ambiente
-&nbsp; * multi-thread occorre sincronizzare il metodo {@link #getInstance()}
-&nbsp; * o utilizzare un inizializzatore statico.
+&nbsp; * La logica di gestione del risultato atteso è incapsulata
+&nbsp; * nell&#39;embeddable {@link RisultatoAtteso}, mentre il risultato
+&nbsp; * effettivo viene modellato tramite un&#39;entità separata
+&nbsp; * {@link Risultato} (con sottoclassi specializzate).
 &nbsp; * &lt;/p&gt;
 &nbsp; */
-&nbsp;public class JpaUtil {
+&nbsp;@Entity
+&nbsp;@Table(name = &quot;esercizi&quot;)
+&nbsp;public class Esercizio {
 &nbsp;
-&nbsp;    private static JpaUtil instance;
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Long id;
 &nbsp;
-&nbsp;    private final EntityManagerFactory emf;
+&nbsp;    private String nome;
+&nbsp;    private String descrizione;
 &nbsp;
 &nbsp;    /**
-&nbsp;     * Costruttore privato. Inizializza la {@link EntityManagerFactory}
-&nbsp;     * leggendo la configurazione dell&#39;unità di persistenza.
+&nbsp;     * Tipologia di esercizio: a ripetizioni o a tempo.
+&nbsp;     * Mappato come stringa nel database.
 &nbsp;     */
-<b class="fc">&nbsp;    private JpaUtil() {</b>
-<b class="fc">&nbsp;        emf = Persistence.createEntityManagerFactory(&quot;GestioneAllenamentiPU&quot;);</b>
+&nbsp;    @Enumerated(EnumType.STRING)
+&nbsp;    private TipoEsercizio tipo;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Valore target dell&#39;esercizio (es. 15 ripetizioni o 30 minuti).
+&nbsp;     */
+&nbsp;    @Embedded
+&nbsp;    private RisultatoAtteso risultatoAtteso;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Risultato effettivamente conseguito durante una sessione.
+&nbsp;     * Relazione uno-a-uno con cascade completo.
+&nbsp;     */
+<b class="fc">&nbsp;    @OneToOne(cascade = CascadeType.ALL)</b>
+&nbsp;    @JoinColumn(name = &quot;risultato&quot;)
+&nbsp;    private Risultato risultato = null;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Costruttore di default obbligatorio per JPA.
+&nbsp;     */
+<b class="fc">&nbsp;    public Esercizio() {</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    /**
-&nbsp;     * Restituisce l&#39;unica istanza di {@code JpaUtil}.
-&nbsp;     * &lt;p&gt;
-&nbsp;     * L&#39;istanza viene creata al primo accesso (lazy initialization).
-&nbsp;     * &lt;/p&gt;
+&nbsp;     * Crea un esercizio di tipo ripetizioni con il risultato atteso
+&nbsp;     * specificato.
 &nbsp;     *
-&nbsp;     * @return l&#39;istanza Singleton
+&nbsp;     * @param nome        nome dell&#39;esercizio
+&nbsp;     * @param descrizione breve descrizione
+&nbsp;     * @param ripetizioni numero di ripetizioni target (deve essere positivo)
+&nbsp;     * @throws IllegalArgumentException se {@code ripetizioni} è minore o uguale a zero
 &nbsp;     */
-&nbsp;    public static JpaUtil getInstance() {
-<b class="fc">&nbsp;        if (instance == null) {</b>
-<b class="fc">&nbsp;            instance = new JpaUtil();</b>
+<b class="fc">&nbsp;    public Esercizio(String nome, String descrizione, int ripetizioni) {</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.descrizione = descrizione;</b>
+<b class="fc">&nbsp;        this.tipo = TipoEsercizio.RIPETIZIONI;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (ripetizioni &gt; 0) {</b>
+<b class="fc">&nbsp;            this.risultatoAtteso = new RisultatoAtteso(ripetizioni);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Il numero di ripetizioni deve essere positivo&quot;);</b>
 &nbsp;        }
-<b class="fc">&nbsp;        return instance;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    /**
-&nbsp;     * Crea e restituisce un nuovo {@link EntityManager}.
-&nbsp;     * &lt;p&gt;
-&nbsp;     * Ogni chiamata produce un manager indipendente, che deve essere chiuso
-&nbsp;     * dal chiamante dopo l&#39;uso (tipicamente tramite il pattern try-finally
-&nbsp;     * o try-with-resources).
-&nbsp;     * &lt;/p&gt;
+&nbsp;     * Crea un esercizio di tipo tempo con il risultato atteso espresso
+&nbsp;     * come durata.
 &nbsp;     *
-&nbsp;     * @return una nuova istanza di {@link EntityManager}
+&nbsp;     * @param nome        nome dell&#39;esercizio
+&nbsp;     * @param descrizione breve descrizione
+&nbsp;     * @param durata      durata target (es. 30 minuti)
 &nbsp;     */
-&nbsp;    public EntityManager getEntityManager() {
-<b class="fc">&nbsp;        return emf.createEntityManager();</b>
+<b class="fc">&nbsp;    public Esercizio(String nome, String descrizione, Duration durata) {</b>
+<b class="fc">&nbsp;        this.nome = nome;</b>
+<b class="fc">&nbsp;        this.descrizione = descrizione;</b>
+<b class="fc">&nbsp;        this.tipo = TipoEsercizio.TEMPO;</b>
+<b class="fc">&nbsp;        this.risultatoAtteso = new RisultatoAtteso(durata);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Long getId() {
+<b class="fc">&nbsp;        return id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getNome() {
+<b class="fc">&nbsp;        return nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getDescrizione() {
+<b class="fc">&nbsp;        return descrizione;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    /**
-&nbsp;     * Chiude definitivamente la {@link EntityManagerFactory} e
-&nbsp;     * reimposta l&#39;istanza Singleton a {@code null}.
-&nbsp;     * &lt;p&gt;
-&nbsp;     * Dopo la chiamata, ogni ulteriore utilizzo di {@code getEntityManager()}
-&nbsp;     * richiederà una nuova inizializzazione tramite {@code getInstance()}.
-&nbsp;     * &lt;/p&gt;
+&nbsp;     * Restituisce il tipo di esercizio.
+&nbsp;     *
+&nbsp;     * @return {@link TipoEsercizio#RIPETIZIONI} o {@link TipoEsercizio#TEMPO}
 &nbsp;     */
-&nbsp;    public void chiudi() {
-<b class="fc">&nbsp;        emf.close();</b>
-<b class="fc">&nbsp;        instance = null;</b>
+&nbsp;    public TipoEsercizio getTipo() {
+<b class="fc">&nbsp;        return tipo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce il risultato atteso sotto forma di oggetto generico.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * Il tipo concreto dipende dal {@link #tipo}:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;{@link TipoEsercizio#RIPETIZIONI} → {@link Integer}&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@link TipoEsercizio#TEMPO} → {@link Duration}&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * @return il valore atteso, oppure {@code null} se non impostato
+&nbsp;     */
+&nbsp;    public Object getRisultatoAtteso() {
+<b class="fc">&nbsp;        if (tipo == TipoEsercizio.RIPETIZIONI) {</b>
+<b class="fc">&nbsp;            return this.risultatoAtteso.getRipetizioni();</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return this.risultatoAtteso.getDurata();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Restituisce il risultato effettivo registrato per questo esercizio.
+&nbsp;     *
+&nbsp;     * @return l&#39;entità {@link Risultato} associata, oppure {@code null}
+&nbsp;     */
+&nbsp;    public Risultato getRisultato() {
+<b class="fc">&nbsp;        return risultato;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void setNome(String nome) {
+<b class="fc">&nbsp;        this.nome = nome;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    protected void setDescrizione(String descrizione) {
+<b class="fc">&nbsp;        this.descrizione = descrizione;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Imposta il tipo di esercizio a partire da un intero.
+&nbsp;     *
+&nbsp;     * @param tipo 0 per {@link TipoEsercizio#RIPETIZIONI}, 1 per {@link TipoEsercizio#TEMPO}
+&nbsp;     * @throws IllegalArgumentException se il valore non è 0 o 1
+&nbsp;     */
+&nbsp;    protected void setTipo(int tipo) {
+<b class="fc">&nbsp;        if (tipo == 0) {</b>
+<b class="fc">&nbsp;            this.tipo = TipoEsercizio.RIPETIZIONI;</b>
+<b class="fc">&nbsp;        } else if (tipo == 1) {</b>
+<b class="fc">&nbsp;            this.tipo = TipoEsercizio.TEMPO;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Valori accettati solo 0 e 1&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Modifica il risultato atteso, adattandolo al tipo di esercizio.
+&nbsp;     *
+&nbsp;     * @param risultatoAtteso oggetto {@link Integer} per ripetizioni,
+&nbsp;     *                        o {@link Duration} per tempo
+&nbsp;     * @throws IllegalArgumentException se il tipo di dato non corrisponde
+&nbsp;     *                                  al tipo di esercizio corrente o se
+&nbsp;     *                                  l&#39;aggiornamento fallisce
+&nbsp;     */
+&nbsp;    protected void setRisultatoAtteso(Object risultatoAtteso) {
+<b class="fc">&nbsp;        boolean successo = false;</b>
+<b class="fc">&nbsp;        if (this.tipo == TipoEsercizio.RIPETIZIONI &amp;&amp; risultatoAtteso instanceof Integer) {</b>
+<b class="fc">&nbsp;            successo = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);</b>
+<b class="fc">&nbsp;        } else if (this.tipo == TipoEsercizio.TEMPO &amp;&amp; risultatoAtteso instanceof Duration) {</b>
+<b class="fc">&nbsp;            successo = this.risultatoAtteso.setRisultatoAtteso(risultatoAtteso);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (!successo) {</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Risultato atteso non valido per il tipo di esercizio&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Registra il risultato effettivo dell&#39;esercizio comprensivo di valore e nota.
+&nbsp;     *
+&nbsp;     * @param risultato valore ottenuto: {@link Duration} per esercizi a tempo,
+&nbsp;     *                  {@link Integer} per ripetizioni
+&nbsp;     * @param nota      eventuale annotazione testuale
+&nbsp;     * @throws IllegalArgumentException se il tipo di dato non corrisponde al tipo esercizio
+&nbsp;     */
+&nbsp;    public void setRisultato(Object risultato, String nota) {
+<b class="fc">&nbsp;        if (this.tipo == TipoEsercizio.TEMPO &amp;&amp; risultato instanceof Duration) {</b>
+<b class="fc">&nbsp;            this.risultato = new RisultatoTempo(nota, (Duration) risultato);</b>
+<b class="fc">&nbsp;        } else if (this.tipo == TipoEsercizio.RIPETIZIONI &amp;&amp; risultato instanceof Integer) {</b>
+<b class="fc">&nbsp;            this.risultato = new RisultatoRipetizioni(nota, (Integer) risultato);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Tipo di risultato non valido per questo esercizio&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Classe embeddable che memorizza il risultato atteso in modo polimorfico:
+&nbsp;     * può contenere un numero di ripetizioni o una durata.
+&nbsp;     */
+&nbsp;    @Embeddable
+&nbsp;    static class RisultatoAtteso {
+&nbsp;        private Integer ripetizioni;
+&nbsp;        private Duration durata; // Convertito in stringa ISO-8601 tramite AttributeConverter globale
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Costruttore vuoto per JPA.
+&nbsp;         */
+<b class="fc">&nbsp;        public RisultatoAtteso() {</b>
+<b class="fc">&nbsp;            this.ripetizioni = null;</b>
+<b class="fc">&nbsp;            this.durata = null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Crea un risultato atteso basato su ripetizioni.
+&nbsp;         *
+&nbsp;         * @param ripetizioni numero target di ripetizioni
+&nbsp;         */
+<b class="fc">&nbsp;        public RisultatoAtteso(int ripetizioni) {</b>
+<b class="fc">&nbsp;            this.ripetizioni = ripetizioni;</b>
+<b class="fc">&nbsp;            this.durata = null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Crea un risultato atteso basato su durata.
+&nbsp;         *
+&nbsp;         * @param durata durata target
+&nbsp;         */
+<b class="fc">&nbsp;        public RisultatoAtteso(Duration durata) {</b>
+<b class="fc">&nbsp;            this.durata = durata;</b>
+<b class="fc">&nbsp;            this.ripetizioni = null;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Integer getRipetizioni() {
+<b class="fc">&nbsp;            return ripetizioni;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public Duration getDurata() {
+<b class="fc">&nbsp;            return durata;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Modifica il valore atteso, accettando solo il tipo coerente
+&nbsp;         * con lo stato corrente dell&#39;oggetto.
+&nbsp;         *
+&nbsp;         * @param risultato {@link Integer} se l&#39;oggetto è stato creato per ripetizioni,
+&nbsp;         *                  {@link Duration} se per tempo
+&nbsp;         * @return {@code true} se l&#39;aggiornamento è riuscito, {@code false} altrimenti
+&nbsp;         */
+&nbsp;        public boolean setRisultatoAtteso(Object risultato) {
+<b class="pc">&nbsp;            if (risultato instanceof Integer &amp;&amp; this.durata == null) {</b>
+<b class="fc">&nbsp;                this.ripetizioni = (Integer) risultato;</b>
+<b class="fc">&nbsp;                return true;</b>
+<b class="pc">&nbsp;            } else if (risultato instanceof Duration &amp;&amp; this.ripetizioni == null) {</b>
+<b class="fc">&nbsp;                this.durata = (Duration) risultato;</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
 &nbsp;    }
 &nbsp;}
 </code>
@@ -166,25 +409,25 @@
 </div>
 
 <script type="text/javascript">
-    (function () {
-        var msie = false, msie9 = false;
-        /*@cc_on
-          msie = true;
-          @if (@_jscript_version >= 9)
-            msie9 = true;
-          @end
-        @*/
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
 
-        if (!msie || msie && msie9) {
-            hljs.highlightAll()
-            hljs.initLineNumbersOnLoad();
-        }
-    })();
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
 </script>
 
 <div class="footer">
-
-    <div style="float:right;">generated on 2026-06-13 17:57</div>
+    
+    <div style="float:right;">generated on 2026-06-18 12:22</div>
 </div>
 </body>
 </html>
