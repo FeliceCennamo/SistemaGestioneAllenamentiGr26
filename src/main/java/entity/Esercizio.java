@@ -192,7 +192,7 @@ public class Esercizio {
      * @param nota      eventuale annotazione testuale
      * @throws IllegalArgumentException se il tipo di dato non corrisponde al tipo esercizio
      */
-    public void setRisultato(Object risultato, String nota) {
+    protected void setRisultato(Object risultato, String nota) {
         if (this.tipo == TipoEsercizio.TEMPO && risultato instanceof Duration) {
             this.risultato = new RisultatoTempo(nota, (Duration) risultato);
         } else if (this.tipo == TipoEsercizio.RIPETIZIONI && risultato instanceof Integer) {

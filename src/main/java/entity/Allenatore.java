@@ -112,7 +112,7 @@ public class Allenatore extends Utente {
      * @throws ResourceNotFoundException se l'atleta non è tra quelli seguiti
      *                                   da questo allenatore
      */
-    public Atleta getAtleta(Long id) throws ResourceNotFoundException {
+    protected Atleta getAtleta(Long id) throws ResourceNotFoundException {
         for (Atleta a : atleti) {
             if (a.getId().equals(id)) {
                 return a;
