@@ -98,6 +98,21 @@ class GestoreSessioniTest {
         sessione = GestorePersistenza.salva(sessione);
     }
 
+    // Helper per eseguire codice in transazione (utile per settare risultati)
+    private void eseguiInTransazione(Runnable runnable) {
+        EntityManager em = JpaUtil.getInstance().getEntityManager();
+        em.getTransaction().begin();
+        try {
+            runnable.run();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
     // ------------------------- getSessione -------------------------
     @Test
     void testGetSessione_ValidId() throws ResourceNotFoundException {
@@ -171,6 +186,8 @@ class GestoreSessioniTest {
                 assertEquals(Duration.ofMinutes(8), e.getRisultato().getRisultato());
             }
         }
+
+        assertTrue(gs.isSessionCompleted(sessione.getId()));
     }
 
     @Test
@@ -193,6 +210,7 @@ class GestoreSessioniTest {
         Esercizio eTempo = reloaded.getEsercizi().stream()
                 .filter(e -> e.getId().equals(esercizioTempo.getId())).findFirst().orElseThrow();
         assertNull(eTempo.getRisultato());
+        assertFalse(gs.isSessionCompleted(sessione.getId()));
     }
 
     @Test
@@ -207,6 +225,7 @@ class GestoreSessioniTest {
         for (Esercizio e : reloaded.getEsercizi()) {
             assertNull(e.getRisultato());
         }
+        assertFalse(gs.isSessionCompleted(sessione.getId()));
     }
 
     @Test
@@ -244,6 +263,7 @@ class GestoreSessioniTest {
         Esercizio e = reloaded.getEsercizi().stream()
                 .filter(ex -> ex.getId().equals(esercizioRip.getId())).findFirst().orElseThrow();
         assertNull(e.getRisultato());
+        assertFalse(gs.isSessionCompleted(sessione.getId()));
     }
 
     @Test
@@ -260,4 +280,97 @@ class GestoreSessioniTest {
         assertThrows(IllegalAccessException.class, () ->
                 gs.completaSessione(atleta.getId(), sessione.getId(), risultati, note));
     }
+
+    // ==================== getIdSessioniPerUtente ====================
+    @Test
+    void testGetIdSessioniPerUtente_AtletaConSessioni() {
+        List<Long> ids = gs.getIdSessioniForUtente(atleta.getId());
+        assertEquals(1, ids.size());
+        assertTrue(ids.contains(sessione.getId()));
+    }
+
+    @Test
+    void testGetIdSessioniPerUtente_UtenteSenzaSessioni() {
+        List<Long> ids = gs.getIdSessioniForUtente(999999L);
+        assertTrue(ids.isEmpty());
+    }
+
+    // ==================== getDettaglioSessionePerId ====================
+    @Test
+    void testGetDettaglioSessionePerId_Valid() {
+        Map<String, Object> dettaglio = gs.getDettaglioSessionePerId(sessione.getId());
+
+        assertEquals(sessione.getTitolo(), dettaglio.get("titolo"));
+        assertEquals(allenatore.getNome() + " " + allenatore.getCognome(), dettaglio.get("allenatore"));
+        assertEquals(sessione.getDescrizione(), dettaglio.get("descrizione"));
+        assertEquals(sessione.getStato().toString(), dettaglio.get("stato"));
+        assertEquals(sessione.getDataSvolgimento(), dettaglio.get("data"));
+        assertEquals(sessione.getAllenatore().getMail(), dettaglio.get("email_allenatore"));
+    }
+
+    @Test
+    void testGetDettaglioSessionePerId_InvalidId_ThrowsException() {
+        assertThrows(exceptions.ResourceNotFoundException.class,
+                () -> gs.getDettaglioSessionePerId(999999L));
+    }
+
+    // ==================== getIdEserciziPerSessione ====================
+    @Test
+    void testGetIdEserciziPerSessione_Valid() {
+        List<Long> ids = gs.getIdEserciziForSessione(sessione.getId());
+        assertEquals(2, ids.size());
+        assertTrue(ids.contains(esercizioRip.getId()));
+        assertTrue(ids.contains(esercizioTempo.getId()));
+    }
+
+    @Test
+    void testGetIdEserciziPerSessione_InvalidId_ThrowsException() {
+        // GestoreSessioni.dettaglioSessione lancia ResourceNotFoundException
+        assertThrows(exceptions.ResourceNotFoundException.class,
+                () -> gs.getIdEserciziForSessione(999999L));
+    }
+
+    // ==================== getDettaglioEsercizioPerId ====================
+    @Test
+    void testGetDettaglioEsercizioPerId_ConRisultatoNull() {
+        Map<String, Object> dettaglio = gs.getDettaglioEsercizioPerId(sessione.getId(), esercizioRip.getId());
+
+        assertEquals(esercizioRip.getDescrizione(), dettaglio.get("descrizione"));
+        assertEquals(esercizioRip.getNome(), dettaglio.get("nome"));
+        assertEquals(sessione.getStato().toString(), dettaglio.get("stato"));
+        assertNull(dettaglio.get("nota"));
+        assertNull(dettaglio.get("risultato"));
+        assertEquals(esercizioRip.getRisultatoAtteso(), dettaglio.get("risultato_atteso"));
+    }
+
+    @Test
+    void testGetDettaglioEsercizioPerId_ConRisultatoValido() {
+        // Imposta un risultato sull'esercizio
+        eseguiInTransazione(() -> {
+            Esercizio e = GestorePersistenza.trovaPerId(Esercizio.class, esercizioRip.getId());
+            e.setRisultato(20, "Ottimo");
+            GestorePersistenza.salva(e);
+        });
+
+        Map<String, Object> dettaglio = gs.getDettaglioEsercizioPerId(sessione.getId(), esercizioRip.getId());
+
+        assertEquals("Ottimo", dettaglio.get("nota"));
+        assertEquals(20, dettaglio.get("risultato"));
+        assertEquals(esercizioRip.getRisultatoAtteso(), dettaglio.get("risultato_atteso"));
+    }
+
+    @Test
+    void testGetDettaglioEsercizioPerId_SessioneInesistente_ThrowsException() {
+        assertThrows(exceptions.ResourceNotFoundException.class,
+                () -> gs.getDettaglioEsercizioPerId(999999L, esercizioRip.getId()));
+    }
+
+    @Test
+    void testGetDettaglioEsercizioPerId_EsercizioInesistente_ThrowsNullPointerException() {
+        // getEsercizioPerId restituisce null se l'esercizio non è trovato, poi e.getDescrizione() causa NPE
+        assertThrows(NullPointerException.class,
+                () -> gs.getDettaglioEsercizioPerId(sessione.getId(), 999999L));
+    }
+
 }
+
